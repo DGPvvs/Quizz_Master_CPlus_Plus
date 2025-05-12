@@ -5,6 +5,7 @@
 
 class IBaseProvider
 {
+public:
 	virtual void Action(String& str, ProviderOptions options) = 0;
 };
 

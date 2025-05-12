@@ -249,3 +249,38 @@ void String::Split(char separator, Vector<String>& v)
 	}
 }
 
+String String::UIntToString(unsigned int num)
+{	
+	String s = "";
+
+	while (num  > 0)
+	{
+		int digit = num % 10;
+		num /= 10;
+
+		char* arr = new char[2] {'\0'};
+				
+		arr[0] = digit + '0';
+
+		s = String(arr) + s;
+
+		delete[] arr;
+		arr = nullptr;
+	}
+
+	return s;
+}
+
+unsigned int String::StringToInt()
+{
+	unsigned int result = 0;
+
+	for (int i = 0; i < this->getSize(); ++i)
+	{
+		char ch = this->data[i];
+		result = (result * 10) + (ch - '0');
+	}
+
+	return result;
+}
+

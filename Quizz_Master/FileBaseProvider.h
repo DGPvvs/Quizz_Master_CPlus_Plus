@@ -1,14 +1,14 @@
 #ifndef FileBaseProvider_H
 #define FileBaseProvider_H
 
-#include "IBaseprovider.h"
+#include "IBaseProvider.h"
 #include "String.h"
 
 class FileBaseProvider : public IBaseProvider
 {
 private:
-	void FileSave(String& str, ProviderOptions options);
-	String FileLoad(String& str, ProviderOptions options);
+	void FileSave(String& str);
+	String FileLoad(String str);
 	void FileDelete(String& str, ProviderOptions options);
 
 public:

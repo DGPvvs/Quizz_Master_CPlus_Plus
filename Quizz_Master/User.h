@@ -38,13 +38,14 @@ public:
 
     virtual void Login() override;
     virtual void Logout() override;
-    virtual void UserLoop(const CommandStruct&) override;
+    virtual void Action(const CommandStruct&) override;
     virtual IWriter& Writer() override;
     virtual IReader& Reader() override;
     virtual bool GetIsHasLog() override;
 
     virtual void Print() override;
     virtual String BuildUserData() override;
+    virtual void Help() override;
 
     virtual ~User() {}
 };

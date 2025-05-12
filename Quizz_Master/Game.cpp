@@ -56,6 +56,10 @@ void Game::GameLoop()
         {
             this->LoginUser();
         }
+        else
+        {
+            this->user->Action(*this->command);
+        }
 
         //TODO
     }
@@ -100,12 +104,20 @@ void Game::Exit()
 
 void Game::LoadConfig()
 {
-    //TODO Четене на конфигурационни данни
+    String configString;
+    this->provider->Action(configString, ProviderOptions::ConfigLoad);
+    Vector<String> v;
+    configString.Split(' ', v);
+
+    this->maxUserId = v[0].StringToInt();
+    this->maxQuizId = v[1].StringToInt();
 }
 
 void Game::SaveConfig()
 {
-    //TODO Запис на конфигурационни данни
+    String configString = String::UIntToString(this->maxUserId) + " " + String::UIntToString(this->maxQuizId);
+
+    this->provider->Action(configString, ProviderOptions::ConfigSave);
 }
 
 void Game::LoginUser()

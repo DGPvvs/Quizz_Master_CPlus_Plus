@@ -62,6 +62,10 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const String& other);
 
 	void Split(char separator, Vector<String>& v);
+	
+	static String UIntToString(unsigned int);
+
+	unsigned int StringToInt();
 
 	~String();
 };

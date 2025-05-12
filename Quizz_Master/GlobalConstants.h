@@ -13,6 +13,8 @@ enum ProviderOptions
 	ConfigLoad,
 };
 
+const char FILENAME_TO_DATA_SEPARATOR = '$';
+
 const String EXIT = "exit";
 const String LOGIN = "login";
 

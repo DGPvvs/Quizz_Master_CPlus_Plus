@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="ConsoleReader.cpp" />
     <ClCompile Include="ConsoleWriter.cpp" />
     <ClCompile Include="FileBaseProvider.cpp" />
@@ -136,13 +137,14 @@
     <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Admin.h" />
     <ClInclude Include="CommandStruct.h" />
     <ClInclude Include="ConsoleReader.h" />
     <ClInclude Include="ConsoleWriter.h" />
     <ClInclude Include="FileBaseProvider.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GlobalConstants.h" />
-    <ClInclude Include="IBaseprovider.h" />
+    <ClInclude Include="IBaseProvider.h" />
     <ClInclude Include="IReader.h" />
     <ClInclude Include="IUser.h" />
     <ClInclude Include="IWriter.h" />

@@ -12,7 +12,12 @@ unsigned int User::Hash(const String& str)
     return (hash & 0x7FFFFFFF);
 }
 
-User::User(IWriter* writer, IReader* reader) : writer(writer), reader(reader), isHasLogin(false)
+User::User(IWriter* writer, IReader* reader)
+    : writer(writer)
+    , reader(reader)
+    , isHasLogin(false)
+    , id(0u)
+    , password(0)
 {
 
 }
@@ -48,7 +53,7 @@ void User::Logout()
     //TODO
 }
 
-void User::UserLoop(const CommandStruct& cmdStr)
+void User::Action(const CommandStruct& cmdStr)
 {
     //TODO
 }
@@ -99,4 +104,9 @@ String User::BuildUserData()
     unsigned int password;
 
     return result;
+}
+
+void User::Help()
+{
+    //TODO
 }
