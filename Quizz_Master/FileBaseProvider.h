@@ -8,7 +8,7 @@ class FileBaseProvider : public IBaseProvider
 {
 private:
 	void FileSave(String& str);
-	String FileLoad(String str);
+	void FileLoad(String& str);
 	void FileDelete(String& str, ProviderOptions options);
 
 public:

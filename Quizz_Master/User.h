@@ -5,6 +5,7 @@
 #include "String.h"
 #include "IWriter.h"
 #include "IReader.h"
+#include "IBaseProvider.h"
 #include "CommandStruct.h"
 
 class User : public IUser
@@ -15,6 +16,7 @@ private:
     String firstName;
     String lastName;
     String userName;
+    String userFile;
 
     unsigned int password;
 
@@ -22,6 +24,7 @@ private:
 
     IWriter* writer;
     IReader* reader;
+    IBaseProvider* provider;
 
 protected:
     void SetIsHasLog(bool);
@@ -32,7 +35,7 @@ protected:
     unsigned int Hash(const String& str);
 
 public:
-    User(IWriter* writer, IReader* reader);
+    User(IWriter* writer, IReader* reader, IBaseProvider* provider);
     virtual String getName() const override;
     virtual String getUserName() const override;
 

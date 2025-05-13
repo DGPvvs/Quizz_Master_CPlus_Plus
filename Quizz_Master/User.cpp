@@ -1,4 +1,5 @@
 #include "User.h"
+#include "IBaseProvider.h"
 
 unsigned int User::Hash(const String& str)
 {
@@ -12,9 +13,10 @@ unsigned int User::Hash(const String& str)
     return (hash & 0x7FFFFFFF);
 }
 
-User::User(IWriter* writer, IReader* reader)
+User::User(IWriter* writer, IReader* reader, IBaseProvider* provider)
     : writer(writer)
     , reader(reader)
+    , provider(provider)
     , isHasLogin(false)
     , id(0u)
     , password(0)
@@ -102,11 +104,16 @@ String User::BuildUserData()
     String userName;
 
     unsigned int password;
+    //TODO
 
     return result;
 }
 
 void User::Help()
 {
-    //TODO
+    std::cout << "signup <first-name> <last-name> <username> <password1> <password2>" << std::endl;
+    std::cout << "login <username> <password>" << std::endl;
+    std::cout << "logout" << std::endl;
+    std::cout << "help" << std::endl;
+    std::cout << "exit" << std::endl;
 }

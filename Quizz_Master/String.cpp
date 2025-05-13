@@ -197,21 +197,18 @@ void String::free()
 
 
 
-void String::Split(char separator, Vector<String>& v)
+void String::Split(char separator, Vector<String>& v, String s)
 {
 
 	Vector<char> vv;
 
 	size_t i = 0;
-	size_t startIndex = 0;
-	size_t stopIndex = 0;
-	bool startFlag = false;
 
-	while (this->data[i] != '\0')
+	while (s[i] != '\0')
 	{
-		if (this->data[i] != separator)
+		if (s[i] != separator)
 		{
-			vv.push_back(this->data[i]);
+			vv.push_back(s[i]);
 		}
 		else
 		{
@@ -251,6 +248,11 @@ void String::Split(char separator, Vector<String>& v)
 
 String String::UIntToString(unsigned int num)
 {	
+	if (num == 0)
+	{
+		return String("0");
+	}
+
 	String s = "";
 
 	while (num  > 0)

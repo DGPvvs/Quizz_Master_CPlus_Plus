@@ -9,9 +9,6 @@ Game::Game(IWriter * writer, IReader * reader, IBaseProvider * provider)
     , reader(reader)
     , provider(provider)
 {
-    this->command = new CommandStruct();
-    this->user = new User(this->writer, this->reader);
-    this->LoadConfig();
 }
 
 void Game::Free()
@@ -29,8 +26,9 @@ Game::~Game()
 
 void Game::Init()
 {
-    this->user = new User(this->writer, this->reader);
     this->command = new CommandStruct();
+    this->user = new User(this->writer, this->reader, this->provider);
+    this->LoadConfig();
 }
 
 void Game::Run()
@@ -56,6 +54,17 @@ void Game::GameLoop()
         {
             this->LoginUser();
         }
+        else if (this->command->command == LOGOUT)
+        {
+            if (this->user->GetIsHasLog())
+            {
+                this->LogoutUser();
+            }
+        }
+        else if (this->command->command == SIGNUP)
+        {
+            this->SignupUser();
+        }
         else
         {
             this->user->Action(*this->command);
@@ -71,7 +80,7 @@ void Game::SetCommandStruct()
     this->command->command = "";
 
     String s = *reader->ReadLine();
-    s.Split(' ', commandLine);
+    String::Split(' ', commandLine, s);
 
     if (commandLine.getSize() > 0)
     {
@@ -94,7 +103,7 @@ void Game::Exit()
 {
     if (this->user->GetIsHasLog())
     {
-        //TODO: Запис на данните за логнат играч
+        this->LogoutUser();
     }
 
     this->SaveConfig();
@@ -107,7 +116,7 @@ void Game::LoadConfig()
     String configString;
     this->provider->Action(configString, ProviderOptions::ConfigLoad);
     Vector<String> v;
-    configString.Split(' ', v);
+    String::Split('\n', v, configString);
 
     this->maxUserId = v[0].StringToInt();
     this->maxQuizId = v[1].StringToInt();
@@ -115,7 +124,7 @@ void Game::LoadConfig()
 
 void Game::SaveConfig()
 {
-    String configString = String::UIntToString(this->maxUserId) + " " + String::UIntToString(this->maxQuizId);
+    String configString = String::UIntToString(this->maxUserId) + "\n" + String::UIntToString(this->maxQuizId);
 
     this->provider->Action(configString, ProviderOptions::ConfigSave);
 }
@@ -126,6 +135,14 @@ void Game::LoginUser()
 
 void Game::LogoutUser()
 {
+    //TODO - Записва се статуса на потребителя, ако не е админ
+    delete this->user;
+    this->user = nullptr;
+
+    if (this->command->command != EXIT)
+    {
+        this->user = new User(this->writer, this->reader, this->provider);
+    }
 }
 
 void Game::SignupUser()

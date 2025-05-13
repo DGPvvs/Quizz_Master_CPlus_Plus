@@ -3,43 +3,48 @@
 void FileBaseProvider::FileSave(String& str)
 {
     Vector<String> v;
-    str.Split(FILENAME_TO_DATA_SEPARATOR, v);
+    String::Split(FILENAME_TO_DATA_SEPARATOR, v, str);
     std::ofstream ofs;
 
     ofs.open(v[0].c_str(), std::fstream::out | std::fstream::trunc);
     if (ofs.is_open())
     {
-        ofs << v[1];
+        for (int i = 0; i < v[1].getSize(); ++i)
+        {
+            ofs.put(v[1][i]);
+        }
+
         ofs.close();
     }
 }
 
-String FileBaseProvider::FileLoad(String str)
+void FileBaseProvider::FileLoad(String& str)
 {
-	
     std::ifstream ifs;
     char* arr = new char[1024] {'\0'};
-    String s = "";
+
 
     ifs.open(str.c_str());
+
+    str = "";
 
     if (!ifs.is_open())
     {
         std::cerr << "Error opening the file!";
-        return "error";
+        str = "error";
     }
 
     while (!(ifs.eof() || ifs.fail()))
     {
-        ifs.get(arr, 1024);
-        s += String(arr) + String(" ");
-        ifs.ignore();
+        ifs.getline(arr, 1024);
+        str += String(arr) + String("\n");
     }
 
     ifs.close();
 
+    std::cout << str << std::endl;
+
     delete[] arr;
-    return s;
 }
 
 void FileBaseProvider::FileDelete(String& str, ProviderOptions options)
@@ -51,15 +56,15 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
 {
     if (options == ProviderOptions::ConfigLoad)
     {
-        String s = "config.txt";
-        str = this->FileLoad(s);
+        str = CONFIG_FILE_NAME;
+        FileLoad(str);
     }
     else if (options == ProviderOptions::ConfigSave)
     {
         char* arr = new char[2] {'\0'};
         arr[0] = FILENAME_TO_DATA_SEPARATOR;
-        String s = "config.txt" + String(arr) + str;
-        this->FileSave(s);
+        String s = CONFIG_FILE_NAME + String(arr) + str;
+        FileSave(s);
 
         delete[] arr;
         arr = nullptr;

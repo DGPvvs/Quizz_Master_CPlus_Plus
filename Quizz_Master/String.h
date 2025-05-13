@@ -61,7 +61,7 @@ public:
 	friend std::istream& operator>>(std::istream& is, String& other);
 	friend std::ostream& operator<<(std::ostream& os, const String& other);
 
-	void Split(char separator, Vector<String>& v);
+	static void Split(char separator, Vector<String>& v, String s);
 	
 	static String UIntToString(unsigned int);
 
