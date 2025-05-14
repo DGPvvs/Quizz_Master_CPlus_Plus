@@ -18,7 +18,7 @@ void FileBaseProvider::FileSave(String& str)
     }
 }
 
-void FileBaseProvider::FileLoad(String& str)
+String FileBaseProvider::FileLoad(String& str)
 {
     std::ifstream ifs;
     char* arr = new char[1024] {'\0'};
@@ -26,25 +26,28 @@ void FileBaseProvider::FileLoad(String& str)
 
     ifs.open(str.c_str());
 
-    str = "";
+    String s = "";
 
     if (!ifs.is_open())
     {
         std::cerr << "Error opening the file!";
-        str = "error";
+        s = "error";
+        return s;
     }
 
     while (!(ifs.eof() || ifs.fail()))
     {
         ifs.getline(arr, 1024);
-        str += String(arr) + String("\n");
+        s += String(arr) + String("\n");
     }
 
     ifs.close();
 
-    std::cout << str << std::endl;
+    std::cout << s << std::endl;
 
     delete[] arr;
+
+    return s;
 }
 
 void FileBaseProvider::FileDelete(String& str, ProviderOptions options)
@@ -56,8 +59,8 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
 {
     if (options == ProviderOptions::ConfigLoad)
     {
-        str = CONFIG_FILE_NAME;
-        FileLoad(str);
+        String s = CONFIG_FILE_NAME;
+        str = FileLoad(s);
     }
     else if (options == ProviderOptions::ConfigSave)
     {

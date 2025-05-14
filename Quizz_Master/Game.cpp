@@ -113,9 +113,9 @@ void Game::Exit()
 
 void Game::LoadConfig()
 {
+    Vector<String> v;
     String configString;
     this->provider->Action(configString, ProviderOptions::ConfigLoad);
-    Vector<String> v;
     String::Split('\n', v, configString);
 
     this->maxUserId = v[0].StringToInt();
