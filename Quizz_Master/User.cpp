@@ -57,6 +57,11 @@ void User::Logout()
 
 void User::Action(const CommandStruct& cmdStr)
 {
+    if (cmdStr.command == HELP)
+    {
+        this->Help();
+    }
+
     //TODO
 }
 

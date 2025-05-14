@@ -4,6 +4,7 @@
 #include "IUser.h"
 #include "CommandStruct.h"
 #include "IBaseProvider.h"
+#include "UserStruct.h"
 
 class Game
 {
@@ -34,9 +35,10 @@ public:
     void LoginUser();
     void LogoutUser();
     void SignupUser();
+    int FindUser(UserStruct& us);
 
     void SaveUser();
-    void LoadUser();
+    void LoadUser(UserStruct& us);
 };
 
 #endif // ! Game

@@ -1,5 +1,9 @@
 #include "Admin.h"
 
+Admin::Admin(IWriter* writer, IReader* reader, IBaseProvider* provider)
+	: User::User(writer, reader, provider)
+{
+}
 
 void Admin::Help()
 {

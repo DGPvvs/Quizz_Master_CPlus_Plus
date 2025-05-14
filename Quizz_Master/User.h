@@ -30,9 +30,7 @@ protected:
     void SetIsHasLog(bool);
 
     unsigned int GetPassword() const;
-    void SetPassword(unsigned int);
-
-    unsigned int Hash(const String& str);
+    void SetPassword(unsigned int);    
 
 public:
     User(IWriter* writer, IReader* reader, IBaseProvider* provider);
@@ -45,6 +43,7 @@ public:
     virtual IWriter& Writer() override;
     virtual IReader& Reader() override;
     virtual bool GetIsHasLog() override;
+    virtual unsigned int Hash(const String& str) override;
 
     virtual void Print() override;
     virtual String BuildUserData() override;

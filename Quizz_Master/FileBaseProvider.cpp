@@ -43,7 +43,7 @@ String FileBaseProvider::FileLoad(String& str)
 
     ifs.close();
 
-    std::cout << s << std::endl;
+    //std::cout << s << std::endl;
 
     delete[] arr;
 
@@ -71,5 +71,10 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
 
         delete[] arr;
         arr = nullptr;
+    }
+    else if (options == ProviderOptions::UserFind)
+    {
+        String s = USERS_FILE_NAME;
+        str = FileLoad(s);
     }
 }

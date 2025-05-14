@@ -19,6 +19,8 @@ public:
     virtual bool GetIsHasLog() = 0;
     virtual String BuildUserData() = 0;
     virtual void Help() = 0;
+    virtual unsigned int Hash(const String& str) = 0;
+    virtual void SetIsHasLog(bool) = 0;
 };
 
 #endif

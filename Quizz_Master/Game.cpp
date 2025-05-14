@@ -2,12 +2,15 @@
 
 #include "Game.h"
 #include "User.h"
+#include "Admin.h"
 #include "GlobalConstants.h"
 
-Game::Game(IWriter * writer, IReader * reader, IBaseProvider * provider)
+Game::Game(IWriter* writer, IReader* reader, IBaseProvider* provider)
     : writer(writer)
     , reader(reader)
     , provider(provider)
+    , maxUserId(0)
+    , maxQuizId(0)
 {
 }
 
@@ -131,6 +134,35 @@ void Game::SaveConfig()
 
 void Game::LoginUser()
 {
+    if (this->user->GetIsHasLog())
+    {
+        this->writer->WriteLine("You cannot log in a new user before logging out!");
+        return;
+    }
+
+    UserStruct* us = new UserStruct();
+
+    int uo = this->FindUser(*us);
+
+    if (uo == UserOptions::NotFound)
+    {
+        this->writer->WriteLine("User not found!");
+    }
+    else if (uo == UserOptions::WrongPassword)
+    {
+        this->writer->WriteLine("Wrong password!");
+    }
+    else if (uo == UserOptions::Ban)
+    {
+        this->writer->WriteLine("Sorry, the user has been banned!");
+    }
+    else if ((uo & UserOptions::OK) == UserOptions::OK)
+    {
+        this->LoadUser(*us);
+    }
+
+    delete us;
+    us = nullptr;
 }
 
 void Game::LogoutUser()
@@ -145,14 +177,76 @@ void Game::LogoutUser()
     }
 }
 
+int Game::FindUser(UserStruct& us)
+{
+    Vector<String> v, vv;
+    String users;
+    this->provider->Action(users, ProviderOptions::UserFind);
+    String::Split('\n', v, users);
+
+    int i = 0;
+
+    bool isLoopExit = false;
+    bool isFound = false;
+
+    while (!(isLoopExit || isFound))
+    {
+        vv.clear();
+        String user = v[i];
+        String::Split(' ', vv, user);
+
+        if (this->command->Param1 == vv[0])
+        {
+            isFound = true;
+        }
+
+        i++;
+
+        if (i >= v.getSize())
+        {
+            isLoopExit = true;
+        }
+    }
+
+    if (isFound)
+    {
+        if (this->user->Hash(this->command->Param2) != vv[1].StringToInt())
+        {
+            return UserOptions::WrongPassword;
+        }
+        else if (vv[4].StringToInt() == UserOptions::Ban)
+        {
+            return UserOptions::Ban;
+        }
+
+        us.fileName = vv[2];
+        us.id = vv[3].StringToInt();
+
+        return (UserOptions::Empty | UserOptions::OK | UserOptions::AlreadyExisist);
+    }
+
+    return UserOptions::NotFound;
+}
+
 void Game::SignupUser()
 {
+    //TODO
 }
 
 void Game::SaveUser()
 {
+    //TODO
 }
 
-void Game::LoadUser()
+void Game::LoadUser(UserStruct& us)
 {
+    if (us.id <= 10)
+    {
+        delete this->user;
+        this->user = nullptr;
+
+        this->user = new Admin(this->writer, this->reader, this->provider);
+        this->user->SetIsHasLog(true);
+    }
+    //TODO LoadPlayer
 }
