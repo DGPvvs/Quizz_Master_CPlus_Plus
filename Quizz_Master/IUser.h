@@ -4,12 +4,20 @@
 #include "CommandStruct.h"
 #include "IWriter.h"
 #include "IReader.h"
+#include "UserStruct.h"
 
 class IUser
 {
 public:
     virtual String getName() const = 0;
+    virtual void setFirstName(const String) = 0;
+    virtual void setLastName(const String) = 0;
     virtual String getUserName() const = 0;
+    virtual void setUserName(const String) = 0;
+    virtual void setId(const unsigned int) = 0;
+    virtual unsigned int getId() const = 0;
+    virtual String getFileName() const = 0;
+    virtual void setFileName(const String) = 0;
     virtual void Login() = 0;
     virtual void Logout() = 0;
     virtual void Action(const CommandStruct&) = 0;
@@ -19,8 +27,10 @@ public:
     virtual bool GetIsHasLog() = 0;
     virtual String BuildUserData() = 0;
     virtual void Help() = 0;
-    virtual unsigned int Hash(const String& str) = 0;
+    virtual unsigned int Hash(const String&) = 0;
     virtual void SetIsHasLog(bool) = 0;
+    virtual int FindUserData(UserStruct&, bool) = 0;
+    virtual void AllUsers(String&) = 0;
 };
 
 #endif

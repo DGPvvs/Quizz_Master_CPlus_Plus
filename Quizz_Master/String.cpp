@@ -199,7 +199,6 @@ void String::free()
 
 void String::Split(char separator, Vector<String>& v, String s)
 {
-
 	Vector<char> vv;
 
 	size_t i = 0;
@@ -244,6 +243,30 @@ void String::Split(char separator, Vector<String>& v, String s)
 		delete[] arr;
 		arr = nullptr;
 	}
+}
+
+void String::Join(char separator, Vector<String>& v, String& s)
+{
+	bool isFirst = true;
+	char* arr = new char[2] {'\0'};
+	arr[0] = separator;
+
+	for (int i = 0; i < v.getSize(); ++i)
+	{
+		if (isFirst)
+		{
+			isFirst = false;
+		}
+		else
+		{
+			s += String(arr);
+		}
+
+		s += v[i];
+	}
+
+	delete[] arr;
+	arr = nullptr;
 }
 
 String String::UIntToString(unsigned int num)

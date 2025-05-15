@@ -35,7 +35,6 @@ public:
     void LoginUser();
     void LogoutUser();
     void SignupUser();
-    int FindUser(UserStruct& us);
 
     void SaveUser();
     void LoadUser(UserStruct& us);

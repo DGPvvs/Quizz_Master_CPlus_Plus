@@ -29,9 +29,44 @@ String User::getName() const
     return this->firstName + " " + this->lastName;
 }
 
+void User::setFirstName(const String firstName)
+{
+    this->firstName = firstName;
+}
+
+void User::setLastName(const String lastName)
+{
+    this->lastName = lastName;
+}
+
+void User::setUserName(const String userName)
+{
+    this->userName = userName;
+}
+
+void User::setId(const unsigned int id)
+{
+    this->id = id;
+}
+
+unsigned int User::getId() const
+{
+    return this->id;
+}
+
 String User::getUserName() const
 {
     return this->userName;
+}
+
+String User::getFileName() const
+{
+    return this->userFile;
+}
+
+void User::setFileName(const String fileName)
+{
+    this->userFile = fileName;
 }
 
 unsigned int User::GetPassword() const
@@ -121,4 +156,75 @@ void User::Help()
     std::cout << "logout" << std::endl;
     std::cout << "help" << std::endl;
     std::cout << "exit" << std::endl;
+}
+
+void User::AllUsers(String& users)
+{
+    this->provider->Action(users, ProviderOptions::UserFind);
+}
+
+int User::FindUserData(UserStruct& us, bool exsist)
+{
+    Vector<String> usersVec, v;
+    String users;
+    this->AllUsers(users);
+    String::Split(ROW_DATA_SEPARATOR, usersVec, users);
+
+    int userIndex = this->FindUserIndex(us, usersVec);
+
+    if (userIndex > -1)
+    {
+        String user = usersVec[userIndex];
+        String::Split(ELEMENT_DATA_SEPARATOR, v, user);
+        if (exsist && this->Hash(us.password) != v[1].StringToInt())
+        {
+            return UserOptions::WrongPassword;
+        }
+        else if (exsist && v[4].StringToInt() == UserOptions::Ban)
+        {
+            return UserOptions::Ban;
+        }
+
+        us.fileName = v[2];
+        us.id = v[3].StringToInt();
+
+        return (UserOptions::Empty | UserOptions::OK | UserOptions::AlreadyExisist);
+    }
+
+    return UserOptions::NotFound;
+}
+
+int User::FindUserIndex(UserStruct& us, Vector<String>& usersVec)
+{
+    Vector<String> v;
+
+    int result = -1;
+
+    int i = 0;
+
+    bool isLoopExit = false;
+    bool isFound = false;
+    bool notEmptyVector = usersVec.getSize() > 0;
+
+    while (notEmptyVector && !(isLoopExit || isFound))
+    {
+        v.clear();
+        String user = usersVec[i];
+        String::Split(ELEMENT_DATA_SEPARATOR, v, user);
+
+        if (us.userName == v[0])
+        {
+            isFound = true;
+            result = i;
+        }
+
+        i++;
+
+        if (i >= usersVec.getSize())
+        {
+            isLoopExit = true;
+        }
+    }
+
+    return result;
 }

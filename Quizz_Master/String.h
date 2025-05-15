@@ -62,6 +62,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const String& other);
 
 	static void Split(char separator, Vector<String>& v, String s);
+	static void Join(char separator, Vector<String>& v, String& s);
 	
 	static String UIntToString(unsigned int);
 

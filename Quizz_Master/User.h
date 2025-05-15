@@ -7,6 +7,7 @@
 #include "IReader.h"
 #include "IBaseProvider.h"
 #include "CommandStruct.h"
+#include "UserStruct.h"
 
 class User : public IUser
 {
@@ -25,6 +26,7 @@ private:
     IWriter* writer;
     IReader* reader;
     IBaseProvider* provider;
+    int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
 
 protected:
     void SetIsHasLog(bool);
@@ -35,7 +37,17 @@ protected:
 public:
     User(IWriter* writer, IReader* reader, IBaseProvider* provider);
     virtual String getName() const override;
+    virtual void setFirstName(const String)override;
+    virtual void setLastName(const String)override;
+
     virtual String getUserName() const override;
+    virtual void setUserName(const String) override;
+
+    virtual void setId(const unsigned int) override;
+    virtual unsigned int getId() const override;
+
+    virtual String getFileName() const override;
+    virtual void setFileName(const String) override;
 
     virtual void Login() override;
     virtual void Logout() override;
@@ -44,6 +56,8 @@ public:
     virtual IReader& Reader() override;
     virtual bool GetIsHasLog() override;
     virtual unsigned int Hash(const String& str) override;
+    virtual int FindUserData(UserStruct&, bool) override;
+    virtual void AllUsers(String&) override;
 
     virtual void Print() override;
     virtual String BuildUserData() override;

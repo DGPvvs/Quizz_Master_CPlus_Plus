@@ -77,4 +77,19 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
         String s = USERS_FILE_NAME;
         str = FileLoad(s);
     }
+    else if (options == ProviderOptions::NewUserSave)
+    {
+        char* arr = new char[2] {'\0'};
+        arr[0] = FILENAME_TO_DATA_SEPARATOR;
+        String s = USERS_FILE_NAME + String(arr) + str;
+        FileSave(s);
+
+        delete[] arr;
+        arr = nullptr;
+    }
+    else if (options == ProviderOptions::UserLoad)
+    {
+        String s = str;
+        str = FileLoad(s);
+    }
 }

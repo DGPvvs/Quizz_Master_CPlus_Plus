@@ -80,10 +80,15 @@ void Game::GameLoop()
 void Game::SetCommandStruct()
 {
     Vector<String> commandLine;
-    this->command->command = "";
+    this->command->command = EMPTY_STRING;
 
-    String s = *reader->ReadLine();
-    String::Split(' ', commandLine, s);
+    this->writer->Write(PROMPT_STRING);
+
+    String* s = this->reader->ReadLine();
+    String::Split(ELEMENT_DATA_SEPARATOR, commandLine, *s);
+
+    delete s;
+    s = nullptr;
 
     if (commandLine.getSize() > 0)
     {
@@ -91,7 +96,7 @@ void Game::SetCommandStruct()
 
         for (size_t i = commandLine.getSize(); i < 6; i++)
         {
-            commandLine.push_back("");
+            commandLine.push_back(EMPTY_STRING);
         }
 
         this->command->Param1 = commandLine[1];
@@ -142,7 +147,10 @@ void Game::LoginUser()
 
     UserStruct* us = new UserStruct();
 
-    int uo = this->FindUser(*us);
+    us->userName = this->command->Param1;
+    us->password = this->command->Param2;
+
+    int uo = this->user->FindUserData(*us, EXSIST);
 
     if (uo == UserOptions::NotFound)
     {
@@ -159,6 +167,8 @@ void Game::LoginUser()
     else if ((uo & UserOptions::OK) == UserOptions::OK)
     {
         this->LoadUser(*us);
+        String s = "Welcome " + this->user->getName() + "!";
+        this->writer->WriteLine(s);
     }
 
     delete us;
@@ -177,60 +187,50 @@ void Game::LogoutUser()
     }
 }
 
-int Game::FindUser(UserStruct& us)
-{
-    Vector<String> v, vv;
-    String users;
-    this->provider->Action(users, ProviderOptions::UserFind);
-    String::Split('\n', v, users);
-
-    int i = 0;
-
-    bool isLoopExit = false;
-    bool isFound = false;
-
-    while (!(isLoopExit || isFound))
-    {
-        vv.clear();
-        String user = v[i];
-        String::Split(' ', vv, user);
-
-        if (this->command->Param1 == vv[0])
-        {
-            isFound = true;
-        }
-
-        i++;
-
-        if (i >= v.getSize())
-        {
-            isLoopExit = true;
-        }
-    }
-
-    if (isFound)
-    {
-        if (this->user->Hash(this->command->Param2) != vv[1].StringToInt())
-        {
-            return UserOptions::WrongPassword;
-        }
-        else if (vv[4].StringToInt() == UserOptions::Ban)
-        {
-            return UserOptions::Ban;
-        }
-
-        us.fileName = vv[2];
-        us.id = vv[3].StringToInt();
-
-        return (UserOptions::Empty | UserOptions::OK | UserOptions::AlreadyExisist);
-    }
-
-    return UserOptions::NotFound;
-}
 
 void Game::SignupUser()
 {
-    //TODO
+    if (this->user->GetIsHasLog())
+    {
+        this->writer->WriteLine("You cannot log in a new user before logging out!");
+        return;
+    }
+
+    UserStruct* us = new UserStruct();
+
+    us->userName = this->command->Param3;
+    us->password = this->command->Param4;
+
+    int uo = this->user->FindUserData(*us, NOT_EXSIST);
+
+    if ((uo & UserOptions::AlreadyExisist) == UserOptions::AlreadyExisist)
+    {
+        this->writer->WriteLine("Such a user already exists!");
+        return;
+    }
+    else if (us->password != this->command->Param5)
+    {
+        this->writer->WriteLine("Passwords do not match!");
+        return;
+    }
+
+    Vector<String> usersVec;
+    String users;
+    this->user->AllUsers(users);
+    String::Split(ROW_DATA_SEPARATOR, usersVec, users);
+
+    String newUser = us->userName + " " + String::UIntToString(this->user->Hash(us->password)) + " ";
+
+    String fileName = us->userName + String::UIntToString(++this->maxUserId) + ".txt";
+
+    newUser += fileName + " " + String::UIntToString(this->maxUserId) + " " + String::UIntToString(UserOptions::OK);
+    usersVec.push_back(newUser);
+
+    String usersString = EMPTY_STRING;
+
+    String::Join(ROW_DATA_SEPARATOR, usersVec, usersString);
+
+    this->provider->Action(usersString, ProviderOptions::NewUserSave);
 }
 
 void Game::SaveUser()
@@ -245,8 +245,26 @@ void Game::LoadUser(UserStruct& us)
         delete this->user;
         this->user = nullptr;
 
-        this->user = new Admin(this->writer, this->reader, this->provider);
-        this->user->SetIsHasLog(true);
+        this->user = new Admin(this->writer, this->reader, this->provider);        
+
+        String s = us.fileName;
+        this->provider->Action(s, ProviderOptions::UserLoad);
+        Vector<String> v, vv;
+
+        String::Split(ROW_DATA_SEPARATOR, v, s);        
+
+        String::Split(ELEMENT_DATA_SEPARATOR, vv, v[0]);
+
+        this->user->setFirstName(vv[0]);
+        this->user->setLastName(vv[1]);
     }
-    //TODO LoadPlayer
+    else
+    {
+        //TODO LoadPlayer
+    }
+
+    this->user->SetIsHasLog(true);
+    this->user->setFileName(us.fileName);
+    this->user->setId(us.id);
+    this->user->setUserName(us.userName);
 }

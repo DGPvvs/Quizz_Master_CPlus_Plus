@@ -8,6 +8,7 @@ struct UserStruct
 public:
     String userName;
     String fileName;
+    String password;
     unsigned int id;
 };
 
