@@ -6,6 +6,8 @@
 struct UserStruct
 {
 public:
+    String firstName;
+    String lastName;
     String userName;
     String fileName;
     String password;

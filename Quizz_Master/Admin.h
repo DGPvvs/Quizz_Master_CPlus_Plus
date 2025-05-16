@@ -2,7 +2,9 @@
 #define Admin_H
 
 #include "User.h"
-
+/// <summary>
+/// Декларация на потребителски клас Администратор
+/// </summary>
 class Admin : public User
 {
 public:

@@ -1,20 +1,28 @@
 #include "Admin.h"
-
+/// <summary>
+/// Конструктор
+/// </summary>
+/// <param name="writer"></param>
+/// <param name="reader"></param>
+/// <param name="provider"></param>
 Admin::Admin(IWriter* writer, IReader* reader, IBaseProvider* provider)
 	: User::User(writer, reader, provider)
 {
 }
 
+/// <summary>
+/// Петод извеждащ функционалностите на Admin
+/// </summary>
 void Admin::Help()
 {
 	User::Help();
 
-	std::cout << "pending" << std::endl;
-	std::cout << "approve-quiz <quiz id>" << std::endl;
-	std::cout << "approve-quiz <quiz id>" << std::endl;
-	std::cout << "reject-quiz <quiz id> <reason>" << std::endl;
-	std::cout << "view-reports" << std::endl;
-	std::cout << "ban <username>" << std::endl;
+	this->Writer().WriteLine("pending");
+	this->Writer().WriteLine("approve-quiz <quiz id>");
+	this->Writer().WriteLine("approve-quiz <quiz id>");
+	this->Writer().WriteLine("reject-quiz <quiz id> <reason>");
+	this->Writer().WriteLine("view-reports");
+	this->Writer().WriteLine("ban <username>");
 }
 
 void Admin::Action(const CommandStruct& cndStr)

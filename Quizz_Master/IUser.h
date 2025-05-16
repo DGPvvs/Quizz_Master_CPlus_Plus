@@ -5,6 +5,7 @@
 #include "IWriter.h"
 #include "IReader.h"
 #include "UserStruct.h"
+#include "GlobalConstants.h"
 
 class IUser
 {
@@ -31,6 +32,7 @@ public:
     virtual void SetIsHasLog(bool) = 0;
     virtual int FindUserData(UserStruct&, bool) = 0;
     virtual void AllUsers(String&) = 0;
+    virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) = 0;
 };
 
 #endif

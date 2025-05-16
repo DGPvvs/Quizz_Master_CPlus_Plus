@@ -132,6 +132,7 @@
     <ClCompile Include="ConsoleWriter.cpp" />
     <ClCompile Include="FileBaseProvider.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Quizz_Master.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="User.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="IReader.h" />
     <ClInclude Include="IUser.h" />
     <ClInclude Include="IWriter.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserStruct.h" />

@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "User.h"
 #include "Admin.h"
+#include "Player.h"
 #include "GlobalConstants.h"
 
 Game::Game(IWriter* writer, IReader* reader, IBaseProvider* provider)
@@ -245,26 +246,14 @@ void Game::LoadUser(UserStruct& us)
         delete this->user;
         this->user = nullptr;
 
-        this->user = new Admin(this->writer, this->reader, this->provider);        
-
-        String s = us.fileName;
-        this->provider->Action(s, ProviderOptions::UserLoad);
-        Vector<String> v, vv;
-
-        String::Split(ROW_DATA_SEPARATOR, v, s);        
-
-        String::Split(ELEMENT_DATA_SEPARATOR, vv, v[0]);
-
-        this->user->setFirstName(vv[0]);
-        this->user->setLastName(vv[1]);
+        this->user = new Admin(this->writer, this->reader, this->provider);
     }
     else
     {
-        //TODO LoadPlayer
+        this->user = new Player(this->writer, this->reader, this->provider);
     }
 
-    this->user->SetIsHasLog(true);
-    this->user->setFileName(us.fileName);
-    this->user->setId(us.id);
-    this->user->setUserName(us.userName);
+    Vector<String> v;
+
+    this->user->SetUpUserData(us, v, UserOptions::Empty);
 }

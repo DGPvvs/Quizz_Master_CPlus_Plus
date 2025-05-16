@@ -61,12 +61,12 @@ String User::getUserName() const
 
 String User::getFileName() const
 {
-    return this->userFile;
+    return this->fileName;
 }
 
 void User::setFileName(const String fileName)
 {
-    this->userFile = fileName;
+    this->fileName = fileName;
 }
 
 unsigned int User::GetPassword() const
@@ -151,11 +151,11 @@ String User::BuildUserData()
 
 void User::Help()
 {
-    std::cout << "signup <first-name> <last-name> <username> <password1> <password2>" << std::endl;
-    std::cout << "login <username> <password>" << std::endl;
-    std::cout << "logout" << std::endl;
-    std::cout << "help" << std::endl;
-    std::cout << "exit" << std::endl;
+    this->writer->WriteLine("signup <first-name> <last-name> <username> <password1> <password2>");
+    this->writer->WriteLine("login <username> <password>");
+    this->writer->WriteLine("logout");
+    this->writer->WriteLine("help");
+    this->writer->WriteLine("exit");
 }
 
 void User::AllUsers(String& users)
@@ -227,4 +227,28 @@ int User::FindUserIndex(UserStruct& us, Vector<String>& usersVec)
     }
 
     return result;
+}
+
+void User::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
+{
+    if ((uo & UserOptions::NewUserCreated) == UserOptions::NewUserCreated)
+    {
+        this->firstName = us.firstName;
+        this->lastName = us.lastName;
+    }
+    else
+    {
+        String s = us.fileName;
+        this->provider->Action(s, ProviderOptions::UserLoad);
+
+        String::Split(ROW_DATA_SEPARATOR, v, s);
+
+        this->firstName = v[0];
+        this->lastName = v[1];
+        this->SetIsHasLog(true);
+    }
+
+    this->fileName = us.fileName;
+    this->id = us.id;
+    this->userName = us.userName;
 }

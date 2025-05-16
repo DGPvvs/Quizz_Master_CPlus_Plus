@@ -17,7 +17,7 @@ private:
     String firstName;
     String lastName;
     String userName;
-    String userFile;
+    String fileName;
 
     unsigned int password;
 
@@ -35,10 +35,10 @@ protected:
     void SetPassword(unsigned int);    
 
 public:
-    User(IWriter* writer, IReader* reader, IBaseProvider* provider);
+    User(IWriter*, IReader*, IBaseProvider*);
     virtual String getName() const override;
-    virtual void setFirstName(const String)override;
-    virtual void setLastName(const String)override;
+    virtual void setFirstName(const String) override;
+    virtual void setLastName(const String) override;
 
     virtual String getUserName() const override;
     virtual void setUserName(const String) override;
@@ -58,6 +58,7 @@ public:
     virtual unsigned int Hash(const String& str) override;
     virtual int FindUserData(UserStruct&, bool) override;
     virtual void AllUsers(String&) override;
+    virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
 
     virtual void Print() override;
     virtual String BuildUserData() override;
