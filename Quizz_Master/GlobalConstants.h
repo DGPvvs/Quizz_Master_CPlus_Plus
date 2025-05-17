@@ -34,7 +34,7 @@ const char ROW_DATA_SEPARATOR = '\n';
 const char ELEMENT_DATA_SEPARATOR = ' ';
 
 const String EMPTY_STRING = "";
-const String PROMPT_STRING = ">:";
+const String PROMPT_STRING = "> ";
 
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;

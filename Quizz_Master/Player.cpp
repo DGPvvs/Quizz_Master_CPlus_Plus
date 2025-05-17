@@ -15,25 +15,14 @@ Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider)
     this->Init();
 }
 
-Player::~Player()
-{
-    delete this->listCreatedQuizzes;
-    delete this->listLikedQuizzes;
-    delete this->listFavoriteQuizzes;
-    delete this->listFinishedChallenges;
-
-    this->listCreatedQuizzes = nullptr;
-    this->listLikedQuizzes = nullptr;
-    this->listFavoriteQuizzes = nullptr;
-    this->listFinishedChallenges = nullptr;
-}
-
 void Player::Init()
 {
-    this->listCreatedQuizzes = new Vector<String>();
-    this->listLikedQuizzes = new Vector<unsigned int>();
-    this->listFavoriteQuizzes = new Vector<unsigned int>();
-    this->listFinishedChallenges = new Vector<String>();
+    Vector<String> a, b;
+    Vector<unsigned int> c, d;
+    this->listCreatedQuizzes = a;
+    this->listLikedQuizzes = c;
+    this->listFavoriteQuizzes = d;
+    this->listFinishedChallenges = b;
 }
 
 void Player::Help()
@@ -49,12 +38,52 @@ void Player::Action(const CommandStruct& cndStr)
 
 void Player::SaveData()
 {
+    String s = this->BuildUserData();
+    this->Provider().Action(s, ProviderOptions::UserSave);
+
     //TODO Да направя метод за запис на данните на плеара във собствен файл с име указано от 
 }
 
 String Player::BuildUserData()
 {
     String result = User::BuildUserData();
+
+    char* arr = new char[2] {'\0'};
+
+    arr[0] = ROW_DATA_SEPARATOR;
+
+    String newLine(arr);
+
+    result += String::UIntToString(this->level) + newLine;
+    result += String::UIntToString(this->points) + newLine;
+    result += String::UIntToString(this->numberCreatedQuizzes) + newLine;
+    result += String::UIntToString(this->numberLikedQuizzes) + newLine;
+    result += String::UIntToString(this->numberFavoriteQuizzes) + newLine;
+    result += String::UIntToString(this->numberFinishedChallenges) + newLine;
+    result += String::UIntToString(this->numberSolvedTestQuizzes) + newLine;
+    result += String::UIntToString(this->numberSolvedNormalQuizzes) + newLine;
+    result += String::UIntToString(this->numberCreatedQuizzesChallengers) + newLine;
+
+    for (size_t i = 0; i < this->listCreatedQuizzes.getSize(); i++)
+    {        
+        result = result + this->listCreatedQuizzes[i] + newLine;
+    }
+
+    for (size_t i = 0; i < this->listLikedQuizzes.getSize(); i++)
+    {
+        result = result + String::UIntToString(this->listLikedQuizzes[i]) + newLine;
+    }
+
+    for (size_t i = 0; i < this->listFavoriteQuizzes.getSize(); i++)
+    {
+        result = result + String::UIntToString(this->listFavoriteQuizzes[i]) + newLine;
+    }
+
+    for (size_t i = 0; i < this->listFinishedChallenges.getSize(); i++)
+    {
+        result = result + this->listFinishedChallenges[i] + newLine;
+    }    
+
     return result;
 }
 
@@ -92,28 +121,28 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
 
     for (; i < j + this->numberCreatedQuizzes; ++i)
     {
-        this->listCreatedQuizzes->push_back(v[i]);
+        this->listCreatedQuizzes.push_back(v[i]);
     }
 
     j = i;
 
     for (; i < j + this->numberLikedQuizzes; ++i)
     {
-        this->listLikedQuizzes->push_back(v[i].StringToInt());
+        this->listLikedQuizzes.push_back(v[i].StringToInt());
     }
 
     j = i;
 
     for (; i < j + this->numberFavoriteQuizzes; ++i)
     {
-        this->listFavoriteQuizzes->push_back(v[i].StringToInt());
+        this->listFavoriteQuizzes.push_back(v[i].StringToInt());
     }
 
     j = i;
 
     for (; i < j + this->numberFinishedChallenges; ++i)
     {
-        this->listFinishedChallenges->push_back(v[i]);
+        this->listFinishedChallenges.push_back(v[i]);
     }
 
     /*0 <firstName>

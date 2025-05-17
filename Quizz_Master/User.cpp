@@ -110,6 +110,11 @@ IReader& User::Reader()
     return *reader;
 }
 
+IBaseProvider& User::Provider()
+{
+    return *provider;
+}
+
 bool User::GetIsHasLog()
 {
     return this->isHasLogin;
@@ -132,19 +137,20 @@ void User::Print()
 
 String User::BuildUserData()
 {
-    String result = "";
+    String result = EMPTY_STRING;
 
-    result += "[" + this->id;
-    result += "]";
+    char* arr = new char[2] {'\0'};
+    arr[0] = FILENAME_TO_DATA_SEPARATOR;
 
-    unsigned int id;
+    result += this->fileName + String(arr);
 
-    String firstName;
-    String lastName;
-    String userName;
+    arr[0] = ROW_DATA_SEPARATOR;
+    String newLine = String(arr);
 
-    unsigned int password;
-    //TODO
+    result += this->firstName + newLine;
+    result += this->lastName + newLine;
+
+    delete arr;
 
     return result;
 }

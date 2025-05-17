@@ -17,10 +17,10 @@ private:
     unsigned int numberSolvedNormalQuizzes;
     unsigned int numberCreatedQuizzesChallengers;
 
-    Vector<String>* listCreatedQuizzes;
-    Vector<unsigned int>* listLikedQuizzes;
-    Vector<unsigned int>* listFavoriteQuizzes;
-    Vector<String>* listFinishedChallenges;
+    Vector<String> listCreatedQuizzes;
+    Vector<unsigned int> listLikedQuizzes;
+    Vector<unsigned int> listFavoriteQuizzes;
+    Vector<String> listFinishedChallenges;
 
     void Init();
     void SaveData();
@@ -32,7 +32,7 @@ public:
     virtual void Action(const CommandStruct&) override;
     virtual String BuildUserData() override;
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
-    virtual ~Player();
+    virtual ~Player() {};
 };
 
 #endif // !Player_H

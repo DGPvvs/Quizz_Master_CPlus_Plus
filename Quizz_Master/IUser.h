@@ -4,6 +4,7 @@
 #include "CommandStruct.h"
 #include "IWriter.h"
 #include "IReader.h"
+#include "IBaseProvider.h"
 #include "UserStruct.h"
 #include "GlobalConstants.h"
 
@@ -24,6 +25,7 @@ public:
     virtual void Action(const CommandStruct&) = 0;
     virtual IWriter& Writer() = 0;
     virtual IReader& Reader() = 0;
+    virtual IBaseProvider& Provider() = 0;
     virtual void Print() = 0;
     virtual bool GetIsHasLog() = 0;
     virtual String BuildUserData() = 0;

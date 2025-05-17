@@ -92,4 +92,9 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
         String s = str;
         str = FileLoad(s);
     }
+    else if (options == ProviderOptions::UserSave)
+    {
+        String s = str;
+        FileSave(s);
+    }
 }

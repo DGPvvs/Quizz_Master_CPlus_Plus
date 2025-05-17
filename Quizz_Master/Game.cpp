@@ -199,6 +199,8 @@ void Game::SignupUser()
 
     UserStruct* us = new UserStruct();
 
+    us->firstName = this->command->Param1;
+    us->lastName = this->command->Param2;
     us->userName = this->command->Param3;
     us->password = this->command->Param4;
 
@@ -207,11 +209,15 @@ void Game::SignupUser()
     if ((uo & UserOptions::AlreadyExisist) == UserOptions::AlreadyExisist)
     {
         this->writer->WriteLine("Such a user already exists!");
+        delete us;
+        us = nullptr;
         return;
     }
     else if (us->password != this->command->Param5)
     {
         this->writer->WriteLine("Passwords do not match!");
+        delete us;
+        us = nullptr;
         return;
     }
 
@@ -225,6 +231,8 @@ void Game::SignupUser()
     String fileName = us->userName + String::UIntToString(++this->maxUserId) + ".txt";
 
     newUser += fileName + " " + String::UIntToString(this->maxUserId) + " " + String::UIntToString(UserOptions::OK);
+    us->fileName = fileName;
+    us->id = this->maxUserId;
     usersVec.push_back(newUser);
 
     String usersString = EMPTY_STRING;
@@ -232,6 +240,13 @@ void Game::SignupUser()
     String::Join(ROW_DATA_SEPARATOR, usersVec, usersString);
 
     this->provider->Action(usersString, ProviderOptions::NewUserSave);
+
+    Player* newPlayer = new Player(this->writer, this->reader, this->provider, *us, UserOptions::NewUserCreated);
+
+    this->writer->WriteLine("Signup " + us->userName + " successful!");
+
+    delete newPlayer;
+    newPlayer = nullptr;
 }
 
 void Game::SaveUser()
