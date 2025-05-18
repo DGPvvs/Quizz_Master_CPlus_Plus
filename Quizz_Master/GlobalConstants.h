@@ -48,5 +48,6 @@ const String HELP = "help";
 const String BAN = "ban";
 
 const String VIEW_PROFILE = "view-profile";
+const String VIEW = "view";
 
 #endif

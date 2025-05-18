@@ -32,7 +32,7 @@ private:
     unsigned int PointsForLevel();
 
 public:
-    Player(IWriter*, IReader*, IBaseProvider*, UserStruct&, UserOptions);
+    Player(IWriter*, IReader*, IBaseProvider*, UserStruct*, UserOptions);
     Player(IWriter*, IReader*, IBaseProvider*);
     virtual void Help() override;
     virtual void Action(const CommandStruct&) override;
@@ -40,6 +40,7 @@ public:
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
     virtual void SaveData() override;
     void ViewSelfProfile(DatBuild);
+    void ViewOtherProfile(const String&, DatBuild);
     virtual ~Player() {};
 };
 

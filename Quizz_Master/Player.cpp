@@ -1,11 +1,11 @@
 #include "Player.h"
 
-Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct& us, UserOptions uo)
+Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct* us, UserOptions uo)
     : User::User(writer, reader, provider) 
 {
     this->Init();
     Vector<String> v;
-    this->SetUpUserData(us, v, uo);
+    this->SetUpUserData(*us, v, uo);
     this->SaveData();
 }
 
@@ -56,6 +56,10 @@ void Player::Action(const CommandStruct& cmdStr)
     {
         this->ViewSelfProfile(VIEW_SELF_PROFILE);
 
+    }
+    else if (cmdStr.command == VIEW)
+    {
+        this->ViewOtherProfile(cmdStr.Param1, VIEW_OTHER_PROFILE);
     }
 }
 
@@ -132,6 +136,36 @@ void Player::ViewSelfProfile(DatBuild option)
     } 
 
     this->Writer().WriteLine(result);
+}
+
+void Player::ViewOtherProfile(const String& userName, DatBuild option)
+{
+    UserStruct* us = new UserStruct();    
+
+    us->userName = userName;
+
+    int uo = this->FindUserData(*us, EXSIST);
+
+    if (uo == UserOptions::NotFound)
+    {
+        this->Writer().WriteLine("User not found!");
+    }
+    else if ((uo & UserOptions::WrongPassword) == UserOptions::WrongPassword) //TODO Да се преработи да не връща грешна парола
+    {
+        Player* otherPlayer = new Player(&Writer(), &Reader(), &Provider(), us, UserOptions::Empty);
+
+        Vector<String> v;
+
+        otherPlayer->SetUpUserData(*us, v, UserOptions::Empty);
+        otherPlayer->ViewSelfProfile(DatBuild::VIEW_OTHER_PROFILE);
+
+        delete otherPlayer;
+        otherPlayer = nullptr;
+    }
+
+    delete us;
+    us = nullptr;
+
 }
 
 void Player::SaveData()

@@ -241,7 +241,7 @@ void Game::SignupUser()
 
     this->provider->Action(usersString, ProviderOptions::NewUserSave);
 
-    Player* newPlayer = new Player(this->writer, this->reader, this->provider, *us, UserOptions::NewUserCreated);
+    Player* newPlayer = new Player(this->writer, this->reader, this->provider, us, UserOptions::NewUserCreated);
 
     this->writer->WriteLine("Signup " + us->userName + " successful!");
 
