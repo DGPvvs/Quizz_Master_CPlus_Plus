@@ -23,7 +23,6 @@ private:
     Vector<String> listFinishedChallenges;
 
     void Init();
-    void SaveData();
 
 public:
     Player(IWriter*, IReader*, IBaseProvider*, UserStruct&, UserOptions);
@@ -32,6 +31,7 @@ public:
     virtual void Action(const CommandStruct&) override;
     virtual String BuildUserData() override;
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
+    virtual void SaveData() override;
     virtual ~Player() {};
 };
 

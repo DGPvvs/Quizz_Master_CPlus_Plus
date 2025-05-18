@@ -178,7 +178,7 @@ void Game::LoginUser()
 
 void Game::LogoutUser()
 {
-    //TODO - Записва се статуса на потребителя, ако не е админ
+    this->user->SaveData();
     delete this->user;
     this->user = nullptr;
 
@@ -187,7 +187,6 @@ void Game::LogoutUser()
         this->user = new User(this->writer, this->reader, this->provider);
     }
 }
-
 
 void Game::SignupUser()
 {
@@ -233,6 +232,7 @@ void Game::SignupUser()
     newUser += fileName + " " + String::UIntToString(this->maxUserId) + " " + String::UIntToString(UserOptions::OK);
     us->fileName = fileName;
     us->id = this->maxUserId;
+    us->password = EMPTY_STRING;
     usersVec.push_back(newUser);
 
     String usersString = EMPTY_STRING;
@@ -244,6 +244,9 @@ void Game::SignupUser()
     Player* newPlayer = new Player(this->writer, this->reader, this->provider, *us, UserOptions::NewUserCreated);
 
     this->writer->WriteLine("Signup " + us->userName + " successful!");
+
+    delete us;
+    us = nullptr;
 
     delete newPlayer;
     newPlayer = nullptr;

@@ -12,6 +12,10 @@ public:
     virtual void Help() override;
     virtual void Action(const CommandStruct&) override;
     virtual String BuildUserData() override;
+    virtual void SaveData() override;
+
+    void Ban(const CommandStruct& cmdStr);
+
     virtual ~Admin() {};
 };
 #endif

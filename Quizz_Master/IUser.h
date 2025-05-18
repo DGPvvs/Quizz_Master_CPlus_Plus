@@ -35,6 +35,7 @@ public:
     virtual int FindUserData(UserStruct&, bool) = 0;
     virtual void AllUsers(String&) = 0;
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) = 0;
+    virtual void SaveData() = 0;
 };
 
 #endif

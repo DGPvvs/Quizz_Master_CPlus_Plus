@@ -25,8 +25,7 @@ private:
 
     IWriter* writer;
     IReader* reader;
-    IBaseProvider* provider;
-    int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
+    IBaseProvider* provider;    
 
 protected:
     void SetIsHasLog(bool);
@@ -36,6 +35,7 @@ protected:
     virtual IWriter& Writer() override;
     virtual IReader& Reader() override;
     virtual IBaseProvider& Provider() override;
+    int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
 
 public:
     User(IWriter*, IReader*, IBaseProvider*);
@@ -65,6 +65,7 @@ public:
     virtual void Print() override;
     virtual String BuildUserData() override;
     virtual void Help() override;
+    virtual void SaveData() override;
 
     virtual ~User() {}
 };

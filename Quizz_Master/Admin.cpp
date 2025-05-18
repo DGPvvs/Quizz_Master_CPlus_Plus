@@ -25,13 +25,72 @@ void Admin::Help()
 	this->Writer().WriteLine("ban <username>");
 }
 
-void Admin::Action(const CommandStruct& cndStr)
+void Admin::Ban(const CommandStruct& cmdStr)
 {
-	User::Action(cndStr);
+	UserStruct* us = new UserStruct();
+
+	us->firstName = EMPTY_STRING;
+	us->lastName = EMPTY_STRING;
+	us->userName = cmdStr.Param1;
+	us->password = EMPTY_STRING;
+
+	Vector<String> usersVec, v;
+	String users;
+	this->AllUsers(users);
+	String::Split(ROW_DATA_SEPARATOR, usersVec, users);
+
+	int userIndex = this->FindUserIndex(*us, usersVec);	
+
+	if (userIndex < 0)
+	{
+		this->Writer().WriteLine("No user with that name found!");
+
+		delete us;
+		us = nullptr;
+
+		return;
+	}	
+
+	String::Split(ELEMENT_DATA_SEPARATOR, v, usersVec[userIndex]);
+
+	if (v[3].StringToInt() <= 10)
+	{
+		this->Writer().WriteLine("Banning an administrator is not allowed!");
+	}
+	else
+	{
+		v[4] = String::UIntToString(UserOptions::Empty | UserOptions::Ban);
+		String s, s1;
+
+		String::Join(ELEMENT_DATA_SEPARATOR, v, s);
+
+		usersVec[userIndex] = s;
+		String::Join(ROW_DATA_SEPARATOR, usersVec, s1);
+
+		this->Provider().Action(s1, ProviderOptions::NewUserSave);
+	}
+
+	delete us;
+	us = nullptr;
+}
+
+void Admin::Action(const CommandStruct& cmdStr)
+{
+	User::Action(cmdStr);
+
+	if (cmdStr.command == BAN)
+	{
+		this->Ban(cmdStr);
+	}
 }
 
 String Admin::BuildUserData()
 {
 	String result = User::BuildUserData();
 	return result;
+}
+
+void Admin::SaveData()
+{
+
 }

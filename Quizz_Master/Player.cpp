@@ -28,7 +28,24 @@ void Player::Init()
 void Player::Help()
 {
     User::Help();
-    //TODO
+
+    this->Writer().WriteLine("view-profile");
+    this->Writer().WriteLine("edit-profile");
+    this->Writer().WriteLine("view-challeenges");
+    this->Writer().WriteLine("view-finished-challeenges");
+    this->Writer().WriteLine("view <nickname>");
+    this->Writer().WriteLine("messages");
+    this->Writer().WriteLine("create-quiz");
+    this->Writer().WriteLine("edit-quiz <quiz id>");
+    this->Writer().WriteLine("quizzes");
+    this->Writer().WriteLine("quizzes <usernane>");
+    this->Writer().WriteLine("like-quiz <quiz id>");
+    this->Writer().WriteLine("unlike-quiz <quiz id>");
+    this->Writer().WriteLine("add-to-favs <quiz id>");
+    this->Writer().WriteLine("remove-from-favs <quiz id>");
+    this->Writer().WriteLine("start-quiz <quiz id> test | normal (shuffle)");
+    this->Writer().WriteLine("save-quiz <quiz id> <filepath>");
+    this->Writer().WriteLine("report-quiz <quiz id> <reason>");
 }
 
 void Player::Action(const CommandStruct& cndStr)
@@ -40,8 +57,6 @@ void Player::SaveData()
 {
     String s = this->BuildUserData();
     this->Provider().Action(s, ProviderOptions::UserSave);
-
-    //TODO Да направя метод за запис на данните на плеара във собствен файл с име указано от 
 }
 
 String Player::BuildUserData()
@@ -53,6 +68,9 @@ String Player::BuildUserData()
     arr[0] = ROW_DATA_SEPARATOR;
 
     String newLine(arr);
+
+    delete[] arr;
+    arr = nullptr;
 
     result += String::UIntToString(this->level) + newLine;
     result += String::UIntToString(this->points) + newLine;

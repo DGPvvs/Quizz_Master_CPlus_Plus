@@ -135,6 +135,11 @@ void User::Print()
     this->writer->WriteLine("I em User");
 }
 
+void User::SaveData()
+{
+
+}
+
 String User::BuildUserData()
 {
     String result = EMPTY_STRING;
@@ -150,7 +155,7 @@ String User::BuildUserData()
     result += this->firstName + newLine;
     result += this->lastName + newLine;
 
-    delete arr;
+    delete[] arr;
 
     return result;
 }
@@ -186,7 +191,7 @@ int User::FindUserData(UserStruct& us, bool exsist)
         {
             return UserOptions::WrongPassword;
         }
-        else if (exsist && v[4].StringToInt() == UserOptions::Ban)
+        else if (exsist && (v[4].StringToInt() == UserOptions::Ban))
         {
             return UserOptions::Ban;
         }
