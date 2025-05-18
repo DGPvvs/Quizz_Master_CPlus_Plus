@@ -7,6 +7,12 @@
 class Player : public User
 {
 private:
+    enum DatBuild
+    {
+        VIEW_SELF_PROFILE,
+        VIEW_OTHER_PROFILE,
+    };
+
     unsigned int level;
     unsigned int points;
     unsigned int numberCreatedQuizzes;
@@ -23,6 +29,7 @@ private:
     Vector<String> listFinishedChallenges;
 
     void Init();
+    unsigned int PointsForLevel();
 
 public:
     Player(IWriter*, IReader*, IBaseProvider*, UserStruct&, UserOptions);
@@ -32,6 +39,7 @@ public:
     virtual String BuildUserData() override;
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
     virtual void SaveData() override;
+    void ViewSelfProfile(DatBuild);
     virtual ~Player() {};
 };
 

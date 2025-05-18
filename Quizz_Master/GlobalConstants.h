@@ -44,6 +44,9 @@ const String LOGIN = "login";
 const String SIGNUP = "signup";
 const String LOGOUT = "logout";
 const String HELP = "help";
+
 const String BAN = "ban";
+
+const String VIEW_PROFILE = "view-profile";
 
 #endif

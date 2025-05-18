@@ -48,9 +48,90 @@ void Player::Help()
     this->Writer().WriteLine("report-quiz <quiz id> <reason>");
 }
 
-void Player::Action(const CommandStruct& cndStr)
+void Player::Action(const CommandStruct& cmdStr)
 {
-    User::Action(cndStr);
+    User::Action(cmdStr);
+        
+    if (cmdStr.command == VIEW_PROFILE)
+    {
+        this->ViewSelfProfile(VIEW_SELF_PROFILE);
+
+    }
+}
+
+unsigned int Player::PointsForLevel()
+{
+    if (this->level < 10)
+    {
+        return 1000;
+    }
+    else if (this->level < 20)
+    {
+        return 2000;
+    }
+    else if (this->level < 30)
+    {
+        return 3000;
+    }
+
+    return 4000;
+}
+
+void Player::ViewSelfProfile(DatBuild option)
+{
+    char* arr = new char[2] {'\0'};
+
+    arr[0] = ROW_DATA_SEPARATOR;
+
+    String newLine(arr);    
+
+    String result = this->getName() + " " + this->getUserName() + newLine;
+    result += "Level : " + String::UIntToString(this->level);
+
+    if (option == DatBuild::VIEW_SELF_PROFILE)
+    {
+        arr[0] = '\t';
+        result += String(arr) + String::UIntToString(this->PointsForLevel() - this->points) + "/";
+        result += String::UIntToString(this->PointsForLevel()) + " Points to next level";
+    }
+
+    delete[] arr;
+    arr = nullptr;
+
+    result += newLine;
+
+    if (option == DatBuild::VIEW_OTHER_PROFILE)
+    {
+        result += newLine;
+    }
+
+    result += "Created Quizzes:" + newLine;
+
+    for (size_t i = 0; i < this->listCreatedQuizzes.getSize(); i++)
+    {
+        result += this->listCreatedQuizzes[i] + newLine;
+    }
+
+    if (option == DatBuild::VIEW_SELF_PROFILE)
+    {
+        result += newLine + "Liked Quizzes: ";
+
+        for (size_t i = 0; i < this->listLikedQuizzes.getSize(); i++)
+        {
+            result += "[" + String::UIntToString(this->listLikedQuizzes[i]) + "]";
+        }
+        
+        result += newLine + "Favorite Quizzes: ";
+
+        for (size_t i = 0; i < this->listFavoriteQuizzes.getSize(); i++)
+        {
+            result += "[" + String::UIntToString(this->listFavoriteQuizzes[i]) + "]";
+        }
+
+        result += newLine;
+    } 
+
+    this->Writer().WriteLine(result);
 }
 
 void Player::SaveData()
@@ -120,7 +201,6 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
         this->numberSolvedTestQuizzes = 0;
         this->numberSolvedNormalQuizzes = 0;
         this->numberCreatedQuizzesChallengers = 0;
-        //TODO зарежда данните за новосъздаден Player
         return;
     }
 
