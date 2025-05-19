@@ -140,24 +140,31 @@ void Player::ViewSelfProfile(DatBuild option)
 
 void Player::ViewOtherProfile(const String& userName, DatBuild option)
 {
-    UserStruct* us = new UserStruct();    
+    UserStruct* us = new UserStruct();
+    UserStruct& refUs = *us;
 
     us->userName = userName;
 
-    int uo = this->FindUserData(*us, EXSIST);
+    int uo = this->FindUserData(*us, NOT_EXSIST);
 
     if (uo == UserOptions::NotFound)
     {
         this->Writer().WriteLine("User not found!");
     }
-    else if ((uo & UserOptions::WrongPassword) == UserOptions::WrongPassword) //TODO Да се преработи да не връща грешна парола
+    else if ((uo & UserOptions::AlreadyExisist) == UserOptions::AlreadyExisist)
     {
-        Player* otherPlayer = new Player(&Writer(), &Reader(), &Provider(), us, UserOptions::Empty);
+        Player* otherPlayer = new Player(&Writer(), &Reader(), &Provider());
 
-        Vector<String> v;
-
-        otherPlayer->SetUpUserData(*us, v, UserOptions::Empty);
-        otherPlayer->ViewSelfProfile(DatBuild::VIEW_OTHER_PROFILE);
+        if (us->id <= 10)
+        {
+            otherPlayer->Writer().WriteLine("Unable to display profile information!\n The specified user is an administrator");
+        }
+        else
+        {
+            Vector<String> v;
+            otherPlayer->SetUpUserData(refUs, v, UserOptions::Empty);
+            otherPlayer->ViewSelfProfile(DatBuild::VIEW_OTHER_PROFILE);
+        }
 
         delete otherPlayer;
         otherPlayer = nullptr;
@@ -165,7 +172,6 @@ void Player::ViewOtherProfile(const String& userName, DatBuild option)
 
     delete us;
     us = nullptr;
-
 }
 
 void Player::SaveData()
