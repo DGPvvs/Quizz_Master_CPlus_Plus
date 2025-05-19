@@ -13,6 +13,16 @@ Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String nam
     this->questions = new Vector<IQuestion*>(this->numberOfQuestions);
 }
 
+Quiz::~Quiz()
+{
+    for (size_t i = 0; i < this->questions->getSize(); i++)
+    {
+        delete& this->questions[i];
+    }
+    delete this->questions;
+    this->questions = nullptr;
+}
+
 String Quiz::GetQuizName()const
 {
     return this->quizName;

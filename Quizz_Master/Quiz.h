@@ -23,6 +23,7 @@ private:
 
 public:
     Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions);
+    ~Quiz();
     String GetQuizName()const;
     String GetUserName()const;
     String GetUserFullName()const;
