@@ -1,4 +1,6 @@
 #include "Quiz.h"
+#include "UserStruct.h"
+#include "User.h"
 
 Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions)
     : writer(writer)
@@ -23,8 +25,21 @@ String Quiz::GetUserName()const
 
 String Quiz::GetUserFullName()const
 {
-    //TODO
-    return String(EMPTY_STRING);
+    UserStruct* us = new UserStruct();
+    UserStruct& refUs = *us;
+
+    us->userName = userName;
+
+    User* user = new User(writer, reader, provider);
+
+    int uo = user->FindUserData(*us, NOT_EXSIST);
+
+    String result = us->firstName + " " + us->lastName;
+
+    delete user;
+    user = nullptr;
+
+    return result;
 }
 
 unsigned int Quiz::GetNumberOfQuestions()const

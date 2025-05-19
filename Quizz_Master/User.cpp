@@ -191,13 +191,15 @@ int User::FindUserData(UserStruct& us, bool exsist)
         {
             return UserOptions::WrongPassword;
         }
-        else if (exsist && (v[4].StringToInt() == UserOptions::Ban))
+        else if (exsist && (v[4].StringToInt() & UserOptions::Ban) == UserOptions::Ban)
         {
             return UserOptions::Ban;
         }
 
         us.fileName = v[2];
         us.id = v[3].StringToInt();
+        us.firstName = v[0];
+        us.lastName = v[1];
 
         return (UserOptions::Empty | UserOptions::OK | UserOptions::AlreadyExisist);
     }
