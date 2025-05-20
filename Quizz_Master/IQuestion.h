@@ -4,7 +4,9 @@
 class IQuestion
 {
 public:
-    virtual void Action() = 0;
+    virtual unsigned int Action() = 0;
+    virtual void SetUpData(String&) = 0;
+    virtual String BuildQuestionData() = 0;    
 };
 
 #endif // !IQuestion_H

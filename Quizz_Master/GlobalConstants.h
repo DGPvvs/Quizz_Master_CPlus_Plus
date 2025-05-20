@@ -26,6 +26,15 @@ enum UserOptions
 	NewUserCreated	= 0b00100000,
 };
 
+enum QuestionType
+{
+	TF = 0,
+	SC,
+	MC,
+	ShA,
+	MP,
+};
+
 const String CONFIG_FILE_NAME = "config.txt";
 const String USERS_FILE_NAME = "users.txt";
 
