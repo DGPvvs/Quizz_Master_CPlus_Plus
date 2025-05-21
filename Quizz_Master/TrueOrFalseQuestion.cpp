@@ -2,7 +2,7 @@
 #include "GlobalConstants.h"
 
 TrueOrFalseQuestion::TrueOrFalseQuestion(IWriter* writer, IReader* reader, String& description, String& corectAnswer, unsigned int points, bool isTest)
-    : Question::Question(writer, reader, description, corectAnswer, points, isTest)
+    : Question::Question(writer, reader, description, corectAnswer, points, isTest, 1)
 {
 
 }
@@ -60,4 +60,10 @@ bool TrueOrFalseQuestion::AnswerAQuestion()
     answer = nullptr;
 
     return result;
+}
+
+void TrueOrFalseQuestion::PrintQuestion()
+{
+    this->Writer()->WriteLine(this->GetDescription() + "\t(" + String::UIntToString(this->GetPoints()) + " points)");
+    Question::PrintQuestion();
 }

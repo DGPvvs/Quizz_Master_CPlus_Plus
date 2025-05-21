@@ -22,7 +22,6 @@ bool Question::GetIsTest() const
 
 void Question::PrintQuestion()
 {
-    this->Writer()->WriteLine(this->GetDescription() + "\t(" + String::UIntToString(this->GetPoints()) + " points)");
     this->Writer()->Write("Enter your answer here: ");
 }
 
@@ -34,13 +33,14 @@ void Question::PrintTestCondition()
     }
 }
 
-Question::Question(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest)
+Question::Question(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest, unsigned char numOfAnswers)
     : writer(writer)
     , reader(reader)
     , description(description)
     , correctAnswer(correctAnswer)
     , points(points)
-    ,isTest(isTest)
+    , isTest(isTest)
+    , numOfAnswers(numOfAnswers)
 {
 
 }
@@ -58,4 +58,9 @@ IWriter* Question::Writer()
 bool Question::AnswerAQuestion()
 {
     return true;
+}
+
+unsigned char Question::GetNumOfAnswers() const
+{
+    return this->numOfAnswers;
 }

@@ -12,6 +12,7 @@ public:
     virtual void SetUpData(String&) override;
     virtual String BuildQuestionData() override;
     virtual bool AnswerAQuestion() override;
+    virtual void PrintQuestion() override;
     virtual ~TrueOrFalseQuestion() {};
 };
 
