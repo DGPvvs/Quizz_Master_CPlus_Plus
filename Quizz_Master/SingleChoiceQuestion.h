@@ -9,6 +9,7 @@ class SingleChoiceQuestion : public Question, public IQuestion
 private:
     Vector<String> questions;
 
+
 public:
     virtual unsigned int Action() override;
     virtual void SetUpData(String&) override;
@@ -17,6 +18,7 @@ public:
     virtual bool AnswerAQuestion() override;
 
     SingleChoiceQuestion(IWriter*, IReader*, String&, String&, unsigned int, bool);
+    SingleChoiceQuestion(IWriter*, IReader*, String&, String&, unsigned int, bool, unsigned int);
 
     virtual ~SingleChoiceQuestion() {};
 };

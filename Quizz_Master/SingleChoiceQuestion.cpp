@@ -6,6 +6,11 @@ SingleChoiceQuestion::SingleChoiceQuestion(IWriter* writer, IReader* reader, Str
 {
 }
 
+SingleChoiceQuestion::SingleChoiceQuestion(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest, unsigned int questionsCount)
+    : Question::Question(writer, reader, description, correctAnswer, points, isTest, questionsCount)
+{
+}
+
 unsigned int SingleChoiceQuestion::Action()
 {
     unsigned int result = this->GetPoints();
