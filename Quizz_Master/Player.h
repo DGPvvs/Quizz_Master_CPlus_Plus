@@ -14,6 +14,12 @@ private:
         VIEW_OTHER_PROFILE,
     };
 
+    const String TF = "T/F";
+    const String SC = "SC";
+    const String MC = "MC";
+    const String ShA = "ShA";
+    const String MP = "MP";
+
     unsigned int level;
     unsigned int points;
     unsigned int numberCreatedQuizzes;

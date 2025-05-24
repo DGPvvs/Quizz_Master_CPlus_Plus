@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Quiz.h"
+#include "TrueOrFalseQuestion.h"
 
 Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct* us, UserOptions uo)
     : User::User(writer, reader, provider) 
@@ -75,7 +76,7 @@ void Player::CreateQuiz()
     this->Writer().Write("Enter quiz title: ");
     String* quizName = this->Reader().ReadLine();
     
-    this->Writer().Write("Enter number of questions : ");
+    this->Writer().Write("Enter number of questions: ");
     String* numOfQuestionsString = this->Reader().ReadLine();
     unsigned int numOfQuestions = numOfQuestionsString->StringToInt();
 
@@ -92,7 +93,38 @@ void Player::CreateQuiz()
 
     for (size_t i = 0; i < numOfQuestions; i++)
     {
+        this->Writer().Write("Enter question 1 type(T/F, SC, MC, ShA, MP): ");
+        String* questionType = this->Reader().ReadLine();
 
+        this->Writer().Write("Enter description: ");
+        String* description = this->Reader().ReadLine();
+
+        if (*questionType == TF)
+        {
+            this->Writer().Write("Enter correct answer(True/False): ");
+            String* answer = this->Reader().ReadLine();
+
+            this->Writer().Write("Enter points: ");
+            String* pointsString = this->Reader().ReadLine();
+
+            unsigned int points = pointsString->StringToInt();
+
+            TrueOrFalseQuestion* question = new TrueOrFalseQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
+
+            quiz->GetQuestions().push_back(question);
+
+            delete answer;
+            answer = nullptr;
+
+            delete pointsString;
+            pointsString = nullptr;
+        }
+
+        delete questionType;
+        questionType = nullptr;
+
+        delete description;
+        description = nullptr;
     }
 
 

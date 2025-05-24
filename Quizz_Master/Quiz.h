@@ -19,7 +19,7 @@ private:
     IReader* reader;
     IBaseProvider* provider;
 
-    Vector<IQuestion*>* questions;
+    Vector<IQuestion*> questions;
 
 public:
     Quiz(IWriter*, IReader*, IBaseProvider*, String, String, unsigned int, unsigned int);
@@ -29,6 +29,7 @@ public:
     String GetUserFullName()const;
     unsigned int GetNumberOfQuestions()const;
     unsigned int GetId()const;
+    Vector<IQuestion*> GetQuestions()const;
 };
 
 #endif

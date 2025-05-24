@@ -10,17 +10,16 @@ Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String nam
     , id(id)
     , numberOfQuestions(numberOfQuestions)
 {
-    this->questions = new Vector<IQuestion*>(this->numberOfQuestions);
+    //this->questions = new Vector<IQuestion*>(this->numberOfQuestions);
+    //this->questions = new Vector<IQuestion*>();
 }
 
 Quiz::~Quiz()
 {
-    for (size_t i = 0; i < this->questions->getSize(); i++)
+    for (size_t i = 0; i < this->questions.getSize(); i++)
     {
         delete& this->questions[i];
     }
-    delete this->questions;
-    this->questions = nullptr;
 }
 
 String Quiz::GetQuizName()const
@@ -62,4 +61,7 @@ unsigned int Quiz::GetId()const
     return this->id;
 }
 
-
+Vector<IQuestion*> Quiz::GetQuestions()const
+{
+    return this->questions;
+}
