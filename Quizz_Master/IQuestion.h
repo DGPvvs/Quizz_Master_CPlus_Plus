@@ -1,6 +1,8 @@
 #ifndef IQuestion_H
 #define IQuestion_H
 
+#include "String.h"
+
 class IQuestion
 {
 public:

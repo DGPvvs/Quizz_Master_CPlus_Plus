@@ -2,11 +2,12 @@
 #define Game_H
 
 #include "IUser.h"
+#include "IGame.h"
 #include "CommandStruct.h"
 #include "IBaseProvider.h"
 #include "UserStruct.h"
 
-class Game
+class Game : public IGame
 {
 private:
     IUser* user;
@@ -38,6 +39,9 @@ public:
 
     void SaveUser();
     void LoadUser(UserStruct& us);
+
+    virtual unsigned int GetMaxQuizId() const override;
+    virtual void SetMaxQuizId(unsigned int) override;
 };
 
 #endif // ! Game

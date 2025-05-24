@@ -2,6 +2,7 @@
 #define Player_H
 
 #include "User.h"
+#include "IGame.h"
 #include "IBaseProvider.h"
 
 class Player : public User
@@ -23,6 +24,8 @@ private:
     unsigned int numberSolvedNormalQuizzes;
     unsigned int numberCreatedQuizzesChallengers;
 
+    IGame* game;
+
     Vector<String> listCreatedQuizzes;
     Vector<unsigned int> listLikedQuizzes;
     Vector<unsigned int> listFavoriteQuizzes;
@@ -33,7 +36,7 @@ private:
 
 public:
     Player(IWriter*, IReader*, IBaseProvider*, UserStruct*, UserOptions);
-    Player(IWriter*, IReader*, IBaseProvider*);
+    Player(IWriter*, IReader*, IBaseProvider*, IGame*);
     virtual void Help() override;
     virtual void Action(const CommandStruct&) override;
     virtual String BuildUserData() override;
@@ -41,6 +44,7 @@ public:
     virtual void SaveData() override;
     void ViewSelfProfile(DatBuild);
     void ViewOtherProfile(const String&, DatBuild);
+    void CreateQuiz();
     virtual ~Player() {};
 };
 

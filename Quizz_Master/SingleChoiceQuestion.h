@@ -9,6 +9,8 @@ class SingleChoiceQuestion : public Question, public IQuestion
 private:
     Vector<String> questions;
 
+protected:
+    Vector<String>& GetQuestions();
 
 public:
     virtual unsigned int Action() override;

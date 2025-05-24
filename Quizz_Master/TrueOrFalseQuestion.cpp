@@ -1,10 +1,10 @@
 #include "TrueOrFalseQuestion.h"
 #include "GlobalConstants.h"
 
-TrueOrFalseQuestion::TrueOrFalseQuestion(IWriter* writer, IReader* reader, String& description, String& corectAnswer, unsigned int points, bool isTest)
-    : Question::Question(writer, reader, description, corectAnswer, points, isTest, 1)
+TrueOrFalseQuestion::TrueOrFalseQuestion(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest)
+    : Question::Question(writer, reader, description, correctAnswer, points, isTest, 1)
 {
-
+    this->SetQt(QuestionType::TF);
 }
 
 unsigned int TrueOrFalseQuestion::Action()
@@ -37,7 +37,7 @@ String TrueOrFalseQuestion::BuildQuestionData()
 
     delete[] arr;
 
-    String result = String::UIntToString(QuestionType::TF) + newLine;
+    String result = String::UIntToString(this->GetQt()) + newLine;
     result += this->GetDescription() + newLine;
     result += this->GetCorrectAnswer() + newLine;
     result += String::UIntToString(this->GetPoints()) + newLine;

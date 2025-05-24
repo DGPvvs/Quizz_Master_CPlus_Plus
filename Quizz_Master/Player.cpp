@@ -1,7 +1,9 @@
 #include "Player.h"
+#include "Quiz.h"
 
 Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct* us, UserOptions uo)
     : User::User(writer, reader, provider) 
+    , game(nullptr)
 {
     this->Init();
     Vector<String> v;
@@ -9,10 +11,11 @@ Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserSt
     this->SaveData();
 }
 
-Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider)
+Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, IGame* game)
     : User::User(writer, reader, provider)
+    , game(game)
 {
-    this->Init();
+    this->Init();    
 }
 
 void Player::Init()
@@ -61,6 +64,44 @@ void Player::Action(const CommandStruct& cmdStr)
     {
         this->ViewOtherProfile(cmdStr.Param1, VIEW_OTHER_PROFILE);
     }
+    else if (cmdStr.command == CREATE_QUIZ)
+    {
+        this->CreateQuiz();
+    }
+}
+
+void Player::CreateQuiz()
+{
+    this->Writer().Write("Enter quiz title: ");
+    String* quizName = this->Reader().ReadLine();
+    
+    this->Writer().Write("Enter number of questions : ");
+    String* numOfQuestionsString = this->Reader().ReadLine();
+    unsigned int numOfQuestions = numOfQuestionsString->StringToInt();
+
+    delete numOfQuestionsString;
+    numOfQuestionsString = nullptr;
+
+    unsigned int quizId = this->game->GetMaxQuizId() + 1;
+    this->game->SetMaxQuizId(quizId);
+
+    Quiz* quiz = new Quiz(&this->Writer(), &this->Reader(), &this->Provider(), *quizName, this->getUserName(), quizId, numOfQuestions);
+
+    delete quizName;
+    quizName = nullptr;
+
+    for (size_t i = 0; i < numOfQuestions; i++)
+    {
+
+    }
+
+
+    
+
+    //TODO
+
+    delete quiz;
+    quiz = nullptr;
 }
 
 unsigned int Player::PointsForLevel()
@@ -153,7 +194,7 @@ void Player::ViewOtherProfile(const String& userName, DatBuild option)
     }
     else if ((uo & UserOptions::AlreadyExisist) == UserOptions::AlreadyExisist)
     {
-        Player* otherPlayer = new Player(&Writer(), &Reader(), &Provider());
+        Player* otherPlayer = new Player(&Writer(), &Reader(), &Provider(), this->game);
 
         if (us->id <= 10)
         {

@@ -5,9 +5,24 @@ String Question::GetDescription() const
     return this->description;
 }
 
+void Question::SetPoints(unsigned int points)
+{
+    this->points = points;
+}
+
 unsigned int Question::GetPoints() const
 {
     return this->points;
+}
+
+int Question::GetQt() const
+{
+    return this->qt;
+}
+
+void Question::SetQt(QuestionType qt)
+{
+    this->qt = qt;
 }
 
 String Question::GetCorrectAnswer() const

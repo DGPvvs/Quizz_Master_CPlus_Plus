@@ -4,11 +4,18 @@
 SingleChoiceQuestion::SingleChoiceQuestion(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest)
     : Question::Question(writer, reader, description, correctAnswer, points, isTest, 4)
 {
+    this->SetQt(QuestionType::SC);
 }
 
 SingleChoiceQuestion::SingleChoiceQuestion(IWriter* writer, IReader* reader, String& description, String& correctAnswer, unsigned int points, bool isTest, unsigned int questionsCount)
     : Question::Question(writer, reader, description, correctAnswer, points, isTest, questionsCount)
 {
+    this->SetQt(QuestionType::SC);
+}
+
+Vector<String>& SingleChoiceQuestion::GetQuestions()
+{
+    return this->questions;
 }
 
 unsigned int SingleChoiceQuestion::Action()
@@ -48,7 +55,7 @@ String SingleChoiceQuestion::BuildQuestionData()
 
     delete[] arr;
 
-    String result = String::UIntToString(QuestionType::SC) + newLine;
+    String result = String::UIntToString(this->GetQt()) + newLine;
     result += this->GetDescription() + newLine;
     result += this->GetCorrectAnswer() + newLine;
     result += String::UIntToString(this->GetPoints()) + newLine;

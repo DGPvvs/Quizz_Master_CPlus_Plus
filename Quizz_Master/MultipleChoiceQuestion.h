@@ -7,8 +7,9 @@
 class MultipleChoiceQuestion : public SingleChoiceQuestion
 {
 private:
-	Vector<String> questions;
     unsigned char percent;
+
+    void SeparateAnswers(Vector<String>&, String);
 
 public:
     virtual bool AnswerAQuestion() override;

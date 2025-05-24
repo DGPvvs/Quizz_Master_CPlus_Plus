@@ -268,10 +268,20 @@ void Game::LoadUser(UserStruct& us)
     }
     else
     {
-        this->user = new Player(this->writer, this->reader, this->provider);
+        this->user = new Player(this->writer, this->reader, this->provider, this);
     }
 
     Vector<String> v;
 
     this->user->SetUpUserData(us, v, UserOptions::Empty);
+}
+
+unsigned int Game::GetMaxQuizId() const
+{
+    return this->maxQuizId;
+}
+
+void Game::SetMaxQuizId(unsigned int quizId)
+{
+    this->maxQuizId = quizId;
 }

@@ -4,6 +4,7 @@
 #include "String.h"
 #include "IWriter.h"
 #include "IReader.h"
+#include "GlobalConstants.h"
 
 class Question
 {
@@ -11,6 +12,7 @@ private:
     bool isTest;
     unsigned char numOfAnswers;
     unsigned int points;
+    QuestionType qt;
     String correctAnswer;
     String description;
 
@@ -20,6 +22,9 @@ private:
 protected:
     String GetDescription() const;
     unsigned int GetPoints() const;
+    void SetPoints(unsigned int);
+    int GetQt() const;
+    void SetQt(QuestionType);
     String GetCorrectAnswer() const;
     bool GetIsTest() const;
     unsigned char GetNumOfAnswers() const;

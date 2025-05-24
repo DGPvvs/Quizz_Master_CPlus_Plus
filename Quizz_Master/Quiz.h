@@ -22,7 +22,7 @@ private:
     Vector<IQuestion*>* questions;
 
 public:
-    Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions);
+    Quiz(IWriter*, IReader*, IBaseProvider*, String, String, unsigned int, unsigned int);
     ~Quiz();
     String GetQuizName()const;
     String GetUserName()const;
