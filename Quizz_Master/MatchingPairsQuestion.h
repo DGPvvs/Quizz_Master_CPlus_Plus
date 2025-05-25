@@ -10,6 +10,9 @@ private:
 
 public:
 	MatchingPairsQuestion(IWriter*, IReader*, String&, String&, unsigned int, bool, unsigned int);
+
+	Vector<String>& GetAnswersVec();
+
 	virtual ~MatchingPairsQuestion() {};
 };
 

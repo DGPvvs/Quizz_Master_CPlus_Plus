@@ -7,11 +7,10 @@ Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String nam
     , reader(reader)
     , provider(provider)
     , quizName(name)
+    , userName(userName)
     , id(id)
     , numberOfQuestions(numberOfQuestions)
 {
-    //this->questions = new Vector<IQuestion*>(this->numberOfQuestions);
-    //this->questions = new Vector<IQuestion*>();
 }
 
 Quiz::~Quiz()
@@ -64,4 +63,36 @@ unsigned int Quiz::GetId()const
 Vector<IQuestion*> Quiz::GetQuestions()const
 {
     return this->questions;
+}
+
+void Quiz::SaveQuiz(QuizStatus qs)
+{
+    if (qs == QuizStatus::NewQuiz)
+    {
+        String s = QUIZZES_FILE_NAME;
+
+        this->provider->Action(s, ProviderOptions::QuizzeFind);
+
+        Vector<String> v;
+
+        String::Split(ROW_DATA_SEPARATOR, v, s);
+
+        String quizFileName = String::UIntToString(this->GetId()) + "Quiz.txt";
+
+        String newQuizString = String::UIntToString(this->GetId()) + " " + quizFileName + " " + String::UIntToString(QuizStatus::NewQuiz);
+
+        v.push_back(newQuizString);
+
+        String allQuizzesString;
+        String::Join(ROW_DATA_SEPARATOR, v, allQuizzesString);
+
+        char* arr = new char[2] {'\0'};
+
+        arr[0] = FILENAME_TO_DATA_SEPARATOR;
+
+        allQuizzesString = QUIZZES_FILE_NAME + String(arr) + allQuizzesString;
+
+        this->provider->Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
+    }
+    //TODO
 }

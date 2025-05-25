@@ -11,6 +11,8 @@ enum ProviderOptions
 	NewUserSave,
 	QuizzeLoad,
 	QuizzeSave,
+	QuizzeFind,
+	QuizzeIndexSave,
 	ConfigSave,
 	ConfigLoad,
 };
@@ -26,6 +28,15 @@ enum UserOptions
 	NewUserCreated	= 0b00100000,
 };
 
+enum QuizStatus
+{
+	NewQuiz = 0,
+	EditQuiz,
+	ApprovedQuiz,
+	RejectedQuiz,
+	RemovedQuiz,
+};
+
 enum QuestionType
 {
 	TF = 0,
@@ -35,9 +46,18 @@ enum QuestionType
 	MP,
 };
 
+const unsigned char MAX_LENGTH_SC_QUESTION = 4;
+
+/// <summary>
+/// Константи за имен на файлове
+/// </summary>
 const String CONFIG_FILE_NAME = "config.txt";
 const String USERS_FILE_NAME = "users.txt";
+const String QUIZZES_FILE_NAME = "quizzes.txt";
 
+/// <summary>
+/// Константи на символи за сепаратори на структуриран стринг
+/// </summary>
 const char FILENAME_TO_DATA_SEPARATOR = '$';
 const char ROW_DATA_SEPARATOR = '\n';
 const char ELEMENT_DATA_SEPARATOR = ' ';
@@ -45,6 +65,7 @@ const char COMMA_DATA_SEPARATOR = ',';
 
 const String EMPTY_STRING = "";
 const String PROMPT_STRING = "> ";
+const String NEW_LINE = "\n";
 
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;

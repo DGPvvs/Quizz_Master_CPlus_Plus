@@ -189,7 +189,12 @@ void String::copyFrom(const String& other)
 
 void String::free()
 {
-	delete[] this->data;
+	/*if (this->data != nullptr)
+	{
+		delete[] this->data;
+	}*/
+
+	delete[] data;
 
 	this->data = nullptr;
 	this->size = this->capacity = 0;

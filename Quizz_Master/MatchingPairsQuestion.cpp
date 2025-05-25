@@ -5,3 +5,8 @@ MatchingPairsQuestion::MatchingPairsQuestion(IWriter* writer, IReader* reader, S
 {
     this->SetQt(QuestionType::MP);
 }
+
+Vector<String>& MatchingPairsQuestion::GetAnswersVec()
+{
+    return this->answers;
+}

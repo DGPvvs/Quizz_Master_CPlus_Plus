@@ -87,12 +87,12 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
         delete[] arr;
         arr = nullptr;
     }
-    else if (options == ProviderOptions::UserLoad)
+    else if (options == ProviderOptions::UserLoad || options == ProviderOptions::QuizzeFind)
     {
         String s = str;
         str = FileLoad(s);
     }
-    else if (options == ProviderOptions::UserSave)
+    else if (options == ProviderOptions::UserSave || options == ProviderOptions::QuizzeIndexSave)
     {
         String s = str;
         FileSave(s);

@@ -1,4 +1,5 @@
 #include "Admin.h"
+
 /// <summary>
 /// Конструктор
 /// </summary>
@@ -11,7 +12,7 @@ Admin::Admin(IWriter* writer, IReader* reader, IBaseProvider* provider)
 }
 
 /// <summary>
-/// Петод извеждащ функционалностите на Admin
+/// Метод извеждащ функционалностите на Admin
 /// </summary>
 void Admin::Help()
 {

@@ -10,9 +10,10 @@ private:
     Vector<String> questions;
 
 protected:
-    Vector<String>& GetQuestions();
 
 public:
+    Vector<String>& GetQuestions();
+
     virtual unsigned int Action() override;
     virtual void SetUpData(String&) override;
     virtual String BuildQuestionData() override;
@@ -24,7 +25,6 @@ public:
 
     virtual ~SingleChoiceQuestion() {};
 };
-
 
 #endif // !SingleChoiceQuestion_H
 
