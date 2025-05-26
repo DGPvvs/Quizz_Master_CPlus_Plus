@@ -54,7 +54,6 @@ const unsigned char MAX_LENGTH_SC_QUESTION = 4;
 const String CONFIG_FILE_NAME = "config.txt";
 const String USERS_FILE_NAME = "users.txt";
 const String QUIZZES_FILE_NAME = "quizzes.txt";
-const String PENDING_FILE_NAME = "pending.txt";
 
 /// <summary>
 /// Константи на символи за сепаратори на структуриран стринг
@@ -74,6 +73,9 @@ const String ERROR = "error";
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;
 
+/// <summary>
+/// Константи за командите
+/// </summary>
 const String EXIT = "exit";
 const String LOGIN = "login";
 const String SIGNUP = "signup";
@@ -81,6 +83,7 @@ const String LOGOUT = "logout";
 const String HELP = "help";
 
 const String BAN = "ban";
+const String PENDING = "pending";
 
 const String VIEW_PROFILE = "view-profile";
 const String VIEW = "view";

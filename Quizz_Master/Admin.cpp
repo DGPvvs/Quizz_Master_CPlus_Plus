@@ -83,6 +83,36 @@ void Admin::Action(const CommandStruct& cmdStr)
 	{
 		this->Ban(cmdStr);
 	}
+	else if (cmdStr.command == PENDING)
+	{
+		String s = QUIZZES_FILE_NAME;
+
+		this->Provider().Action(s, ProviderOptions::QuizzeFind);
+
+		if (s == ERROR)
+		{
+			s = EMPTY_STRING;
+		}
+
+		Vector<String> quizzesVec, quizVec;
+
+		String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+		for (size_t i = 0; i < quizzesVec.getSize(); i++)
+		{
+			String quizString;
+			quizVec.clear();
+			String quiz = quizzesVec[i];
+
+			String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);			
+
+			if ( quizVec[4].StringToInt() == QuizStatus::NewQuiz || quizVec[4].StringToInt() == QuizStatus::EditQuiz)
+			{
+				String output = "[id " + quizVec[0] + "] " + quizVec[1] + " by " + quizVec[2];
+				this->Writer().WriteLine(output);
+			}
+		}			
+	}
 }
 
 String Admin::BuildUserData()

@@ -29,7 +29,7 @@ public:
     String GetUserFullName() const;
     unsigned int GetNumberOfQuestions() const;
     unsigned int GetId() const;
-    Vector<IQuestion*> GetQuestions() const;
+    Vector<IQuestion*>& GetQuestions();
     void SaveQuiz(QuizStatus);
 };
 

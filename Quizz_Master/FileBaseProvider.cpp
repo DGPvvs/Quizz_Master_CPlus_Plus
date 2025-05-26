@@ -92,7 +92,7 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
         String s = str;
         str = FileLoad(s);
     }
-    else if (options == ProviderOptions::UserSave || options == ProviderOptions::QuizzeIndexSave)
+    else if (options == ProviderOptions::UserSave || options == ProviderOptions::QuizzeSave || ProviderOptions::QuizzeIndexSave)
     {
         String s = str;
         FileSave(s);

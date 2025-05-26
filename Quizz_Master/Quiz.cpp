@@ -1,5 +1,6 @@
 #include "Quiz.h"
 #include "UserStruct.h"
+#include "Question.h"
 #include "User.h"
 
 Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions)
@@ -15,10 +16,12 @@ Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String nam
 
 Quiz::~Quiz()
 {
-    for (size_t i = 0; i < this->questions.getSize(); i++)
-    {
-        delete& this->questions[i];
-    }
+    //for (size_t i = 0; i < this->questions.getSize(); i++)
+    //{
+    //    /*IQuestion* q = this->questions[i];
+    //    delete q;
+    //    this->questions[i] = nullptr;*/
+    //}
 }
 
 String Quiz::GetQuizName()const
@@ -60,13 +63,15 @@ unsigned int Quiz::GetId()const
     return this->id;
 }
 
-Vector<IQuestion*> Quiz::GetQuestions()const
+Vector<IQuestion*>& Quiz::GetQuestions()
 {
     return this->questions;
 }
 
 void Quiz::SaveQuiz(QuizStatus qs)
 {
+    String quizFileName;
+
     if (qs == QuizStatus::NewQuiz)
     {
         String s = QUIZZES_FILE_NAME;
@@ -88,7 +93,7 @@ void Quiz::SaveQuiz(QuizStatus qs)
 
         String separator = String(arr);
 
-        String quizFileName = String::UIntToString(this->GetId()) + "Quiz.txt";
+        quizFileName = String::UIntToString(this->GetId()) + "Quiz.txt";
 
         String newQuizString = String::UIntToString(this->GetId()) + separator + this->GetQuizName() + separator + this->GetUserName() + separator + quizFileName + separator + String::UIntToString(QuizStatus::NewQuiz);
 
@@ -107,42 +112,20 @@ void Quiz::SaveQuiz(QuizStatus qs)
         arr = nullptr;
     }
 
-    char* arr = new char[2] {'\0'};
-
-    String s = PENDING_FILE_NAME;
-
-    this->provider->Action(s, ProviderOptions::QuizzeFind);
-
-    if (s == ERROR)
-    {
-        s = EMPTY_STRING;
-    }
-
-    Vector<String> pendingVec;
-
-    String::Split(ROW_DATA_SEPARATOR, pendingVec, s);
-
     char* arr1 = new char[2] {'\0'};
-
-    arr1[0] = QUIZ_ELEMENT_DATA_SEPARATOR;
-
-    String separator = String(arr1);
-
-    String newPendingString = String::UIntToString(this->GetId()) + separator + this->GetQuizName() + separator + this->GetUserName();
-
-    pendingVec.push_back(newPendingString);
-
-    String allPendingString;
-    String::Join(ROW_DATA_SEPARATOR, pendingVec, allPendingString);
-
     arr1[0] = FILENAME_TO_DATA_SEPARATOR;
 
-    allPendingString = PENDING_FILE_NAME + String(arr1) + allPendingString;
+    String allQuizData = quizFileName + String(arr1) + this->GetQuizName() + NEW_LINE + String::UIntToString(this->GetNumberOfQuestions());
+    allQuizData += NEW_LINE + this->GetUserName() + NEW_LINE;
 
-    this->provider->Action(allPendingString, ProviderOptions::QuizzeIndexSave);
+    for (size_t i = 0; i < this->GetNumberOfQuestions(); i++)
+    {
+        allQuizData += this->GetQuestions()[i]->BuildQuestionData();
+    }
+
+    this->provider->Action(allQuizData, ProviderOptions::QuizzeSave);
 
     arr1[0] = QUOTES_DATA_SEPARATOR;
-
 
     this->writer->WriteLine("Quiz " + String(arr1) + this->GetQuizName() + String(arr1) + " with ID " + String::UIntToString(this->GetId()) + " sent for admin approval!");
     //TODO
