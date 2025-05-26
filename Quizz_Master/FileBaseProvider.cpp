@@ -30,7 +30,7 @@ String FileBaseProvider::FileLoad(String& str)
 
     if (!ifs.is_open())
     {
-        std::cerr << "Error opening the file!";
+        std::cerr << "Error opening the file!" << std::endl;
         s = "error";
         return s;
     }

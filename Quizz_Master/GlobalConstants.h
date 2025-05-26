@@ -54,6 +54,7 @@ const unsigned char MAX_LENGTH_SC_QUESTION = 4;
 const String CONFIG_FILE_NAME = "config.txt";
 const String USERS_FILE_NAME = "users.txt";
 const String QUIZZES_FILE_NAME = "quizzes.txt";
+const String PENDING_FILE_NAME = "pending.txt";
 
 /// <summary>
 /// Константи на символи за сепаратори на структуриран стринг
@@ -61,11 +62,14 @@ const String QUIZZES_FILE_NAME = "quizzes.txt";
 const char FILENAME_TO_DATA_SEPARATOR = '$';
 const char ROW_DATA_SEPARATOR = '\n';
 const char ELEMENT_DATA_SEPARATOR = ' ';
+const char QUIZ_ELEMENT_DATA_SEPARATOR = '|';
 const char COMMA_DATA_SEPARATOR = ',';
+const char QUOTES_DATA_SEPARATOR = '"';
 
 const String EMPTY_STRING = "";
 const String PROMPT_STRING = "> ";
 const String NEW_LINE = "\n";
+const String ERROR = "error";
 
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;
