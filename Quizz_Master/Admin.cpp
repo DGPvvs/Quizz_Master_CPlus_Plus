@@ -99,12 +99,11 @@ void Admin::Action(const CommandStruct& cmdStr)
 		String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
 
 		for (size_t i = 0; i < quizzesVec.getSize(); i++)
-		{
-			String quizString;
+		{			
 			quizVec.clear();
-			String quiz = quizzesVec[i];
+			String quizString = quizzesVec[i];
 
-			String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);			
+			String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
 
 			if ( quizVec[4].StringToInt() == QuizStatus::NewQuiz || quizVec[4].StringToInt() == QuizStatus::EditQuiz)
 			{
