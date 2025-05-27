@@ -10,11 +10,8 @@
 #include "Game.h"
 #include "Vector.h"
 
-    int main()
+int main()
 {
-    String s = "Hello World";
-    std::cout << s << std::endl;
-
     ConsoleWriter * writer = new ConsoleWriter();
     ConsoleReader* reader = new ConsoleReader();
     FileBaseProvider* provider = new FileBaseProvider();

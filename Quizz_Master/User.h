@@ -6,6 +6,7 @@
 #include "IWriter.h"
 #include "IReader.h"
 #include "IBaseProvider.h"
+#include "Quiz.h"
 #include "CommandStruct.h"
 #include "UserStruct.h"
 
@@ -25,7 +26,8 @@ private:
 
     IWriter* writer;
     IReader* reader;
-    IBaseProvider* provider;    
+    IBaseProvider* provider;
+    Quiz* quiz;
 
 protected:
     void SetIsHasLog(bool);
@@ -36,6 +38,7 @@ protected:
     virtual IReader& Reader() override;
     virtual IBaseProvider& Provider() override;
     int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
+    Quiz& GetQuiz();
 
 public:
     User(IWriter*, IReader*, IBaseProvider*);
@@ -67,7 +70,7 @@ public:
     virtual void Help() override;
     virtual void SaveData() override;
 
-    virtual ~User() {}
+    virtual ~User();
 };
 
 #endif

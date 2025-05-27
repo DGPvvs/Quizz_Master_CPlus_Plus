@@ -10,9 +10,10 @@
 class Quiz
 {
 private:
-    String quizName;
     unsigned int id;
     unsigned int numberOfQuestions;
+    unsigned int numberOfLikes;
+    String quizName;
     String userName;
 
     IWriter* writer;
@@ -22,15 +23,18 @@ private:
     Vector<IQuestion*> questions;
 
 public:
-    Quiz(IWriter*, IReader*, IBaseProvider*, String, String, unsigned int, unsigned int);
-    ~Quiz();
+    Quiz(IWriter*, IReader*, IBaseProvider*, String, String, unsigned int, unsigned int, unsigned int);
+    ~Quiz() = default;
     String GetQuizName() const;
     String GetUserName() const;
     String GetUserFullName() const;
     unsigned int GetNumberOfQuestions() const;
     unsigned int GetId() const;
+    unsigned int GetLikes() const;
+    void IncreceLikes(int);
     Vector<IQuestion*>& GetQuestions();
     void SaveQuiz(QuizStatus);
+    String FindAllQuizzes();
 };
 
 #endif

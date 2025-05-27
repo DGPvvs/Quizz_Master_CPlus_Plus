@@ -59,7 +59,7 @@ void Player::Help()
 void Player::Action(const CommandStruct& cmdStr)
 {
     User::Action(cmdStr);
-        
+
     if (cmdStr.command == VIEW_PROFILE)
     {
         this->ViewSelfProfile(VIEW_SELF_PROFILE);
@@ -72,6 +72,33 @@ void Player::Action(const CommandStruct& cmdStr)
     else if (cmdStr.command == CREATE_QUIZ)
     {
         this->CreateQuiz();
+    }
+    else if (cmdStr.command == QUIZZES)
+    {
+        this->Quizzes();
+    }
+}
+
+void Player::Quizzes()
+{
+    String s = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec, quizVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+    for (size_t i = 0; i < quizzesVec.getSize(); i++)
+    {
+        quizVec.clear();
+        String quizString = quizzesVec[i];
+
+        String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+
+        if (quizVec[4].StringToInt() == QuizStatus::ApprovedQuiz)
+        {
+            String output = quizVec[0] + " | " + quizVec[1] + " | " + quizVec[2] + " | " + quizVec[5] + " Questions | " + quizVec[6] + " likes";
+            this->Writer().WriteLine(output);
+        }
     }
 }
 
@@ -90,7 +117,7 @@ void Player::CreateQuiz()
     unsigned int quizId = this->game->GetMaxQuizId() + 1;
     this->game->SetMaxQuizId(quizId);
 
-    Quiz* quiz = new Quiz(&this->Writer(), &this->Reader(), &this->Provider(), *quizName, this->getUserName(), quizId, numOfQuestions);
+    Quiz* quiz = new Quiz(&this->Writer(), &this->Reader(), &this->Provider(), *quizName, this->getUserName(), quizId, numOfQuestions, 0);
 
     delete quizName;
     quizName = nullptr;

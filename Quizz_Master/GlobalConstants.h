@@ -84,9 +84,11 @@ const String HELP = "help";
 
 const String BAN = "ban";
 const String PENDING = "pending";
+const String APPROVE_QUIZ = "approve-quiz";
 
 const String VIEW_PROFILE = "view-profile";
 const String VIEW = "view";
 const String CREATE_QUIZ = "create-quiz";
+const String QUIZZES = "quizzes";
 
 #endif

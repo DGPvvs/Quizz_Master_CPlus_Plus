@@ -21,7 +21,16 @@ User::User(IWriter* writer, IReader* reader, IBaseProvider* provider)
     , id(0u)
     , password(0)
 {
+    this->quiz = new Quiz(this->writer, this->reader, this->provider, "", "", 0, 0, 0);
+}
 
+User::~User()
+{
+    if (this->quiz != nullptr)
+    {
+        delete this->quiz;
+        this->quiz = nullptr;
+    }
 }
 
 String User::getName() const
@@ -158,6 +167,11 @@ String User::BuildUserData()
     delete[] arr;
 
     return result;
+}
+
+Quiz& User::GetQuiz()
+{
+    return *quiz;
 }
 
 void User::Help()

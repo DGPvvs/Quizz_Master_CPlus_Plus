@@ -20,10 +20,61 @@ void Admin::Help()
 
 	this->Writer().WriteLine("pending");
 	this->Writer().WriteLine("approve-quiz <quiz id>");
-	this->Writer().WriteLine("approve-quiz <quiz id>");
 	this->Writer().WriteLine("reject-quiz <quiz id> <reason>");
 	this->Writer().WriteLine("view-reports");
+	this->Writer().WriteLine("remove-quiz <quiz id> <reason>");
 	this->Writer().WriteLine("ban <username>");
+}
+
+void Admin::ApproveQuiz(const CommandStruct& cmdStr)
+{
+	String quizId = cmdStr.Param1;
+	String s = this->GetQuiz().FindAllQuizzes();
+
+	Vector<String> quizzesVec, quizVec;
+
+	String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+	for (size_t i = 0; i < quizzesVec.getSize(); i++)
+	{
+		quizVec.clear();
+		String quizString = quizzesVec[i];
+
+		String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+		String id = quizVec[0];
+
+		if (id == quizId)
+		{
+			Vector<String> v;
+			quizVec[4] = String::UIntToString(QuizStatus::ApprovedQuiz);
+
+			for (size_t j = 0; j < quizVec.getSize(); j++)
+			{
+				v.push_back(quizVec[j]);
+			}
+
+			s = EMPTY_STRING;
+			String::Join(QUIZ_ELEMENT_DATA_SEPARATOR, v, s);
+			quizzesVec[i] = s;
+			break;
+		}
+	}
+
+	char* arr = new char[2] {'\0'};
+
+	String allQuizzesString;
+	String::Join(ROW_DATA_SEPARATOR, quizzesVec, allQuizzesString);
+
+	arr[0] = FILENAME_TO_DATA_SEPARATOR;
+
+	allQuizzesString = QUIZZES_FILE_NAME + String(arr) + allQuizzesString;
+
+	this->Provider().Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
+
+	delete[] arr;
+	arr = nullptr;
+
+	//id|quizName|useName|quizFileName|QuizStatus|numOfQuestions|Likes
 }
 
 void Admin::Ban(const CommandStruct& cmdStr)
@@ -75,6 +126,29 @@ void Admin::Ban(const CommandStruct& cmdStr)
 	us = nullptr;
 }
 
+void Admin::Pending()
+{
+	String s = this->GetQuiz().FindAllQuizzes();
+
+	Vector<String> quizzesVec, quizVec;
+
+	String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+	for (size_t i = 0; i < quizzesVec.getSize(); i++)
+	{
+		quizVec.clear();
+		String quizString = quizzesVec[i];
+
+		String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+
+		if (quizVec[4].StringToInt() == QuizStatus::NewQuiz || quizVec[4].StringToInt() == QuizStatus::EditQuiz)
+		{
+			String output = "[id " + quizVec[0] + "] " + quizVec[1] + " by " + quizVec[2];
+			this->Writer().WriteLine(output);
+		}
+	}
+}
+
 void Admin::Action(const CommandStruct& cmdStr)
 {
 	User::Action(cmdStr);
@@ -85,32 +159,11 @@ void Admin::Action(const CommandStruct& cmdStr)
 	}
 	else if (cmdStr.command == PENDING)
 	{
-		String s = QUIZZES_FILE_NAME;
-
-		this->Provider().Action(s, ProviderOptions::QuizzeFind);
-
-		if (s == ERROR)
-		{
-			s = EMPTY_STRING;
-		}
-
-		Vector<String> quizzesVec, quizVec;
-
-		String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
-
-		for (size_t i = 0; i < quizzesVec.getSize(); i++)
-		{			
-			quizVec.clear();
-			String quizString = quizzesVec[i];
-
-			String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
-
-			if ( quizVec[4].StringToInt() == QuizStatus::NewQuiz || quizVec[4].StringToInt() == QuizStatus::EditQuiz)
-			{
-				String output = "[id " + quizVec[0] + "] " + quizVec[1] + " by " + quizVec[2];
-				this->Writer().WriteLine(output);
-			}
-		}			
+		this->Pending();
+	}
+	else if (cmdStr.command == APPROVE_QUIZ)
+	{
+		this->ApproveQuiz(cmdStr);
 	}
 }
 

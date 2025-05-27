@@ -1,7 +1,11 @@
-TEST
-1
+TEST quiz
+2
 UserPrime
+3
+Нямям идея?
+Ха
+5
 0
-jhnkjkjnbkj?
-False
-10
+The !False olwais is True?
+True
+50

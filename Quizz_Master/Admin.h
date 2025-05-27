@@ -14,7 +14,9 @@ public:
     virtual String BuildUserData() override;
     virtual void SaveData() override;
 
-    void Ban(const CommandStruct& cmdStr);
+    void Ban(const CommandStruct&);
+    void Pending();
+    void ApproveQuiz(const CommandStruct&);
 
     virtual ~Admin() {};
 };

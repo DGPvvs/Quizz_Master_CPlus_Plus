@@ -51,6 +51,7 @@ public:
     void ViewSelfProfile(DatBuild);
     void ViewOtherProfile(const String&, DatBuild);
     void CreateQuiz();
+    void Quizzes();
     virtual ~Player() {};
 };
 

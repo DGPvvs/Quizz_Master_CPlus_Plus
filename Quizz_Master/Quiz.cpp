@@ -3,7 +3,7 @@
 #include "Question.h"
 #include "User.h"
 
-Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions)
+Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions, unsigned int numberOfLikes)
     : writer(writer)
     , reader(reader)
     , provider(provider)
@@ -11,17 +11,8 @@ Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String nam
     , userName(userName)
     , id(id)
     , numberOfQuestions(numberOfQuestions)
+    , numberOfLikes(numberOfLikes)
 {
-}
-
-Quiz::~Quiz()
-{
-    //for (size_t i = 0; i < this->questions.getSize(); i++)
-    //{
-    //    /*IQuestion* q = this->questions[i];
-    //    delete q;
-    //    this->questions[i] = nullptr;*/
-    //}
 }
 
 String Quiz::GetQuizName()const
@@ -63,26 +54,45 @@ unsigned int Quiz::GetId()const
     return this->id;
 }
 
+unsigned int Quiz::GetLikes() const
+{
+    return this->numberOfLikes;
+}
+
+void Quiz::IncreceLikes(int likes)
+{
+    if ((this->numberOfLikes > 0 && likes < 0) || likes > 0)
+    {
+        this->numberOfLikes += likes;
+    }
+}
+
 Vector<IQuestion*>& Quiz::GetQuestions()
 {
     return this->questions;
 }
 
+String Quiz::FindAllQuizzes()
+{
+    String s = QUIZZES_FILE_NAME;
+
+    this->provider->Action(s, ProviderOptions::QuizzeFind);
+
+    if (s == ERROR)
+    {
+        s = EMPTY_STRING;
+    }
+
+    return s;
+}
+
 void Quiz::SaveQuiz(QuizStatus qs)
 {
     String quizFileName;
+    String s = this->FindAllQuizzes();
 
     if (qs == QuizStatus::NewQuiz)
     {
-        String s = QUIZZES_FILE_NAME;
-
-        this->provider->Action(s, ProviderOptions::QuizzeFind);
-
-        if (s == ERROR)
-        {
-            s = EMPTY_STRING;
-        }
-
         Vector<String> v;
 
         String::Split(ROW_DATA_SEPARATOR, v, s);
@@ -95,16 +105,20 @@ void Quiz::SaveQuiz(QuizStatus qs)
 
         quizFileName = String::UIntToString(this->GetId()) + "Quiz.txt";
 
-        String newQuizString = String::UIntToString(this->GetId()) + separator + this->GetQuizName() + separator + this->GetUserName() + separator + quizFileName + separator + String::UIntToString(QuizStatus::NewQuiz);
+        String newQuizString = String::UIntToString(this->GetId()) + separator + this->GetQuizName() + separator + this->GetUserName() + separator + quizFileName;
+        newQuizString += separator + String::UIntToString(QuizStatus::NewQuiz) + separator + String::UIntToString(this->GetNumberOfQuestions());
+        newQuizString += separator + String::UIntToString(this->GetLikes());
+
+        //id|quizName|useName|quizFileName|QuizStatus|numOfQuestions|Likes
 
         v.push_back(newQuizString);
 
         String allQuizzesString;
-        String::Join(ROW_DATA_SEPARATOR, v, allQuizzesString);        
+        String::Join(ROW_DATA_SEPARATOR, v, allQuizzesString);
 
         arr[0] = FILENAME_TO_DATA_SEPARATOR;
 
-        allQuizzesString = QUIZZES_FILE_NAME + String(arr) + allQuizzesString;        
+        allQuizzesString = QUIZZES_FILE_NAME + String(arr) + allQuizzesString;
 
         this->provider->Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
 
@@ -128,7 +142,6 @@ void Quiz::SaveQuiz(QuizStatus qs)
     arr1[0] = QUOTES_DATA_SEPARATOR;
 
     this->writer->WriteLine("Quiz " + String(arr1) + this->GetQuizName() + String(arr1) + " with ID " + String::UIntToString(this->GetId()) + " sent for admin approval!");
-    //TODO
 
     delete[] arr1;
     arr1 = nullptr;

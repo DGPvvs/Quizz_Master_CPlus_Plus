@@ -37,7 +37,7 @@ void Game::Init()
 
 void Game::Run()
 {
-    this->user->Print();
+    //this->user->Print();
     this->GameLoop();
 }
 
