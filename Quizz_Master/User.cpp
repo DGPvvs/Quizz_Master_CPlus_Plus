@@ -22,6 +22,7 @@ User::User(IWriter* writer, IReader* reader, IBaseProvider* provider)
     , password(0)
 {
     this->quiz = new Quiz(this->writer, this->reader, this->provider, "", "", 0, 0, 0);
+    this->message = new Message(this->provider);
 }
 
 User::~User()
@@ -30,6 +31,12 @@ User::~User()
     {
         delete this->quiz;
         this->quiz = nullptr;
+    }
+
+    if (this->message != nullptr)
+    {
+        delete this->message;
+        this->message = nullptr;
     }
 }
 
@@ -172,6 +179,11 @@ String User::BuildUserData()
 Quiz& User::GetQuiz()
 {
     return *quiz;
+}
+
+Message& User::GetMessage()
+{
+    return *message;
 }
 
 void User::Help()

@@ -86,7 +86,7 @@ String Quiz::FindAllQuizzes()
     return s;
 }
 
-void Quiz::SaveQuiz(QuizStatus qs)
+void Quiz::SaveQuiz(QuizStatus qs, unsigned int quizId)
 {
     String quizFileName;
     String s = this->FindAllQuizzes();
@@ -106,7 +106,7 @@ void Quiz::SaveQuiz(QuizStatus qs)
         quizFileName = String::UIntToString(this->GetId()) + "Quiz.txt";
 
         String newQuizString = String::UIntToString(this->GetId()) + separator + this->GetQuizName() + separator + this->GetUserName() + separator + quizFileName;
-        newQuizString += separator + String::UIntToString(QuizStatus::NewQuiz) + separator + String::UIntToString(this->GetNumberOfQuestions());
+        newQuizString += separator + String::UIntToString(qs) + separator + String::UIntToString(this->GetNumberOfQuestions());
         newQuizString += separator + String::UIntToString(this->GetLikes());
 
         //id|quizName|useName|quizFileName|QuizStatus|numOfQuestions|Likes
@@ -125,24 +125,67 @@ void Quiz::SaveQuiz(QuizStatus qs)
         delete[] arr;
         arr = nullptr;
     }
-
-    char* arr1 = new char[2] {'\0'};
-    arr1[0] = FILENAME_TO_DATA_SEPARATOR;
-
-    String allQuizData = quizFileName + String(arr1) + this->GetQuizName() + NEW_LINE + String::UIntToString(this->GetNumberOfQuestions());
-    allQuizData += NEW_LINE + this->GetUserName() + NEW_LINE;
-
-    for (size_t i = 0; i < this->GetNumberOfQuestions(); i++)
+    else if (qs == QuizStatus::ApprovedQuiz)
     {
-        allQuizData += this->GetQuestions()[i]->BuildQuestionData();
+        Vector<String> quizzesVec, quizVec, resultVec;
+
+        String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+        for (size_t i = 0; i < quizzesVec.getSize(); i++)
+        {
+            quizVec.clear();
+            String quizString = quizzesVec[i];
+
+            String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+            unsigned int id = quizVec[0].StringToInt();
+
+            if (id == quizId)
+            {
+                String approveString = quizVec[0] + QUIZ_ELEMENT_SEPARATOR + quizVec[1] + QUIZ_ELEMENT_SEPARATOR + quizVec[2] + QUIZ_ELEMENT_SEPARATOR + quizVec[3];
+                approveString += QUIZ_ELEMENT_SEPARATOR + String::UIntToString(QuizStatus::ApprovedQuiz) + QUIZ_ELEMENT_SEPARATOR + quizVec[5] + QUIZ_ELEMENT_SEPARATOR + quizVec[6];
+                resultVec.push_back(approveString);
+            }
+            else
+            {
+                resultVec.push_back(quizString);
+            }
+        }
+
+        String allQuizzesString;
+        String::Join(ROW_DATA_SEPARATOR, resultVec, allQuizzesString);
+
+        char* arr2 = new char[2] {'\0'};
+        arr2[0] = FILENAME_TO_DATA_SEPARATOR;
+
+        allQuizzesString = QUIZZES_FILE_NAME + String(arr2) + allQuizzesString;
+
+        this->provider->Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
+
+        delete[] arr2;
+        arr2 = nullptr;
+
+        //id|quizName|userName|quizFileName|QuizStatus|numOfQuestions|Likes
     }
 
-    this->provider->Action(allQuizData, ProviderOptions::QuizzeSave);
+    if (qs == QuizStatus::NewQuiz)
+    {
+        char* arr1 = new char[2] {'\0'};
+        arr1[0] = FILENAME_TO_DATA_SEPARATOR;
 
-    arr1[0] = QUOTES_DATA_SEPARATOR;
+        String allQuizData = quizFileName + String(arr1) + this->GetQuizName() + NEW_LINE + String::UIntToString(this->GetNumberOfQuestions());
+        allQuizData += NEW_LINE + this->GetUserName() + NEW_LINE;
 
-    this->writer->WriteLine("Quiz " + String(arr1) + this->GetQuizName() + String(arr1) + " with ID " + String::UIntToString(this->GetId()) + " sent for admin approval!");
+        for (size_t i = 0; i < this->GetNumberOfQuestions(); i++)
+        {
+            allQuizData += this->GetQuestions()[i]->BuildQuestionData();
+        }
 
-    delete[] arr1;
-    arr1 = nullptr;
+        this->provider->Action(allQuizData, ProviderOptions::QuizzeSave);
+
+        arr1[0] = QUOTES_DATA_SEPARATOR;
+        this->writer->WriteLine("Quiz " + String(arr1) + this->GetQuizName() + String(arr1) + " with ID " + String::UIntToString(this->GetId()) + " sent for admin approval!");
+
+        delete[] arr1;
+        arr1 = nullptr;
+    }
 }

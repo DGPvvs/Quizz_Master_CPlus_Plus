@@ -52,6 +52,7 @@ public:
     void ViewOtherProfile(const String&, DatBuild);
     void CreateQuiz();
     void Quizzes();
+    void ReportQuiz(String, String);
     virtual ~Player() {};
 };
 

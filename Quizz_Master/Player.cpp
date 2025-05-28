@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Quiz.h"
+#include "DateTime.h"
 #include "TrueOrFalseQuestion.h"
 #include "SingleChoiceQuestion.h"
 #include "ShortAnswerQuestion.h"
@@ -77,6 +78,76 @@ void Player::Action(const CommandStruct& cmdStr)
     {
         this->Quizzes();
     }
+    else if (cmdStr.command == REPORT_QUIZ)
+    {        
+        this->ReportQuiz(cmdStr.Param1, cmdStr.Param2);
+    }
+}
+
+void Player::ReportQuiz(String quizIdString, String reason)
+{
+    //id|quizName|userName|quizFileName|QuizStatus|numOfQuestions|Likes
+
+    //UserId = 0|date|quizId|SendUserName|ByUserName|reason - Message toAdmin
+    //UserId|text message - Message to player
+
+    unsigned int quizId = quizIdString.StringToInt();
+
+    String sendedUserName = this->getUserName();
+    String ByUserName;
+
+    String s = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec, quizVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+    size_t i = 0;
+
+    bool isLoopExit = false;
+
+    while (!isLoopExit)
+    {
+        quizVec.clear();
+        String quizString = quizzesVec[i];
+
+        String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+        unsigned int id = quizVec[0].StringToInt();
+
+        if (id == quizId)
+        {
+            ByUserName = quizVec[2];
+
+            isLoopExit = true;
+        }
+
+        i++;
+
+        if (i >= quizzesVec.getSize())
+        {
+            isLoopExit = true;
+        }
+    }
+
+    String messages = this->GetMessage().FindAllMessages();
+    Vector<String> messagesVec;
+    String::Split(ROW_DATA_SEPARATOR, messagesVec, messages);
+
+    String separator = MESSAGE_ELEMENT_SEPARATOR;
+
+    String newMessageString = "0" + separator + DateTime::DateNow() + separator + quizIdString + separator + sendedUserName;
+    newMessageString += separator + ByUserName + separator + reason;
+
+    //UserId = 0|date|quizId|SendUserName|ByUserName|reason - Message toAdmin
+
+    messagesVec.push_back(newMessageString);
+
+    String allMessagesString;
+    String::Join(ROW_DATA_SEPARATOR, messagesVec, allMessagesString);
+
+    allMessagesString = MESSAGES_FILE_NAME + FILENAME_SEPARATOR + allMessagesString;
+
+    this->Provider().Action(allMessagesString, ProviderOptions::MessagesSave);
 }
 
 void Player::Quizzes()
@@ -388,7 +459,7 @@ void Player::CreateQuiz()
         description = nullptr;
     }
 
-    quiz->SaveQuiz(QuizStatus::NewQuiz);
+    quiz->SaveQuiz(QuizStatus::NewQuiz, 0);
 
     //TODO
 

@@ -33,7 +33,7 @@ public:
     unsigned int GetLikes() const;
     void IncreceLikes(int);
     Vector<IQuestion*>& GetQuestions();
-    void SaveQuiz(QuizStatus);
+    void SaveQuiz(QuizStatus, unsigned int);
     String FindAllQuizzes();
 };
 

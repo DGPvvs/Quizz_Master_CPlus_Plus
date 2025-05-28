@@ -7,6 +7,7 @@
 #include "IReader.h"
 #include "IBaseProvider.h"
 #include "Quiz.h"
+#include "Message.h"
 #include "CommandStruct.h"
 #include "UserStruct.h"
 
@@ -28,17 +29,19 @@ private:
     IReader* reader;
     IBaseProvider* provider;
     Quiz* quiz;
+    Message* message;
 
 protected:
     void SetIsHasLog(bool);
 
     unsigned int GetPassword() const;
-    void SetPassword(unsigned int); 
+    void SetPassword(unsigned int);
     virtual IWriter& Writer() override;
     virtual IReader& Reader() override;
     virtual IBaseProvider& Provider() override;
     int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
     Quiz& GetQuiz();
+    Message& GetMessage();
 
 public:
     User(IWriter*, IReader*, IBaseProvider*);
@@ -58,7 +61,7 @@ public:
     virtual void Login() override;
     virtual void Logout() override;
     virtual void Action(const CommandStruct&) override;
-    
+
     virtual bool GetIsHasLog() override;
     virtual unsigned int Hash(const String& str) override;
     virtual int FindUserData(UserStruct&, bool) override;

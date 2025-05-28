@@ -15,6 +15,8 @@ enum ProviderOptions
 	QuizzeIndexSave,
 	ConfigSave,
 	ConfigLoad,
+	MessagesLoad,
+	MessagesSave,
 };
 
 enum UserOptions
@@ -54,6 +56,7 @@ const unsigned char MAX_LENGTH_SC_QUESTION = 4;
 const String CONFIG_FILE_NAME = "config.txt";
 const String USERS_FILE_NAME = "users.txt";
 const String QUIZZES_FILE_NAME = "quizzes.txt";
+const String MESSAGES_FILE_NAME = "messages.txt";
 
 /// <summary>
 /// Константи на символи за сепаратори на структуриран стринг
@@ -68,6 +71,9 @@ const char QUOTES_DATA_SEPARATOR = '"';
 const String EMPTY_STRING = "";
 const String PROMPT_STRING = "> ";
 const String NEW_LINE = "\n";
+const String QUIZ_ELEMENT_SEPARATOR = "|";
+const String MESSAGE_ELEMENT_SEPARATOR = "|";
+const String FILENAME_SEPARATOR = "$";
 const String ERROR = "error";
 
 const bool EXSIST = true;
@@ -90,5 +96,6 @@ const String VIEW_PROFILE = "view-profile";
 const String VIEW = "view";
 const String CREATE_QUIZ = "create-quiz";
 const String QUIZZES = "quizzes";
+const String REPORT_QUIZ = "report-quiz";
 
 #endif

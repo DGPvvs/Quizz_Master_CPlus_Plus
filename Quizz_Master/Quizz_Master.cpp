@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <ctime> 
 
 #include "String.h"
 #include "ConsoleWriter.h"

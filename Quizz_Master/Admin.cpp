@@ -28,7 +28,10 @@ void Admin::Help()
 
 void Admin::ApproveQuiz(const CommandStruct& cmdStr)
 {
-	String quizId = cmdStr.Param1;
+	String quizIdString = cmdStr.Param1;
+
+	unsigned int quizId = quizIdString.StringToInt();
+
 	String s = this->GetQuiz().FindAllQuizzes();
 
 	Vector<String> quizzesVec, quizVec;
@@ -41,40 +44,17 @@ void Admin::ApproveQuiz(const CommandStruct& cmdStr)
 		String quizString = quizzesVec[i];
 
 		String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
-		String id = quizVec[0];
+		unsigned int id = quizVec[0].StringToInt();
+		unsigned int qs = quizVec[4].StringToInt();
 
-		if (id == quizId)
+		if (id == quizId && (qs == QuizStatus::NewQuiz || qs == QuizStatus::EditQuiz))
 		{
-			Vector<String> v;
-			quizVec[4] = String::UIntToString(QuizStatus::ApprovedQuiz);
-
-			for (size_t j = 0; j < quizVec.getSize(); j++)
-			{
-				v.push_back(quizVec[j]);
-			}
-
-			s = EMPTY_STRING;
-			String::Join(QUIZ_ELEMENT_DATA_SEPARATOR, v, s);
-			quizzesVec[i] = s;
-			break;
+			this->GetQuiz().SaveQuiz(QuizStatus::ApprovedQuiz, id);
+			return;
 		}
 	}
 
-	char* arr = new char[2] {'\0'};
-
-	String allQuizzesString;
-	String::Join(ROW_DATA_SEPARATOR, quizzesVec, allQuizzesString);
-
-	arr[0] = FILENAME_TO_DATA_SEPARATOR;
-
-	allQuizzesString = QUIZZES_FILE_NAME + String(arr) + allQuizzesString;
-
-	this->Provider().Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
-
-	delete[] arr;
-	arr = nullptr;
-
-	//id|quizName|useName|quizFileName|QuizStatus|numOfQuestions|Likes
+	this->Writer().WriteLine("No quiz with the specified id was found pending approval.");
 }
 
 void Admin::Ban(const CommandStruct& cmdStr)
