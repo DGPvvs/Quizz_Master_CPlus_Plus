@@ -40,6 +40,7 @@ protected:
     virtual IReader& Reader() override;
     virtual IBaseProvider& Provider() override;
     int FindUserIndex(UserStruct& us, Vector<String>& usersVec);
+    bool GenerateReason(CommandStruct&);
     Quiz& GetQuiz();
     Message& GetMessage();
 
@@ -60,7 +61,7 @@ public:
 
     virtual void Login() override;
     virtual void Logout() override;
-    virtual void Action(const CommandStruct&) override;
+    virtual void Action(CommandStruct&) override;
 
     virtual bool GetIsHasLog() override;
     virtual unsigned int Hash(const String& str) override;

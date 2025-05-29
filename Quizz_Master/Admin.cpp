@@ -129,7 +129,7 @@ void Admin::Pending()
 	}
 }
 
-void Admin::Action(const CommandStruct& cmdStr)
+void Admin::Action(CommandStruct& cmdStr)
 {
 	User::Action(cmdStr);
 

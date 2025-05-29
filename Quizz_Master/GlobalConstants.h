@@ -67,10 +67,12 @@ const char ELEMENT_DATA_SEPARATOR = ' ';
 const char QUIZ_ELEMENT_DATA_SEPARATOR = '|';
 const char COMMA_DATA_SEPARATOR = ',';
 const char QUOTES_DATA_SEPARATOR = '"';
+const char CREATED_QUIZ_SEPARATOR = '#';
 
 const String EMPTY_STRING = "";
 const String PROMPT_STRING = "> ";
 const String NEW_LINE = "\n";
+const String CREATED_QUIZ_SEPARATOR_STRING = "#";
 const String QUIZ_ELEMENT_SEPARATOR = "|";
 const String MESSAGE_ELEMENT_SEPARATOR = "|";
 const String FILENAME_SEPARATOR = "$";

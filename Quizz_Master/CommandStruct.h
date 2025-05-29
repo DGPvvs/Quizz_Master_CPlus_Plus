@@ -12,6 +12,7 @@ public:
 	String Param3;
 	String Param4;
 	String Param5;
+	String CommandLine;
 };
 
 #endif // !CommandsStruct_H

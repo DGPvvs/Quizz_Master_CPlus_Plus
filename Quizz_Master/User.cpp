@@ -106,7 +106,7 @@ void User::Logout()
     //TODO
 }
 
-void User::Action(const CommandStruct& cmdStr)
+void User::Action(CommandStruct& cmdStr)
 {
     if (cmdStr.command == HELP)
     {
@@ -114,6 +114,23 @@ void User::Action(const CommandStruct& cmdStr)
     }
 
     //TODO
+}
+
+bool User::GenerateReason(CommandStruct& cmdStr)
+{
+    int size = cmdStr.CommandLine.getSize();
+    int idx = cmdStr.CommandLine.IndexOf(ELEMENT_DATA_SEPARATOR, 0);
+
+    if (idx > -1 && idx + 1 < size)
+    {        
+        idx = cmdStr.CommandLine.IndexOf(ELEMENT_DATA_SEPARATOR, idx + 1);
+        String s = cmdStr.CommandLine;
+        s = s.substr(idx + 1, size - idx - 2);
+        cmdStr.Param2 = s;
+        return true;
+    }
+
+    return false;
 }
 
 IWriter& User::Writer()

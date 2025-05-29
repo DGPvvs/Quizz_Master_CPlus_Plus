@@ -5,8 +5,6 @@
 #ifndef STRING_H
 #define STRING_H
 
-
-
 namespace Constants
 {
 	constexpr size_t MAX_SIZE = 1024;
@@ -67,6 +65,8 @@ public:
 	static String UIntToString(unsigned int);
 
 	unsigned int StringToInt();
+
+	int IndexOf(char, unsigned int);
 
 	~String();
 };

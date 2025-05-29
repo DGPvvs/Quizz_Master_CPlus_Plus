@@ -4,6 +4,11 @@
 #include "User.h"
 #include "IGame.h"
 #include "IBaseProvider.h"
+#include "TrueOrFalseQuestion.h"
+#include "SingleChoiceQuestion.h"
+#include "MultipleChoiceQuestion.h"
+#include "ShortAnswerQuestion.h"
+#include "MatchingPairsQuestion.h"
 
 class Player : public User
 {
@@ -40,11 +45,17 @@ private:
     void Init();
     unsigned int PointsForLevel();
 
+    TrueOrFalseQuestion* CreateTF(String*);
+    SingleChoiceQuestion* CreateSC(String*);
+    MultipleChoiceQuestion* CreateMC(String*);
+    ShortAnswerQuestion* CreateShA(String*);
+    MatchingPairsQuestion* CreateMP(String*);
+
 public:
     Player(IWriter*, IReader*, IBaseProvider*, UserStruct*, UserOptions);
     Player(IWriter*, IReader*, IBaseProvider*, IGame*);
     virtual void Help() override;
-    virtual void Action(const CommandStruct&) override;
+    virtual void Action(CommandStruct&) override;
     virtual String BuildUserData() override;
     virtual void SetUpUserData(UserStruct&, Vector<String>&, UserOptions) override;
     virtual void SaveData() override;

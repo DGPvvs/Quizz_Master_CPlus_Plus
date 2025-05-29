@@ -88,6 +88,8 @@ void Game::SetCommandStruct()
     String* s = this->reader->ReadLine();
     String::Split(ELEMENT_DATA_SEPARATOR, commandLine, *s);
 
+    this->command->CommandLine = *s;
+
     delete s;
     s = nullptr;
 

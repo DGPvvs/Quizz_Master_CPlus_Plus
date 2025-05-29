@@ -22,7 +22,7 @@ public:
     virtual void setFileName(const String) = 0;
     virtual void Login() = 0;
     virtual void Logout() = 0;
-    virtual void Action(const CommandStruct&) = 0;
+    virtual void Action(CommandStruct&) = 0;
     virtual IWriter& Writer() = 0;
     virtual IReader& Reader() = 0;
     virtual IBaseProvider& Provider() = 0;

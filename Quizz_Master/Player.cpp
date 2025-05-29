@@ -1,11 +1,6 @@
 #include "Player.h"
 #include "Quiz.h"
 #include "DateTime.h"
-#include "TrueOrFalseQuestion.h"
-#include "SingleChoiceQuestion.h"
-#include "ShortAnswerQuestion.h"
-#include "MultipleChoiceQuestion.h"
-#include "MatchingPairsQuestion.h"
 
 Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct* us, UserOptions uo)
     : User::User(writer, reader, provider) 
@@ -57,14 +52,13 @@ void Player::Help()
     this->Writer().WriteLine("report-quiz <quiz id> <reason>");
 }
 
-void Player::Action(const CommandStruct& cmdStr)
+void Player::Action(CommandStruct& cmdStr)
 {
     User::Action(cmdStr);
 
     if (cmdStr.command == VIEW_PROFILE)
     {
         this->ViewSelfProfile(VIEW_SELF_PROFILE);
-
     }
     else if (cmdStr.command == VIEW)
     {
@@ -79,8 +73,11 @@ void Player::Action(const CommandStruct& cmdStr)
         this->Quizzes();
     }
     else if (cmdStr.command == REPORT_QUIZ)
-    {        
-        this->ReportQuiz(cmdStr.Param1, cmdStr.Param2);
+    {
+        if (this->GenerateReason(cmdStr))
+        {
+            this->ReportQuiz(cmdStr.Param1, cmdStr.Param2);
+        }
     }
 }
 
@@ -173,11 +170,262 @@ void Player::Quizzes()
     }
 }
 
+TrueOrFalseQuestion* Player::CreateTF(String* description)
+{
+    this->Writer().Write("Enter correct answer(True/False): ");
+    String* answer = this->Reader().ReadLine();
+
+    this->Writer().Write("Enter points: ");
+    String* pointsString = this->Reader().ReadLine();
+
+    unsigned int points = pointsString->StringToInt();
+
+    TrueOrFalseQuestion* question = new TrueOrFalseQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
+
+    delete answer;
+    answer = nullptr;
+
+    delete pointsString;
+    pointsString = nullptr;
+
+    return question;
+}
+
+SingleChoiceQuestion* Player::CreateSC(String* description)
+{
+    Vector<String> v;
+
+    for (char j = 0; j < MAX_LENGTH_SC_QUESTION; j++)
+    {
+        char* arr = new char[2] {'\0'};
+        arr[0] = 'A' + j;
+
+        String questNum = String(arr);
+
+        this->Writer().Write("Enter answer " + questNum + ": ");
+        String* answ = this->Reader().ReadLine();
+
+        v.push_back(*answ);
+
+        delete answ;
+        answ = nullptr;
+
+        delete[] arr;
+        arr = nullptr;
+    }
+
+    this->Writer().Write("Enter correct answer (A, B, C, D): ");
+    String* answer = this->Reader().ReadLine();
+
+    this->Writer().Write("Enter points: ");
+    String* pointsString = this->Reader().ReadLine();
+
+    unsigned int points = pointsString->StringToInt();
+
+    SingleChoiceQuestion* question = new SingleChoiceQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
+
+    for (size_t j = 0; j < v.getSize(); j++)
+    {
+        question->GetQuestions().push_back(v[j]);
+    }
+
+    delete answer;
+    answer = nullptr;
+
+    delete pointsString;
+    pointsString = nullptr;
+
+    return question;
+}
+
+MultipleChoiceQuestion* Player::CreateMC(String* description)
+{
+    this->Writer().Write("Enter possible answer count: ");
+    String* possibleAnswerCountString = this->Reader().ReadLine();
+
+    unsigned int possibleAnswerCount = possibleAnswerCountString->StringToInt();
+
+    Vector<String> v;
+
+    bool isFirst = true;
+
+    char* answersString = new char[1024] {'\0'};
+    size_t answersStringIndex = 0;
+
+    for (char j = 0; j < possibleAnswerCount; j++)
+    {
+        char* arr = new char[2] {'\0'};
+        arr[0] = 'A' + j;
+
+        String questNum = String(arr);
+
+        if (isFirst)
+        {
+            isFirst = false;
+        }
+        else
+        {
+            answersString[answersStringIndex++] = ',';
+            answersString[answersStringIndex++] = ' ';
+        }
+
+        answersString[answersStringIndex++] = arr[0];
+
+        this->Writer().Write("Enter answer " + questNum + ": ");
+        String* answ = this->Reader().ReadLine();
+
+        v.push_back(*answ);
+
+        delete answ;
+        answ = nullptr;
+
+        delete[] arr;
+        arr = nullptr;
+    }
+
+    String s = String(answersString);
+
+    delete[] answersString;
+    answersString = nullptr;
+
+    this->Writer().Write("Enter correct answer (" + s + "): ");
+    String* answer = this->Reader().ReadLine();
+
+    this->Writer().Write("Enter points: ");
+    String* pointsString = this->Reader().ReadLine();
+
+    unsigned int points = pointsString->StringToInt();
+
+    MultipleChoiceQuestion* question = new MultipleChoiceQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false, possibleAnswerCount);
+
+    for (size_t j = 0; j < v.getSize(); j++)
+    {
+        question->GetQuestions().push_back(v[j]);
+    }
+
+    delete answer;
+    answer = nullptr;
+
+    delete pointsString;
+    pointsString = nullptr;
+
+    delete possibleAnswerCountString;
+    possibleAnswerCountString = nullptr;
+
+    return question;
+}
+
+ShortAnswerQuestion* Player::CreateShA(String* description)
+{
+    this->Writer().Write("Enter correct answer: ");
+    String* answer = this->Reader().ReadLine();
+
+    this->Writer().Write("Enter points: ");
+    String* pointsString = this->Reader().ReadLine();
+
+    unsigned int points = pointsString->StringToInt();
+
+    ShortAnswerQuestion* question = new ShortAnswerQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
+
+    delete answer;
+    answer = nullptr;
+
+    delete pointsString;
+    pointsString = nullptr;
+
+    return question;
+}
+
+MatchingPairsQuestion* Player::CreateMP(String* description)
+{
+    this->Writer().Write("Enter left column values count: ");
+    String* possibleAnswerCountString = this->Reader().ReadLine();
+    unsigned int possibleAnswerCount = possibleAnswerCountString->StringToInt();
+
+    delete possibleAnswerCountString;
+    possibleAnswerCountString = nullptr;
+
+    Vector<String> v1, v2;
+
+    for (char j = 0; j < possibleAnswerCount; j++)
+    {
+        char* arr = new char[2] {'\0'};
+        arr[0] = 'A' + j;
+
+        String questNum = String(arr);
+
+        this->Writer().Write("Enter value " + questNum + ": ");
+        String* answ = this->Reader().ReadLine();
+
+        v1.push_back(*answ);
+
+        delete answ;
+        answ = nullptr;
+
+        delete[] arr;
+        arr = nullptr;
+    }
+
+    this->Writer().Write("Enter right column values count: ");
+    possibleAnswerCountString = this->Reader().ReadLine();
+    possibleAnswerCount = possibleAnswerCountString->StringToInt();
+
+    delete possibleAnswerCountString;
+    possibleAnswerCountString = nullptr;
+
+    for (char j = 0; j < possibleAnswerCount; j++)
+    {
+        char* arr = new char[2] {'\0'};
+        arr[0] = 'a' + j;
+
+        String questNum = String(arr);
+
+        this->Writer().Write("Enter value " + questNum + ": ");
+        String* answ = this->Reader().ReadLine();
+
+        v2.push_back(*answ);
+
+        delete answ;
+        answ = nullptr;
+
+        delete[] arr;
+        arr = nullptr;
+    }
+
+    this->Writer().Write("Enter correct pairs: ");
+    String* answer = this->Reader().ReadLine();
+
+    this->Writer().Write("Enter points: ");
+    String* pointsString = this->Reader().ReadLine();
+
+    unsigned int points = pointsString->StringToInt();
+
+    MatchingPairsQuestion* question = new MatchingPairsQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false, possibleAnswerCount);
+
+    for (size_t j = 0; j < v1.getSize(); j++)
+    {
+        question->GetQuestions().push_back(v1[j]);
+    }
+
+    for (size_t j = 0; j < v2.getSize(); j++)
+    {
+        question->GetAnswersVec().push_back(v2[j]);
+    }
+
+    delete answer;
+    answer = nullptr;
+
+    delete pointsString;
+    pointsString = nullptr;
+
+    return question;
+}
+
 void Player::CreateQuiz()
 {
     this->Writer().Write("Enter quiz title: ");
     String* quizName = this->Reader().ReadLine();
-    
+
     this->Writer().Write("Enter number of questions: ");
     String* numOfQuestionsString = this->Reader().ReadLine();
     unsigned int numOfQuestions = numOfQuestionsString->StringToInt();
@@ -203,251 +451,31 @@ void Player::CreateQuiz()
 
         if (*questionType == TF)
         {
-            this->Writer().Write("Enter correct answer(True/False): ");
-            String* answer = this->Reader().ReadLine();
-
-            this->Writer().Write("Enter points: ");
-            String* pointsString = this->Reader().ReadLine();
-
-            unsigned int points = pointsString->StringToInt();
-
-            TrueOrFalseQuestion* question = new TrueOrFalseQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
-
+            TrueOrFalseQuestion* question = this->CreateTF(description);
             quiz->GetQuestions().push_back(question);
-
-            delete answer;
-            answer = nullptr;
-
-            delete pointsString;
-            pointsString = nullptr;
         }
         else if (*questionType == SC)
         {
-            Vector<String> v;
-
-            for (char j = 0; j < MAX_LENGTH_SC_QUESTION; j++)
-            {
-                char* arr = new char[2] {'\0'};
-                arr[0] = 'A' + j;
-
-                String questNum = String(arr);
-
-                this->Writer().Write("Enter answer " + questNum + ": ");
-                String* answ = this->Reader().ReadLine();
-
-                v.push_back(*answ);
-
-                delete answ;
-                answ = nullptr;                
-
-                delete[] arr;
-                arr = nullptr;
-            }
-
-            this->Writer().Write("Enter correct answer (A, B, C, D): ");
-            String* answer = this->Reader().ReadLine();
-
-            this->Writer().Write("Enter points: ");
-            String* pointsString = this->Reader().ReadLine();
-
-            unsigned int points = pointsString->StringToInt();
-
-            SingleChoiceQuestion* question = new SingleChoiceQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
-
-            for (size_t j = 0; j < v.getSize(); j++)
-            {
-                question->GetQuestions().push_back(v[j]);
-            }
-
+            SingleChoiceQuestion* question = this->CreateSC(description);
             quiz->GetQuestions().push_back(question);
-
-            delete answer;
-            answer = nullptr;
-
-            delete pointsString;
-            pointsString = nullptr;
         }
         else if (*questionType == MC)
         {
-            this->Writer().Write("Enter possible answer count: ");
-            String* possibleAnswerCountString = this->Reader().ReadLine();
-            unsigned int possibleAnswerCount = possibleAnswerCountString->StringToInt();
-
-            Vector<String> v;
-
-            bool isFirst = true;
-
-            char* answersString = new char[1024] {'\0'};
-            size_t answersStringIndex = 0;
-
-            for (char j = 0; j < possibleAnswerCount; j++)
-            {
-                char* arr = new char[2] {'\0'};
-                arr[0] = 'A' + j;                
-
-                String questNum = String(arr);
-
-                if (isFirst)
-                {
-                    isFirst = false;
-                }
-                else
-                {
-                    answersString[answersStringIndex++] = ',';
-                    answersString[answersStringIndex++] = ' ';
-                }
-
-                answersString[answersStringIndex++] = arr[0];
-
-                this->Writer().Write("Enter answer " + questNum + ": ");
-                String* answ = this->Reader().ReadLine();
-
-                v.push_back(*answ);
-
-                delete answ;
-                answ = nullptr;
-
-                delete[] arr;
-                arr = nullptr;
-            }
-
-            String s = String(answersString);
-            delete[] answersString;
-            answersString = nullptr;
-
-            this->Writer().Write("Enter correct answer (" + s + "): ");
-            String* answer = this->Reader().ReadLine();
-
-            this->Writer().Write("Enter points: ");
-            String* pointsString = this->Reader().ReadLine();
-
-            unsigned int points = pointsString->StringToInt();
-
-            MultipleChoiceQuestion* question = new MultipleChoiceQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false, possibleAnswerCount);
-
-            for (size_t j = 0; j < v.getSize(); j++)
-            {
-                question->GetQuestions().push_back(v[j]);
-            }
-
+            MultipleChoiceQuestion* question = this->CreateMC(description);
             quiz->GetQuestions().push_back(question);
-
-            delete answer;
-            answer = nullptr;
-
-            delete pointsString;
-            pointsString = nullptr;
-
-            delete possibleAnswerCountString;
-            possibleAnswerCountString = nullptr;
         }
         else if (*questionType == ShA)
         {
-            this->Writer().Write("Enter correct answer: ");
-            String* answer = this->Reader().ReadLine();
-
-            this->Writer().Write("Enter points: ");
-            String* pointsString = this->Reader().ReadLine();
-
-            unsigned int points = pointsString->StringToInt();
-
-            ShortAnswerQuestion* question = new ShortAnswerQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false);
-
+            ShortAnswerQuestion* question = this->CreateShA(description);
             quiz->GetQuestions().push_back(question);
-
-            delete answer;
-            answer = nullptr;
-
-            delete pointsString;
-            pointsString = nullptr;
-
         }
         else if (*questionType == MP)
         {
-            this->Writer().Write("Enter left column values count: ");
-            String* possibleAnswerCountString = this->Reader().ReadLine();
-            unsigned int possibleAnswerCount = possibleAnswerCountString->StringToInt();
-
-            delete possibleAnswerCountString;
-            possibleAnswerCountString = nullptr;
-
-            Vector<String> v1, v2;
-
-            for (char j = 0; j < possibleAnswerCount; j++)
-            {
-                char* arr = new char[2] {'\0'};
-                arr[0] = 'A' + j;
-
-                String questNum = String(arr);
-
-                this->Writer().Write("Enter value " + questNum + ": ");
-                String* answ = this->Reader().ReadLine();
-
-                v1.push_back(*answ);
-
-                delete answ;
-                answ = nullptr;
-
-                delete[] arr;
-                arr = nullptr;
-            }
-
-            this->Writer().Write("Enter right column values count: ");
-            possibleAnswerCountString = this->Reader().ReadLine();
-            possibleAnswerCount = possibleAnswerCountString->StringToInt();
-
-            delete possibleAnswerCountString;
-            possibleAnswerCountString = nullptr;
-
-            for (char j = 0; j < possibleAnswerCount; j++)
-            {
-                char* arr = new char[2] {'\0'};
-                arr[0] = 'a' + j;
-
-                String questNum = String(arr);
-
-                this->Writer().Write("Enter value " + questNum + ": ");
-                String* answ = this->Reader().ReadLine();
-
-                v2.push_back(*answ);
-
-                delete answ;
-                answ = nullptr;
-
-                delete[] arr;
-                arr = nullptr;
-            }
-
-            this->Writer().Write("Enter correct pairs: ");
-            String* answer = this->Reader().ReadLine();
-
-            this->Writer().Write("Enter points: ");
-            String* pointsString = this->Reader().ReadLine();
-
-            unsigned int points = pointsString->StringToInt();
-
-            MatchingPairsQuestion* question = new MatchingPairsQuestion(&this->Writer(), &this->Reader(), *description, *answer, points, false, possibleAnswerCount);
-
-            for (size_t j = 0; j < v1.getSize(); j++)
-            {
-                question->GetQuestions().push_back(v1[j]);
-            }
-
-            for (size_t j = 0; j < v2.getSize(); j++)
-            {
-                question->GetAnswersVec().push_back(v2[j]);
-            }
-
+            MatchingPairsQuestion* question = this->CreateMP(description);
             quiz->GetQuestions().push_back(question);
-
-            delete answer;
-            answer = nullptr;
-
-            delete pointsString;
-            pointsString = nullptr;
         }
         else
-        {            
+        {
             this->Writer().WriteLine("Incorrect Question Type");
             i--;
         }
@@ -461,7 +489,12 @@ void Player::CreateQuiz()
 
     quiz->SaveQuiz(QuizStatus::NewQuiz, 0);
 
-    //TODO
+    this->numberCreatedQuizzes++;
+
+    String createQuizString = String::UIntToString(quiz->GetId()) + " " + quiz->GetQuizName();
+    this->listCreatedQuizzes.push_back(createQuizString);
+
+    //TODO Проверка за изпълнен чалиндж и създаване на съобщение за това
 
     delete quiz;
     quiz = nullptr;

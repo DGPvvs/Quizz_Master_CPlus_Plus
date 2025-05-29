@@ -314,3 +314,23 @@ unsigned int String::StringToInt()
 	return result;
 }
 
+int String::IndexOf(char value, unsigned int startIndex)
+{
+	int result = -1;
+	size_t i = startIndex;
+	bool isFound = false;
+
+	while (i < this->getSize() && !isFound)
+	{
+		if (this->data[i] == value)
+		{
+			result = i;
+			isFound = true;
+		}
+
+		i++;
+	}
+
+	return result;
+}
+
