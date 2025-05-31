@@ -64,6 +64,7 @@ public:
     void CreateQuiz();
     void Quizzes();
     void ReportQuiz(String, String);
+    bool ContainCreatedQuizzes(unsigned int);
     virtual ~Player() {};
 };
 

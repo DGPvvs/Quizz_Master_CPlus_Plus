@@ -139,6 +139,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="Quiz.cpp" />
+    <ClCompile Include="QuizIndexDTO.cpp" />
     <ClCompile Include="Quizz_Master.cpp" />
     <ClCompile Include="ShortAnswerQuestion.cpp" />
     <ClCompile Include="SingleChoiceQuestion.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="Quiz.h" />
+    <ClInclude Include="QuizIndexDTO.h" />
     <ClInclude Include="ShortAnswerQuestion.h" />
     <ClInclude Include="SingleChoiceQuestion.h" />
     <ClInclude Include="String.h" />

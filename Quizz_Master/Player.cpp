@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Quiz.h"
+#include "QuizIndexDTO.h"
 #include "DateTime.h"
 
 Player::Player(IWriter* writer, IReader* reader, IBaseProvider* provider, UserStruct* us, UserOptions uo)
@@ -489,10 +490,10 @@ void Player::CreateQuiz()
 
     quiz->SaveQuiz(QuizStatus::NewQuiz, 0);
 
-    this->numberCreatedQuizzes++;
+    //this->numberCreatedQuizzes++;
 
-    String createQuizString = String::UIntToString(quiz->GetId()) + " " + quiz->GetQuizName();
-    this->listCreatedQuizzes.push_back(createQuizString);
+    //String createQuizString = String::UIntToString(quiz->GetId()) + " " + quiz->GetQuizName();
+    //this->listCreatedQuizzes.push_back(createQuizString);
 
     //TODO Проверка за изпълнен чалиндж и създаване на съобщение за това
 
@@ -663,6 +664,24 @@ String Player::BuildUserData()
     return result;
 }
 
+bool Player::ContainCreatedQuizzes(unsigned int quizId)
+{    
+    Vector<String> v;
+
+    for (size_t i = 0; i < this->listCreatedQuizzes.getSize(); i++)
+    {
+        v.clear();
+        String::Split(CREATED_QUIZ_SEPARATOR, v, this->listCreatedQuizzes[i]);
+
+        if (v[0].StringToInt() == quizId)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
 {
     User::SetUpUserData(us, v, uo);
@@ -719,6 +738,33 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
     {
         this->listFinishedChallenges.push_back(v[i]);
     }
+
+    String quizzesString = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
+
+    for (size_t i = 0; i < quizzesVec.getSize(); i++)
+    {
+        QuizIndexDTO qiDTO;
+
+        qiDTO.SetElement(quizzesVec[i]);
+
+        bool isNotAddedNewQuiz = !this->ContainCreatedQuizzes(qiDTO.id)
+            && (qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
+            && (qiDTO.userName == this->getUserName());
+
+        if (isNotAddedNewQuiz)
+        {
+            String createdQuiz = String::UIntToString(qiDTO.id) + CREATED_QUIZ_SEPARATOR_STRING + qiDTO.quizName;
+
+            this->listCreatedQuizzes.push_back(createdQuiz);
+        }
+    }
+
+    //TODO логика за предизвикателство за създаден куиз
+
 
     /*0 <firstName>
     1 <lastName>

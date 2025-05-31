@@ -59,7 +59,7 @@ unsigned int Quiz::GetLikes() const
     return this->numberOfLikes;
 }
 
-void Quiz::IncreceLikes(int likes)
+void Quiz::IncrementLikes(int likes)
 {
     if ((this->numberOfLikes > 0 && likes < 0) || likes > 0)
     {

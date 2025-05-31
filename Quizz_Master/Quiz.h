@@ -31,7 +31,7 @@ public:
     unsigned int GetNumberOfQuestions() const;
     unsigned int GetId() const;
     unsigned int GetLikes() const;
-    void IncreceLikes(int);
+    void IncrementLikes(int);
     Vector<IQuestion*>& GetQuestions();
     void SaveQuiz(QuizStatus, unsigned int);
     String FindAllQuizzes();
