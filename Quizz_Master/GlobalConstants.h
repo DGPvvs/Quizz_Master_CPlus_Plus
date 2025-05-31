@@ -65,6 +65,7 @@ const char FILENAME_TO_DATA_SEPARATOR = '$';
 const char ROW_DATA_SEPARATOR = '\n';
 const char ELEMENT_DATA_SEPARATOR = ' ';
 const char QUIZ_ELEMENT_DATA_SEPARATOR = '|';
+const char MESSAGE_ELEMENT_DATA_SEPARATOR = '|';
 const char COMMA_DATA_SEPARATOR = ',';
 const char QUOTES_DATA_SEPARATOR = '"';
 const char CREATED_QUIZ_SEPARATOR = '#';
@@ -80,20 +81,31 @@ const String ERROR = "error";
 
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;
+const bool NOT_LOGIN = false;
 
 /// <summary>
 /// Константи за командите
-/// </summary>
+/// Общи команди
+/// </summary> 
 const String EXIT = "exit";
 const String LOGIN = "login";
 const String SIGNUP = "signup";
 const String LOGOUT = "logout";
 const String HELP = "help";
 
+/// <summary>
+/// Команди на Администратори
+/// </summary>
 const String BAN = "ban";
 const String PENDING = "pending";
 const String APPROVE_QUIZ = "approve-quiz";
+const String REJECT_QUIZ = "reject-quiz";
+const String REMOVE_QUIZ = "remove-quiz";
+const String VIEW_REPORTS = "view-reports";
 
+/// <summary>
+/// Команди на Играчи
+/// </summary>
 const String VIEW_PROFILE = "view-profile";
 const String VIEW = "view";
 const String CREATE_QUIZ = "create-quiz";

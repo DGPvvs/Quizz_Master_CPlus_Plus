@@ -118,15 +118,23 @@ void User::Action(CommandStruct& cmdStr)
 
 bool User::GenerateReason(CommandStruct& cmdStr)
 {
-    int size = cmdStr.CommandLine.getSize();
-    int idx = cmdStr.CommandLine.IndexOf(ELEMENT_DATA_SEPARATOR, 0);
+    Vector<String> v, v1;
+    String::Split(ELEMENT_DATA_SEPARATOR, v, cmdStr.CommandLine);
 
-    if (idx > -1 && idx + 1 < size)
-    {        
-        idx = cmdStr.CommandLine.IndexOf(ELEMENT_DATA_SEPARATOR, idx + 1);
-        String s = cmdStr.CommandLine;
-        s = s.substr(idx + 1, size - idx - 2);
+    size_t size = v.getSize();
+
+    if (size > 1)
+    {
+        for (size_t i = 2; i < size; i++)
+        {
+            v1.push_back(v[i]);
+        }
+
+        String s;
+
+        String::Join(ELEMENT_DATA_SEPARATOR, v1, s);
         cmdStr.Param2 = s;
+
         return true;
     }
 

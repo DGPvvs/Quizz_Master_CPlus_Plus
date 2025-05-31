@@ -194,7 +194,7 @@ void String::free()
 		delete[] this->data;
 	}*/
 
-	delete[] data;
+	delete[] this->data;
 
 	this->data = nullptr;
 	this->size = this->capacity = 0;

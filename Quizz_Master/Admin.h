@@ -17,6 +17,8 @@ public:
     void Ban(const CommandStruct&);
     void Pending();
     void ApproveQuiz(const CommandStruct&);
+    void RejectOrRemoveQuiz(String, String, QuizStatus);
+    void ViewReports();
 
     virtual ~Admin() {};
 };
