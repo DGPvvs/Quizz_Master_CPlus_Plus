@@ -108,7 +108,7 @@ void User::Logout()
 
 void User::Action(CommandStruct& cmdStr)
 {
-    if (cmdStr.command == HELP)
+    if (cmdStr.command == HELP && cmdStr.paramRange == 1)
     {
         this->Help();
     }

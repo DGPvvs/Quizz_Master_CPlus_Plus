@@ -49,23 +49,23 @@ void Game::GameLoop()
     {
         this->SetCommandStruct();
 
-        if (this->command->command == EXIT)
+        if (this->command->command == EXIT && this->command->paramRange == 1)
         {
             isLoopExit = true;
             this->Exit();
         }
-        else if (this->command->command == LOGIN)
+        else if (this->command->command == LOGIN && this->command->paramRange == 3)
         {
             this->LoginUser();
         }
-        else if (this->command->command == LOGOUT)
+        else if (this->command->command == LOGOUT && this->command->paramRange == 1)
         {
             if (this->user->GetIsHasLog())
             {
                 this->LogoutUser();
             }
         }
-        else if (this->command->command == SIGNUP)
+        else if (this->command->command == SIGNUP && this->command->paramRange == 6)
         {
             this->SignupUser();
         }
@@ -89,6 +89,7 @@ void Game::SetCommandStruct()
     String::Split(ELEMENT_DATA_SEPARATOR, commandLine, *s);
 
     this->command->CommandLine = *s;
+    this->command->paramRange = commandLine.getSize();
 
     delete s;
     s = nullptr;

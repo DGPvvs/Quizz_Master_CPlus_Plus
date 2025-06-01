@@ -57,23 +57,23 @@ void Player::Action(CommandStruct& cmdStr)
 {
     User::Action(cmdStr);
 
-    if (cmdStr.command == VIEW_PROFILE)
+    if (cmdStr.command == VIEW_PROFILE && cmdStr.paramRange == 1)
     {
         this->ViewSelfProfile(VIEW_SELF_PROFILE);
     }
-    else if (cmdStr.command == VIEW)
+    else if (cmdStr.command == VIEW && cmdStr.paramRange == 2)
     {
         this->ViewOtherProfile(cmdStr.Param1, VIEW_OTHER_PROFILE);
     }
-    else if (cmdStr.command == CREATE_QUIZ)
+    else if (cmdStr.command == CREATE_QUIZ && cmdStr.paramRange == 1)
     {
         this->CreateQuiz();
     }
-    else if (cmdStr.command == QUIZZES)
+    else if (cmdStr.command == QUIZZES && cmdStr.paramRange == 1)
     {
         this->Quizzes();
     }
-    else if (cmdStr.command == REPORT_QUIZ)
+    else if (cmdStr.command == REPORT_QUIZ && cmdStr.paramRange == 3)
     {
         if (this->GenerateReason(cmdStr))
         {
@@ -689,6 +689,7 @@ void Player::AddLevel()
     if (pointForLevel - this->points <= 0)
     {
         this->level++;
+        this->points -= pointForLevel;
 
         String message = "Level " + String::UIntToString(this->level) + " reached!";
 
@@ -804,31 +805,24 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
 
     String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
 
-    bool isHasAddedQuiz = false;
-
     for (size_t i = 0; i < quizzesVec.getSize(); i++)
     {
         QuizIndexDTO qiDTO;
 
         qiDTO.SetElement(quizzesVec[i]);
 
-        bool isNotAddedNewQuiz = !this->ContainCreatedQuizzes(qiDTO.id)
+        bool isAddedNewQuiz = !this->ContainCreatedQuizzes(qiDTO.id)
             && (qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
             && (qiDTO.userName == this->getUserName());
 
-        if (isNotAddedNewQuiz)
+        if (isAddedNewQuiz)
         {
             String createdQuiz = String::UIntToString(qiDTO.id) + CREATED_QUIZ_SEPARATOR_STRING + qiDTO.quizName;
 
             this->listCreatedQuizzes.push_back(createdQuiz);
-
-            isHasAddedQuiz = true;
+            this->numberCreatedQuizzes = this->listCreatedQuizzes.getSize();
+            this->AddQuizChallenge(ChallengerOptions::CreateChallenger);
         }
-    }
-
-    if (isHasAddedQuiz)
-    {
-        this->AddQuizChallenge(ChallengerOptions::CreateChallenger);
     }
 
     /*0 <firstName>

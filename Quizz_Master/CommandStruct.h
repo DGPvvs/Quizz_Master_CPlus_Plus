@@ -6,6 +6,7 @@
 struct CommandStruct
 {
 public:
+	unsigned int paramRange;
 	String command;
 	String Param1;
 	String Param2;

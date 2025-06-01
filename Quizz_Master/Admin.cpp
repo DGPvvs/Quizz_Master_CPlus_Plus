@@ -245,19 +245,19 @@ void Admin::Action(CommandStruct& cmdStr)
 {
 	User::Action(cmdStr);
 
-	if (cmdStr.command == BAN)
+	if (cmdStr.command == BAN && cmdStr.paramRange == 1)
 	{
 		this->Ban(cmdStr);
 	}
-	else if (cmdStr.command == PENDING)
+	else if (cmdStr.command == PENDING && cmdStr.paramRange == 1)
 	{
 		this->Pending();
 	}
-	else if (cmdStr.command == APPROVE_QUIZ)
+	else if (cmdStr.command == APPROVE_QUIZ && cmdStr.paramRange == 2)
 	{
 		this->ApproveQuiz(cmdStr);
 	}
-	else if (cmdStr.command == REJECT_QUIZ || cmdStr.command == REMOVE_QUIZ)
+	else if ((cmdStr.command == REJECT_QUIZ || cmdStr.command == REMOVE_QUIZ) && cmdStr.paramRange == 3)
 	{
 		QuizStatus status = (cmdStr.command == REJECT_QUIZ)
 			? QuizStatus::RejectedQuiz
@@ -268,7 +268,7 @@ void Admin::Action(CommandStruct& cmdStr)
 			this->RejectOrRemoveQuiz(cmdStr.Param1, cmdStr.Param2, status);
 		}
 	}
-	else if (cmdStr.command == VIEW_REPORTS)
+	else if (cmdStr.command == VIEW_REPORTS && cmdStr.paramRange == 1)
 	{
 		this->ViewReports();
 	}

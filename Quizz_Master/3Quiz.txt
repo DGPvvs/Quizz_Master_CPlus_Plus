@@ -1,12 +1,7 @@
 Quiz3
 1
 UserPrime
-2
+0
 Description
-A, B
+True
 10
-A
-B
-C
-D
-E
