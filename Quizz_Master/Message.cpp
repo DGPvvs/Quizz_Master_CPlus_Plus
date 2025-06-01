@@ -18,3 +18,30 @@ String Message::FindAllMessages()
 
     return s;
 }
+
+void Message::SaveNewMessage(String& s)
+{
+    Vector<String> messagesVec;
+
+    String allMessages = this->FindAllMessages();
+
+    String::Split(ROW_DATA_SEPARATOR, messagesVec, allMessages);
+
+    messagesVec.push_back(s);
+
+    String result;
+    String::Join(ROW_DATA_SEPARATOR, messagesVec, result);
+
+    this->SaveMessage(result);
+}
+
+void Message::SaveMessage(String& s)
+{
+    String messages = MESSAGES_FILE_NAME + MESSAGE_ELEMENT_SEPARATOR + s;
+    this->provider->Action(messages, ProviderOptions::MessagesSave);
+}
+
+void Message::SendMessage(String& s)
+{
+    this->SaveNewMessage(s);
+}

@@ -8,9 +8,13 @@ class Message
 private:
     IBaseProvider* provider;
 
+    void SaveNewMessage(String&);
+    void SaveMessage(String&);
+
 public:
     Message(IBaseProvider*);
-    String FindAllMessages();
+    String FindAllMessages(); 
+    void SendMessage(String&);
 };
 
 #endif // !Message_H

@@ -682,6 +682,65 @@ bool Player::ContainCreatedQuizzes(unsigned int quizId)
     return false;
 }
 
+void Player::AddLevel()
+{
+    unsigned int pointForLevel = this->PointsForLevel();
+
+    if (pointForLevel - this->points <= 0)
+    {
+        this->level++;
+
+        String message = "Level " + String::UIntToString(this->level) + " reached!";
+
+        this->GetMessage().SendMessage(message);
+    }
+}
+
+void Player::AddPoints(unsigned int point)
+{
+    this->points += point;
+
+    this->AddLevel();
+}
+
+void Player::AddQuizChallenge(ChallengerOptions co)
+{
+    unsigned int point = 0;
+
+    if (co == ChallengerOptions::CreateChallenger)
+    {
+        int createdQuizCount = this->listCreatedQuizzes.getSize();
+
+        bool isChalleeng = (createdQuizCount < 31) && (createdQuizCount % 5 == 0);
+
+        if (isChalleeng)
+        {
+            point = createdQuizCount * 10 / 2;
+
+            String message = String::UIntToString(this->getId()) + MESSAGE_ELEMENT_SEPARATOR;
+            message += "New challenge complited! You create " + String::UIntToString(createdQuizCount / 5) + "quizzes!";
+            message += String::UIntToString(point) + " points added.";
+
+            this->GetMessage().SendMessage(message);
+
+            String finishedChaleng = DateTime::DateNow() + MESSAGE_ELEMENT_SEPARATOR + "Commplete " + String::UIntToString(createdQuizCount);
+            finishedChaleng += "create quizzes";
+
+            this->listFinishedChallenges.push_back(finishedChaleng);
+        }
+    }
+    else if (co == ChallengerOptions::NormalQuizChallenger)
+    {
+
+    }
+    else if (co == ChallengerOptions::TestQuizChallenger)
+    {
+
+    }
+
+    this->AddPoints(point);
+}
+
 void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
 {
     User::SetUpUserData(us, v, uo);
@@ -745,6 +804,8 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
 
     String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
 
+    bool isHasAddedQuiz = false;
+
     for (size_t i = 0; i < quizzesVec.getSize(); i++)
     {
         QuizIndexDTO qiDTO;
@@ -760,11 +821,15 @@ void Player::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
             String createdQuiz = String::UIntToString(qiDTO.id) + CREATED_QUIZ_SEPARATOR_STRING + qiDTO.quizName;
 
             this->listCreatedQuizzes.push_back(createdQuiz);
+
+            isHasAddedQuiz = true;
         }
     }
 
-    //TODO логика за предизвикателство за създаден куиз
-
+    if (isHasAddedQuiz)
+    {
+        this->AddQuizChallenge(ChallengerOptions::CreateChallenger);
+    }
 
     /*0 <firstName>
     1 <lastName>

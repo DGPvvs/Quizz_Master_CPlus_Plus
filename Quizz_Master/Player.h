@@ -19,6 +19,14 @@ private:
         VIEW_OTHER_PROFILE,
     };
 
+    enum ChallengerOptions
+    {
+        NoChallenger,
+        CreateChallenger,
+        TestQuizChallenger,
+        NormalQuizChallenger,
+    };
+
     const String TF = "T/F";
     const String SC = "SC";
     const String MC = "MC";
@@ -44,6 +52,9 @@ private:
 
     void Init();
     unsigned int PointsForLevel();
+    void AddQuizChallenge(ChallengerOptions);
+    void AddPoints(unsigned int);
+    void AddLevel();
 
     TrueOrFalseQuestion* CreateTF(String*);
     SingleChoiceQuestion* CreateSC(String*);
