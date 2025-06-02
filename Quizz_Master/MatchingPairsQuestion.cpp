@@ -10,3 +10,24 @@ Vector<String>& MatchingPairsQuestion::GetAnswersVec()
 {
     return this->answers;
 }
+
+void MatchingPairsQuestion::SetUpData(String& s)
+{
+    throw "NotImplement - void MatchingPairsQuestion::SetUpData(String& s)";
+    //TODO
+}
+
+
+String MatchingPairsQuestion::BuildQuestionData()
+{
+    String result = MultipleChoiceQuestion::BuildQuestionData();
+
+    result += MP_SEPARATOR_STRING + NEW_LINE;
+
+    for (size_t i = 0; i < this->answers.getSize(); i++)
+    {
+        result += this->answers[i] + NEW_LINE;
+    }
+
+    return result;
+}

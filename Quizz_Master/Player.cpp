@@ -489,6 +489,7 @@ void Player::CreateQuiz()
     }
 
     quiz->SaveQuiz(QuizStatus::NewQuiz, 0);
+    this->game->SaveConfig();
 
     //this->numberCreatedQuizzes++;
 
@@ -719,7 +720,7 @@ void Player::AddQuizChallenge(ChallengerOptions co)
             point = createdQuizCount * 10 / 2;
 
             String message = String::UIntToString(this->getId()) + MESSAGE_ELEMENT_SEPARATOR;
-            message += "New challenge complited! You create " + String::UIntToString(createdQuizCount / 5) + "quizzes!";
+            message += "New challenge complited! You create " + String::UIntToString(createdQuizCount) + "quizzes!";
             message += String::UIntToString(point) + " points added.";
 
             this->GetMessage().SendMessage(message);
@@ -728,6 +729,7 @@ void Player::AddQuizChallenge(ChallengerOptions co)
             finishedChaleng += "create quizzes";
 
             this->listFinishedChallenges.push_back(finishedChaleng);
+            this->numberFinishedChallenges = this->listFinishedChallenges.getSize();
         }
     }
     else if (co == ChallengerOptions::NormalQuizChallenger)

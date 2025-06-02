@@ -22,8 +22,7 @@ private:
     void Free();
     void GameLoop();
     void SetCommandStruct();
-    void LoadConfig();
-    void SaveConfig();
+    void LoadConfig();    
 
 public:
     Game(IWriter*, IReader*, IBaseProvider*);
@@ -42,6 +41,7 @@ public:
 
     virtual unsigned int GetMaxQuizId() const override;
     virtual void SetMaxQuizId(unsigned int) override;
+    virtual void SaveConfig() override;
 };
 
 #endif // ! Game

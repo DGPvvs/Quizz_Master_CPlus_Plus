@@ -248,6 +248,8 @@ void Game::SignupUser()
 
     this->writer->WriteLine("Signup " + us->userName + " successful!");
 
+    this->SaveConfig();
+
     delete us;
     us = nullptr;
 

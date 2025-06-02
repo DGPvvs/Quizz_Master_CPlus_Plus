@@ -13,13 +13,21 @@
 
 int main()
 {
-    ConsoleWriter * writer = new ConsoleWriter();
+    ConsoleWriter* writer = new ConsoleWriter();
     ConsoleReader* reader = new ConsoleReader();
     FileBaseProvider* provider = new FileBaseProvider();
 
     Game* game = new Game(writer, reader, provider);
-    game->Init();
-    game->Run();
+    try
+    {
+        
+        game->Init();
+        game->Run();
+    }
+    catch(String s)
+    {
+        writer->WriteLine(s);
+    }    
 
     delete game;
     game = nullptr;
