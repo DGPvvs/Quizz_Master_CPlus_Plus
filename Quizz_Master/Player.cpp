@@ -80,6 +80,32 @@ void Player::Action(CommandStruct& cmdStr)
             this->ReportQuiz(cmdStr.Param1, cmdStr.Param2);
         }
     }
+    else if (cmdStr.command == MESSAGES && cmdStr.paramRange == 1)
+    {
+        this->Message();
+    }
+}
+
+void Player::Message()
+{
+    String messages = this->GetMessage().FindAllMessages();
+
+    Vector<String> v;
+
+    String::Split(ROW_DATA_SEPARATOR, v, messages);
+
+    for (size_t i = 0; i < v.getSize(); i++)
+    {
+        String message = v[i];
+        Vector<String> vv;
+        
+        String::Split(MESSAGE_ELEMENT_DATA_SEPARATOR, vv, message);
+
+        if (vv[0].StringToInt() == this->getId())
+        {
+            this->Writer().WriteLine(vv[1]);
+        }
+    }
 }
 
 void Player::ReportQuiz(String quizIdString, String reason)

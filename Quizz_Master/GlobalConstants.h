@@ -111,5 +111,6 @@ const String VIEW = "view";
 const String CREATE_QUIZ = "create-quiz";
 const String QUIZZES = "quizzes";
 const String REPORT_QUIZ = "report-quiz";
+const String MESSAGES = "messages";
 
 #endif
