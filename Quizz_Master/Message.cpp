@@ -37,7 +37,7 @@ void Message::SaveNewMessage(String& s)
 
 void Message::SaveMessage(String& s)
 {
-    String messages = MESSAGES_FILE_NAME + MESSAGE_ELEMENT_SEPARATOR + s;
+    String messages = MESSAGES_FILE_NAME + FILENAME_SEPARATOR + s;
     this->provider->Action(messages, ProviderOptions::MessagesSave);
 }
 

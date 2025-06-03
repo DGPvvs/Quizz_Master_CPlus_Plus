@@ -3,3 +3,4 @@
 3|Quiz3|UserPrime|3Quiz.txt|2|1|0
 4|Quiz4|UserPrime|4Quiz.txt|2|1|0
 5|Quiz5|UserPrime|5Quiz.txt|2|1|0
+6|Quiz1 UserSecond|UserSecond|6Quiz.txt|2|1|0

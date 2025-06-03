@@ -534,7 +534,7 @@ void Player::ViewSelfProfile(DatBuild option)
     if (option == DatBuild::VIEW_SELF_PROFILE)
     {
         arr[0] = '\t';
-        result += String(arr) + String::UIntToString(this->PointsForLevel() - this->points) + "/";
+        result += String(arr) + String::UIntToString(this->points) + "/";
         result += String::UIntToString(this->PointsForLevel()) + " Points to next level";
     }
 
@@ -552,7 +552,11 @@ void Player::ViewSelfProfile(DatBuild option)
 
     for (size_t i = 0; i < this->listCreatedQuizzes.getSize(); i++)
     {
-        result += this->listCreatedQuizzes[i] + newLine;
+        String quizString = this->listCreatedQuizzes[i];
+        Vector<String> v;
+        String::Split(CREATED_QUIZ_SEPARATOR, v, quizString);
+
+        result += "[" + v[0] + "] " + v[1] + newLine;
     }
 
     if (option == DatBuild::VIEW_SELF_PROFILE)
@@ -623,44 +627,40 @@ String Player::BuildUserData()
 {
     String result = User::BuildUserData();
 
-    char* arr = new char[2] {'\0'};
+    this->numberCreatedQuizzes = this->listCreatedQuizzes.getSize();
+    this->numberLikedQuizzes = this->listLikedQuizzes.getSize();
+    this->numberFavoriteQuizzes = this->listFavoriteQuizzes.getSize();
+    this->numberFinishedChallenges = this->listFinishedChallenges.getSize();
 
-    arr[0] = ROW_DATA_SEPARATOR;
-
-    String newLine(arr);
-
-    delete[] arr;
-    arr = nullptr;
-
-    result += String::UIntToString(this->level) + newLine;
-    result += String::UIntToString(this->points) + newLine;
-    result += String::UIntToString(this->numberCreatedQuizzes) + newLine;
-    result += String::UIntToString(this->numberLikedQuizzes) + newLine;
-    result += String::UIntToString(this->numberFavoriteQuizzes) + newLine;
-    result += String::UIntToString(this->numberFinishedChallenges) + newLine;
-    result += String::UIntToString(this->numberSolvedTestQuizzes) + newLine;
-    result += String::UIntToString(this->numberSolvedNormalQuizzes) + newLine;
-    result += String::UIntToString(this->numberCreatedQuizzesChallengers) + newLine;
+    result += String::UIntToString(this->level) + NEW_LINE;
+    result += String::UIntToString(this->points) + NEW_LINE;
+    result += String::UIntToString(this->numberCreatedQuizzes) + NEW_LINE;
+    result += String::UIntToString(this->numberLikedQuizzes) + NEW_LINE;
+    result += String::UIntToString(this->numberFavoriteQuizzes) + NEW_LINE;
+    result += String::UIntToString(this->numberFinishedChallenges) + NEW_LINE;
+    result += String::UIntToString(this->numberSolvedTestQuizzes) + NEW_LINE;
+    result += String::UIntToString(this->numberSolvedNormalQuizzes) + NEW_LINE;
+    result += String::UIntToString(this->numberCreatedQuizzesChallengers) + NEW_LINE;
 
     for (size_t i = 0; i < this->listCreatedQuizzes.getSize(); i++)
-    {        
-        result = result + this->listCreatedQuizzes[i] + newLine;
+    {
+        result = result + this->listCreatedQuizzes[i] + NEW_LINE;
     }
 
     for (size_t i = 0; i < this->listLikedQuizzes.getSize(); i++)
     {
-        result = result + String::UIntToString(this->listLikedQuizzes[i]) + newLine;
+        result = result + String::UIntToString(this->listLikedQuizzes[i]) + NEW_LINE;
     }
 
     for (size_t i = 0; i < this->listFavoriteQuizzes.getSize(); i++)
     {
-        result = result + String::UIntToString(this->listFavoriteQuizzes[i]) + newLine;
+        result = result + String::UIntToString(this->listFavoriteQuizzes[i]) + NEW_LINE;
     }
 
     for (size_t i = 0; i < this->listFinishedChallenges.getSize(); i++)
     {
-        result = result + this->listFinishedChallenges[i] + newLine;
-    }    
+        result = result + this->listFinishedChallenges[i] + NEW_LINE;
+    }
 
     return result;
 }
@@ -720,25 +720,26 @@ void Player::AddQuizChallenge(ChallengerOptions co)
             point = createdQuizCount * 10 / 2;
 
             String message = String::UIntToString(this->getId()) + MESSAGE_ELEMENT_SEPARATOR;
-            message += "New challenge complited! You create " + String::UIntToString(createdQuizCount) + "quizzes!";
+            message += "New challenge complited! You create " + String::UIntToString(createdQuizCount) + " quizzes! ";
             message += String::UIntToString(point) + " points added.";
 
             this->GetMessage().SendMessage(message);
 
             String finishedChaleng = DateTime::DateNow() + MESSAGE_ELEMENT_SEPARATOR + "Commplete " + String::UIntToString(createdQuizCount);
-            finishedChaleng += "create quizzes";
+            finishedChaleng += " create quizzes";
 
             this->listFinishedChallenges.push_back(finishedChaleng);
             this->numberFinishedChallenges = this->listFinishedChallenges.getSize();
+            this->numberCreatedQuizzesChallengers++;
         }
     }
     else if (co == ChallengerOptions::NormalQuizChallenger)
     {
-
+        //TODO: if has challenges to this->numberSolvedNormalQuizzes++;
     }
     else if (co == ChallengerOptions::TestQuizChallenger)
     {
-
+        //TODO: if has challenges to this->numberSolvedTestQuizzes++;
     }
 
     this->AddPoints(point);
