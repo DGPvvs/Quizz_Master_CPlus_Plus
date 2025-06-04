@@ -84,6 +84,83 @@ void Player::Action(CommandStruct& cmdStr)
     {
         this->Message();
     }
+    else if (cmdStr.command == ADD_TO_FAVS && cmdStr.paramRange == 2)
+    {
+        this->AddToFavs(cmdStr.Param1);
+    }
+    else if (cmdStr.command == REMOVE_FROM_FAVS && cmdStr.paramRange == 2)
+    {
+        this->RemoveFromFavs(cmdStr.Param1);
+    }
+}
+
+void Player::RemoveFromFavs(String quizId)
+{
+    Vector<unsigned int> newFavs;
+
+    bool isNotFound = true;
+
+    for (size_t i = 0; i < this->listFavoriteQuizzes.getSize(); ++i)
+    {
+        unsigned int id = this->listFavoriteQuizzes[i];
+
+        if (id != quizId.StringToInt())
+        {
+            newFavs.push_back(id);
+        }
+        else
+        {
+            isNotFound = false;
+        }
+    }
+
+    if (isNotFound)
+    {
+        this->Writer().WriteLine("No quiz found with ID " + quizId);
+    }
+    else
+    {
+        this->listFavoriteQuizzes.clear();
+
+        for (size_t i = 0; i < newFavs.getSize(); ++i)
+        {
+            unsigned int id = newFavs[i];
+            this->listFavoriteQuizzes.push_back(id);
+        }
+    }
+}
+
+void Player::AddToFavs(String quizId)
+{
+    String quizzesString = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
+
+    bool isNotFound = true;
+    size_t i = 0;
+
+    while (i < quizzesVec.getSize() && isNotFound)
+    {
+        QuizIndexDTO qiDTO;
+
+        qiDTO.SetElement(quizzesVec[i]);
+
+        if (qiDTO.id == quizId.StringToInt())
+        {
+            this->listFavoriteQuizzes.push_back(qiDTO.id);
+            this->numberFavoriteQuizzes = this->listFavoriteQuizzes.getSize();
+            isNotFound = false;
+        }
+
+        i++;
+    }
+
+    if (isNotFound)
+    {
+        this->Writer().WriteLine("No quiz found with ID " + quizId);
+    }
 }
 
 void Player::Message()
