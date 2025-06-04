@@ -1,6 +1,7 @@
 #include "Quiz.h"
 #include "UserStruct.h"
 #include "Question.h"
+#include "QuizIndexDTO.h"
 #include "User.h"
 
 Quiz::Quiz(IWriter* writer, IReader* reader, IBaseProvider* provider, String name, String userName, unsigned int id, unsigned int numberOfQuestions, unsigned int numberOfLikes)
@@ -165,6 +166,39 @@ void Quiz::SaveQuiz(QuizStatus qs, unsigned int quizId)
         arr2 = nullptr;
 
         //id|quizName|userName|quizFileName|QuizStatus|numOfQuestions|Likes
+    }
+    else if (qs == QuizStatus::LikeQuiz)
+    {
+        Vector<String> quizzesVec, resultVec;
+
+        String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+        for (size_t i = 0; i < quizzesVec.getSize(); i++)
+        {            
+            String quizString = quizzesVec[i];
+
+            QuizIndexDTO qiDTO;
+
+            qiDTO.SetElement(quizzesVec[i]);
+
+            if (qiDTO.id == quizId)
+            {
+                qiDTO.likes++;
+                String incLikeString = qiDTO.ToIndexString();
+                resultVec.push_back(incLikeString);
+            }
+            else
+            {
+                resultVec.push_back(quizString);
+            }
+        }
+
+        String allQuizzesString;
+        String::Join(ROW_DATA_SEPARATOR, resultVec, allQuizzesString);
+
+        allQuizzesString = QUIZZES_FILE_NAME + FILENAME_SEPARATOR + allQuizzesString;
+
+        this->provider->Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
     }
 
     if (qs == QuizStatus::NewQuiz)

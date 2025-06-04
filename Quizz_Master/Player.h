@@ -74,11 +74,13 @@ public:
     void ViewOtherProfile(const String&, DatBuild);
     void CreateQuiz();
     void Quizzes();
-    void ReportQuiz(String, String);
+    void ReportQuiz(String&, String&);
     bool ContainCreatedQuizzes(unsigned int);
+    bool ContainLikedQuizzes(unsigned int);
     void Message();
-    void AddToFavs(String);
-    void RemoveFromFavs(String);
+    void AddToFavs(String&);
+    void RemoveFromFavs(String&);
+    void LikeQuiz(String&);
     virtual ~Player() {};
 };
 

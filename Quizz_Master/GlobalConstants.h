@@ -37,6 +37,8 @@ enum QuizStatus
 	ApprovedQuiz,
 	RejectedQuiz,
 	RemovedQuiz,
+	LikeQuiz,
+	UnlikeQuiz,
 };
 
 enum QuestionType
@@ -114,5 +116,6 @@ const String REPORT_QUIZ = "report-quiz";
 const String MESSAGES = "messages";
 const String ADD_TO_FAVS = "add-to-favs";
 const String REMOVE_FROM_FAVS = "remove-from-favs";
+const String LIKE_QUIZ = "like-quiz";
 
 #endif

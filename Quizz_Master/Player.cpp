@@ -92,9 +92,46 @@ void Player::Action(CommandStruct& cmdStr)
     {
         this->RemoveFromFavs(cmdStr.Param1);
     }
+    else if (cmdStr.command == LIKE_QUIZ && cmdStr.paramRange == 2)
+    {
+        this->LikeQuiz(cmdStr.Param1);
+    }
 }
 
-void Player::RemoveFromFavs(String quizId)
+void Player::LikeQuiz(String& quizId)
+{
+    String quizzesString = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec, quizVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
+
+    for (size_t i = 0; i < quizzesVec.getSize(); i++)
+    {
+        quizVec.clear();
+        String quizString = quizzesVec[i];
+
+        QuizIndexDTO qiDTO;
+
+        qiDTO.SetElement(quizzesVec[i]);
+
+        bool isLikedQuiz = !this->ContainLikedQuizzes(qiDTO.id)
+            && (qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
+            && (qiDTO.id == quizId.StringToInt());
+
+        if (isLikedQuiz)
+        {
+            this->GetQuiz().SaveQuiz(QuizStatus::LikeQuiz, qiDTO.id);
+            this->listLikedQuizzes.push_back(qiDTO.id);
+            this->numberLikedQuizzes = this->listLikedQuizzes.getSize();
+            return;
+        }
+    }
+
+    this->Writer().WriteLine("No test with the specified ID was found to be liked.");
+}
+
+void Player::RemoveFromFavs(String& quizId)
 {
     Vector<unsigned int> newFavs;
 
@@ -130,7 +167,7 @@ void Player::RemoveFromFavs(String quizId)
     }
 }
 
-void Player::AddToFavs(String quizId)
+void Player::AddToFavs(String& quizId)
 {
     String quizzesString = this->GetQuiz().FindAllQuizzes();
 
@@ -185,7 +222,7 @@ void Player::Message()
     }
 }
 
-void Player::ReportQuiz(String quizIdString, String reason)
+void Player::ReportQuiz(String& quizIdString, String& reason)
 {
     //id|quizName|userName|quizFileName|QuizStatus|numOfQuestions|Likes
 
@@ -766,6 +803,19 @@ String Player::BuildUserData()
     }
 
     return result;
+}
+
+bool Player::ContainLikedQuizzes(unsigned int quizId)
+{
+    for (size_t i = 0; i < this->listLikedQuizzes.getSize(); i++)
+    {
+        if (this->listLikedQuizzes[i] == quizId)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool Player::ContainCreatedQuizzes(unsigned int quizId)
