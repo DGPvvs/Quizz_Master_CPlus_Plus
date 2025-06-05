@@ -71,7 +71,12 @@ void Player::Action(CommandStruct& cmdStr)
     }
     else if (cmdStr.command == QUIZZES && cmdStr.paramRange == 1)
     {
-        this->Quizzes();
+        String s = EMPTY_STRING;
+        this->Quizzes(s);
+    }
+    else if (cmdStr.command == QUIZZES && cmdStr.paramRange == 2)
+    {        
+        this->Quizzes(cmdStr.Param1);
     }
     else if (cmdStr.command == REPORT_QUIZ && cmdStr.paramRange == 3)
     {
@@ -95,6 +100,71 @@ void Player::Action(CommandStruct& cmdStr)
     else if (cmdStr.command == LIKE_QUIZ && cmdStr.paramRange == 2)
     {
         this->LikeQuiz(cmdStr.Param1);
+    }
+    else if (cmdStr.command == UNLIKE_QUIZ && cmdStr.paramRange == 2)
+    {
+        this->UnlikeQuiz(cmdStr.Param1);
+    }
+    else if (cmdStr.command == VIEW_FINISHED_CHALLEENGES && cmdStr.paramRange == 1)
+    {
+        this->PrintFinishedChalleenges();
+    }    
+}
+
+void Player::PrintFinishedChalleenges()
+{
+    for (size_t i = 0; i < this->listFinishedChallenges.getSize(); i++)
+    {
+        this->Writer().WriteLine(this->listFinishedChallenges[i]);
+    }
+}
+
+void Player::UnlikeQuiz(String& quizId)
+{
+    unsigned int id = quizId.StringToInt();
+
+    if (this->ContainLikedQuizzes(id))
+    {
+        Vector<unsigned int> v;
+
+        for (size_t i = 0; i < this->listLikedQuizzes.getSize(); i++)
+        {
+            if (this->listLikedQuizzes[i] != id)
+            {
+                v.push_back(this->listLikedQuizzes[i]);
+            }
+        }
+
+        this->listLikedQuizzes.clear();
+
+        for (size_t i = 0; i < v.getSize(); i++)
+        {
+            this->listLikedQuizzes.push_back(v[i]);
+        }
+
+        this->numberLikedQuizzes = this->listLikedQuizzes.getSize();
+        String quizzesString = this->GetQuiz().FindAllQuizzes();
+        Vector<String> quizzesVec, quizVec;
+        String::Split(ROW_DATA_SEPARATOR, quizzesVec, quizzesString);
+
+        for (size_t i = 0; i < quizzesVec.getSize(); i++)
+        {
+            quizVec.clear();
+            String quizString = quizzesVec[i];
+
+            QuizIndexDTO qiDTO;
+            qiDTO.SetElement(quizzesVec[i]);
+
+            if (qiDTO.id == id)
+            {
+                this->GetQuiz().SaveQuiz(QuizStatus::UnlikeQuiz, qiDTO.id);
+                return;
+            }
+        }
+    }
+    else
+    {
+        this->Writer().WriteLine("No test with the specified ID was found to be liked.");
     }
 }
 
@@ -288,25 +358,41 @@ void Player::ReportQuiz(String& quizIdString, String& reason)
     this->Provider().Action(allMessagesString, ProviderOptions::MessagesSave);
 }
 
-void Player::Quizzes()
+void Player::Quizzes(String& userName)
 {
     String s = this->GetQuiz().FindAllQuizzes();
 
-    Vector<String> quizzesVec, quizVec;
+    Vector<String> quizzesVec;
 
     String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
 
     for (size_t i = 0; i < quizzesVec.getSize(); i++)
-    {
-        quizVec.clear();
+    {        
         String quizString = quizzesVec[i];
 
-        String::Split(QUIZ_ELEMENT_DATA_SEPARATOR, quizVec, quizString);
+        QuizIndexDTO qiDTO;
 
-        if (quizVec[4].StringToInt() == QuizStatus::ApprovedQuiz)
+        qiDTO.SetElement(quizString);
+        bool flag = false;
+        
+        if (qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
         {
-            String output = quizVec[0] + " | " + quizVec[1] + " | " + quizVec[2] + " | " + quizVec[5] + " Questions | " + quizVec[6] + " likes";
+            if (userName == EMPTY_STRING || userName == qiDTO.userName)
+            {
+                flag = true;
+            }
+            else
+            {
+                flag = false;
+            }
+        }
+
+        if (flag)
+        {
+            String output = String::UIntToString(qiDTO.id) + " | " + qiDTO.quizName + " | " + qiDTO.userName + " | " + String::UIntToString(qiDTO.numOfQuestions) + " Questions | " + String::UIntToString(qiDTO.likes) + " likes";
             this->Writer().WriteLine(output);
+
+            //id|quizName|useName|quizFileName|QuizStatus|numOfQuestions|Likes
         }
     }
 }

@@ -117,5 +117,7 @@ const String MESSAGES = "messages";
 const String ADD_TO_FAVS = "add-to-favs";
 const String REMOVE_FROM_FAVS = "remove-from-favs";
 const String LIKE_QUIZ = "like-quiz";
+const String UNLIKE_QUIZ = "unlike-quiz";
+const String VIEW_FINISHED_CHALLEENGES = "view-finished-challeenges";
 
 #endif

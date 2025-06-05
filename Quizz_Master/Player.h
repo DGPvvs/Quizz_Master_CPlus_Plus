@@ -73,7 +73,7 @@ public:
     void ViewSelfProfile(DatBuild);
     void ViewOtherProfile(const String&, DatBuild);
     void CreateQuiz();
-    void Quizzes();
+    void Quizzes(String&);
     void ReportQuiz(String&, String&);
     bool ContainCreatedQuizzes(unsigned int);
     bool ContainLikedQuizzes(unsigned int);
@@ -81,6 +81,8 @@ public:
     void AddToFavs(String&);
     void RemoveFromFavs(String&);
     void LikeQuiz(String&);
+    void UnlikeQuiz(String&);
+    void PrintFinishedChalleenges();
     virtual ~Player() {};
 };
 

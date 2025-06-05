@@ -174,16 +174,49 @@ void Quiz::SaveQuiz(QuizStatus qs, unsigned int quizId)
         String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
 
         for (size_t i = 0; i < quizzesVec.getSize(); i++)
-        {            
+        {
             String quizString = quizzesVec[i];
 
             QuizIndexDTO qiDTO;
 
-            qiDTO.SetElement(quizzesVec[i]);
+            qiDTO.SetElement(quizString);
 
             if (qiDTO.id == quizId)
             {
                 qiDTO.likes++;
+                String incLikeString = qiDTO.ToIndexString();
+                resultVec.push_back(incLikeString);
+            }
+            else
+            {
+                resultVec.push_back(quizString);
+            }
+        }
+
+        String allQuizzesString;
+        String::Join(ROW_DATA_SEPARATOR, resultVec, allQuizzesString);
+
+        allQuizzesString = QUIZZES_FILE_NAME + FILENAME_SEPARATOR + allQuizzesString;
+
+        this->provider->Action(allQuizzesString, ProviderOptions::QuizzeIndexSave);
+    }
+    else if (qs == QuizStatus::UnlikeQuiz)
+    {
+        Vector<String> quizzesVec, resultVec;
+
+        String::Split(ROW_DATA_SEPARATOR, quizzesVec, s);
+
+        for (size_t i = 0; i < quizzesVec.getSize(); i++)
+        {
+            String quizString = quizzesVec[i];
+
+            QuizIndexDTO qiDTO;
+
+            qiDTO.SetElement(quizString);
+
+            if (qiDTO.id == quizId)
+            {
+                qiDTO.likes--;
                 String incLikeString = qiDTO.ToIndexString();
                 resultVec.push_back(incLikeString);
             }
