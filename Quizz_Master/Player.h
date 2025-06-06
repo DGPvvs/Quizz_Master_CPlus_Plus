@@ -83,6 +83,7 @@ public:
     void LikeQuiz(String&);
     void UnlikeQuiz(String&);
     void PrintFinishedChalleenges();
+    void PrintChalleenges();
     virtual ~Player() {};
 };
 

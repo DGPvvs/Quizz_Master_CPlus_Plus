@@ -49,23 +49,26 @@ void SingleChoiceQuestion::SetUpData(String& dataString)
 
 String SingleChoiceQuestion::BuildQuestionData()
 {
-    char* arr = new char[2] {'\0'};
-    arr[0] = ROW_DATA_SEPARATOR;
-    String newLine(arr);
-
-    delete[] arr;
-
-    String result = String::UIntToString(this->GetQt()) + newLine;
-    result += this->GetDescription() + newLine;
-    result += this->GetCorrectAnswer() + newLine;
-    result += String::UIntToString(this->GetPoints()) + newLine;
+    String result = String::UIntToString(this->GetQt()) + NEW_LINE;
+    result += this->GetDescription() + NEW_LINE;
+    result += this->GetCorrectAnswer() + NEW_LINE;
+    result += String::UIntToString(this->GetPoints()) + NEW_LINE;
+    result += String::UIntToString(this->GetNumOfAnswers()) + NEW_LINE;
 
     for (int i = 0; i < this->questions.getSize(); ++i)
     {
-        result += this->questions[i] + newLine;
+        result += this->questions[i] + NEW_LINE;
     }
 
     return result;
+
+    //Тип на въпроса
+    //въпроса
+    //Верни отговори
+    //точки
+    //брой отговори
+    //... изброяване на възможните отговори
+
 }
 
 void SingleChoiceQuestion::PrintQuestion()

@@ -119,5 +119,6 @@ const String REMOVE_FROM_FAVS = "remove-from-favs";
 const String LIKE_QUIZ = "like-quiz";
 const String UNLIKE_QUIZ = "unlike-quiz";
 const String VIEW_FINISHED_CHALLEENGES = "view-finished-challeenges";
+const String VIEW_CHALLEENGES = "view-challeenges";
 
 #endif

@@ -75,7 +75,7 @@ void Player::Action(CommandStruct& cmdStr)
         this->Quizzes(s);
     }
     else if (cmdStr.command == QUIZZES && cmdStr.paramRange == 2)
-    {        
+    {
         this->Quizzes(cmdStr.Param1);
     }
     else if (cmdStr.command == REPORT_QUIZ && cmdStr.paramRange == 3)
@@ -108,7 +108,41 @@ void Player::Action(CommandStruct& cmdStr)
     else if (cmdStr.command == VIEW_FINISHED_CHALLEENGES && cmdStr.paramRange == 1)
     {
         this->PrintFinishedChalleenges();
-    }    
+    }
+    else if (cmdStr.command == VIEW_CHALLEENGES && cmdStr.paramRange == 1)
+    {
+        this->PrintChalleenges();
+    }
+}
+
+void Player::PrintChalleenges()
+{
+    for (int i = 5; i <= 30; i += 5)
+    {
+        if (this->numberCreatedQuizzes < i)
+        {
+            String s = "Create " + String::UIntToString(i) + " quizzes (" + String::UIntToString(this->numberCreatedQuizzes) + "/" + String::UIntToString(i) + ")";
+            this->Writer().WriteLine(s);
+        }
+    }
+
+    for (int i = 10; i <= 100; i += 10)
+    {
+        if (this->numberSolvedTestQuizzes < i)
+        {
+            String s = "Complete " + String::UIntToString(i) + " quizzes in test mode (" + String::UIntToString(this->numberSolvedTestQuizzes) + "/" + String::UIntToString(i) + ")";
+            this->Writer().WriteLine(s);
+        }
+    }
+
+    for (int i = 10; i <= 100; i += 10)
+    {
+        if (this->numberSolvedNormalQuizzes < i)
+        {
+            String s = "Complete " + String::UIntToString(i) + " quizzes in normal mode (" + String::UIntToString(this->numberSolvedNormalQuizzes) + "/" + String::UIntToString(i) + ")";
+            this->Writer().WriteLine(s);
+        }
+    }
 }
 
 void Player::PrintFinishedChalleenges()

@@ -22,7 +22,7 @@ String MatchingPairsQuestion::BuildQuestionData()
 {
     String result = MultipleChoiceQuestion::BuildQuestionData();
 
-    result += MP_SEPARATOR_STRING + NEW_LINE;
+    result += String::UIntToString(this->answers.getSize()) + NEW_LINE;
 
     for (size_t i = 0; i < this->answers.getSize(); i++)
     {
@@ -30,4 +30,13 @@ String MatchingPairsQuestion::BuildQuestionData()
     }
 
     return result;
+
+    //Тип на въпроса
+    //въпроса
+    //Верни отговори
+    //точки
+    //брой отговори
+    //... изброяване на възможните отговори
+    //брой малки отговори
+    //... изброяване на възможните малки отговори
 }
