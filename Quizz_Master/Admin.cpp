@@ -257,7 +257,7 @@ void Admin::Action(CommandStruct& cmdStr)
 	{
 		this->ApproveQuiz(cmdStr);
 	}
-	else if ((cmdStr.command == REJECT_QUIZ || cmdStr.command == REMOVE_QUIZ) && cmdStr.paramRange == 3)
+	else if ((cmdStr.command == REJECT_QUIZ || cmdStr.command == REMOVE_QUIZ) && cmdStr.paramRange >= 2)
 	{
 		QuizStatus status = (cmdStr.command == REJECT_QUIZ)
 			? QuizStatus::RejectedQuiz

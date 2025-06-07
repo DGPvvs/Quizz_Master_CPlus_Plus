@@ -53,7 +53,7 @@ String SingleChoiceQuestion::BuildQuestionData()
     result += this->GetDescription() + NEW_LINE;
     result += this->GetCorrectAnswer() + NEW_LINE;
     result += String::UIntToString(this->GetPoints()) + NEW_LINE;
-    result += String::UIntToString(this->GetNumOfAnswers()) + NEW_LINE;
+    result += String::UIntToString(this->questions.getSize()) + NEW_LINE;
 
     for (int i = 0; i < this->questions.getSize(); ++i)
     {
