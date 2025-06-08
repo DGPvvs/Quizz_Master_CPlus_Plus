@@ -131,21 +131,27 @@ void Player::SaveQuiz(String& quizId, String& fileName)
 {
     Quiz* quiz = LoadQuiz(quizId, false);
 
-    String fileData = fileName + FILENAME_SEPARATOR + quiz->GetQuizName() + " - " + String::UIntToString(quiz->GetNumberOfQuestions()) + " Questions" + NEW_LINE;
-
-    fileData += "By: " + this->getName() + " " + this->getUserName() + NEW_LINE;
-
-    for (size_t i = 0; i < quiz->GetQuestions().getSize(); i++)
+    if (quiz != nullptr)
     {
-        fileData += String::UIntToString(i + 1) + ") " + quiz->GetQuestions()[i]->ToStringFile();
-        if ((i + 1) < quiz->GetQuestions().getSize())
-        {
-            fileData += NEW_LINE;
-        }
-    }
+        String fileData = fileName + FILENAME_SEPARATOR + quiz->GetQuizName() + " - " + String::UIntToString(quiz->GetNumberOfQuestions()) + " Questions" + NEW_LINE;
 
-    this->Provider().Action(fileData, ProviderOptions::QuizzeSave);
-    //TODO Save quiz in text file
+        fileData += "By: " + this->getName() + " " + this->getUserName() + NEW_LINE;
+
+        for (size_t i = 0; i < quiz->GetQuestions().getSize(); i++)
+        {
+            fileData += String::UIntToString(i + 1) + ") " + quiz->GetQuestions()[i]->ToStringFile();
+            if ((i + 1) < quiz->GetQuestions().getSize())
+            {
+                fileData += NEW_LINE;
+            }
+        }
+
+        this->Provider().Action(fileData, ProviderOptions::QuizzeSave);
+    }
+    else
+    {
+        this->Writer().WriteLine("The quiz was not recorded.");
+    }    
 }
 
 void Player::StartQuiz(String& quizId, String& mode, String& shuffle)
@@ -155,7 +161,6 @@ void Player::StartQuiz(String& quizId, String& mode, String& shuffle)
         : NORMAL_MODE;
 
     Quiz* quiz = LoadQuiz(quizId, isTest);
-    //TODO
 }
 
 Quiz* Player::LoadQuizHeader(Vector<String>& v)
@@ -303,7 +308,7 @@ Quiz* Player::LoadQuiz(String& idString, bool isTest)
         String quizElement = quizzesVec[i];
         qiDTO.SetElement(quizElement);
 
-        if (id == qiDTO.id && qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
+        if (id == qiDTO.id && qiDTO.quizStatus == QuizStatus::ApprovedQuiz && qiDTO.userName == this->getUserName())
         {
             quizString = qiDTO.quizFileName;
             this->Provider().Action(quizString, ProviderOptions::QuizzeLoad);
