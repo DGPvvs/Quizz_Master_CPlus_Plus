@@ -1,36 +1,40 @@
 TESTQUIZ - 5 Questions
 By: User Prime UserPrime
-1) Description MP
-A
-B
-C
-D
-E
-F
-a
-b
-c
-d
-e
-f
-g
-A,b C,a E,c
+1) Description: Description MP
+First group answers:
+A) A
+B) B
+C) C
+D) D
+E) E
+F) F
+Second group answers:
+a) a
+b) b
+c) c
+d) d
+e) e
+f) f
+g) g
+Correct answer: A,b C,a E,c
 
-2) Description ShA
-ANSWER
+2) Description: Description ShA
+Correct answer: ANSWER
 
-3) Description MC
-AA
-BB
-CC
-A C
+3) Description: Description MC
+Posible answers:
+a) AA
+b) BB
+c) CC
+Correct answer: A C
 
-4) Description SC
-A
-B
-C
-D
-D
+4) Description: Description SC
+Posible answers:
+a) A
+b) B
+c) C
+d) D
+Correct answer: D
 
-5) Description T/F
-False
+5) Description: Description T/F
+Correct answer: False

@@ -43,19 +43,34 @@ String MatchingPairsQuestion::BuildQuestionData()
 
 String MatchingPairsQuestion::ToStringFile()
 {
-    String result = this->GetDescription() + NEW_LINE;
+    String result = "Description: " + this->GetDescription() + NEW_LINE;
+
+    char* arr = new char[2] {'\0'};
+
+    result += "First group answers:" + NEW_LINE;
 
     for (size_t i = 0; i < this->GetQuestions().getSize(); i++)
     {
-        result += this->GetQuestions()[i] + NEW_LINE;
+        arr[0] = 'A' + i;
+        String questNum = String(arr);
+
+        result += questNum + ") " + this->GetQuestions()[i] + NEW_LINE;
     }
+
+    result += "Second group answers:" + NEW_LINE;
 
     for (size_t i = 0; i < this->GetAnswersVec().getSize(); i++)
     {
-        result += this->GetAnswersVec()[i] + NEW_LINE;
+        arr[0] = 'a' + i;
+        String questNum = String(arr);
+
+        result += questNum + ") " + this->GetAnswersVec()[i] + NEW_LINE;
     }
 
-    result += this->GetCorrectAnswer() + NEW_LINE;
+    delete[] arr;
+    arr = nullptr;
+
+    result += "Correct answer: " + this->GetCorrectAnswer() + NEW_LINE;
 
     return result;
 }

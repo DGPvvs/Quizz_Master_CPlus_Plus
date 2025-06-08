@@ -31,8 +31,8 @@ void TrueOrFalseQuestion::SetUpData(String& dataString)
 
 String TrueOrFalseQuestion::ToStringFile()
 {
-    String result = this->GetDescription() + NEW_LINE;
-    result += this->GetCorrectAnswer() + NEW_LINE;
+    String result = "Description: " + this->GetDescription() + NEW_LINE;
+    result += "Correct answer: " + this->GetCorrectAnswer() + NEW_LINE;
 
     return result;
 }
