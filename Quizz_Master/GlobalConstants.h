@@ -84,6 +84,8 @@ const String ERROR = "error";
 const bool EXSIST = true;
 const bool NOT_EXSIST = false;
 const bool NOT_LOGIN = false;
+const bool TEST_MODE = true;
+const bool NORMAL_MODE = false;
 
 /// <summary>
 /// Константи за командите
@@ -120,5 +122,10 @@ const String LIKE_QUIZ = "like-quiz";
 const String UNLIKE_QUIZ = "unlike-quiz";
 const String VIEW_FINISHED_CHALLEENGES = "view-finished-challeenges";
 const String VIEW_CHALLEENGES = "view-challeenges";
+const String EDIT_QUIZ = "edit-quiz";
+const String START_QUIZ = "start-quiz";
+const String SAVE_QUIZ = "save-quiz";
+const String TEST = "test";
+const String NORMAL = "normal";
 
 #endif

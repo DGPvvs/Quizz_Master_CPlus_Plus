@@ -55,6 +55,15 @@ private:
     void AddQuizChallenge(ChallengerOptions);
     void AddPoints(unsigned int);
     void AddLevel();
+    Quiz* LoadQuiz(String&, bool);
+    Quiz* LoadQuizHeader(Vector<String>&);
+    IQuestion* LoadTF(Vector<String>&, unsigned int&, bool);
+    IQuestion* LoadMP(Vector<String>&, unsigned int&, bool);
+    IQuestion* LoadShA(Vector<String>&, unsigned int&, bool);
+    IQuestion* LoadMC(Vector<String>&, unsigned int&, bool);
+    IQuestion* LoadSC(Vector<String>&, unsigned int&, bool);
+    void StartQuiz(String&, String&, String&);
+    void SaveQuiz(String&, String&);
 
     TrueOrFalseQuestion* CreateTF(String*);
     SingleChoiceQuestion* CreateSC(String*);
@@ -84,6 +93,7 @@ public:
     void UnlikeQuiz(String&);
     void PrintFinishedChalleenges();
     void PrintChalleenges();
+    void EditQuiz(String&);
     virtual ~Player() {};
 };
 

@@ -13,6 +13,7 @@ public:
     virtual String BuildQuestionData() override;
     virtual bool AnswerAQuestion() override;
     virtual void PrintQuestion() override;
+    virtual String ToStringFile() override;
     virtual ~TrueOrFalseQuestion() = default;
 };
 

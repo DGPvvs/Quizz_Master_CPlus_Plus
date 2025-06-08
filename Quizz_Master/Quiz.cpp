@@ -55,6 +55,11 @@ unsigned int Quiz::GetId()const
     return this->id;
 }
 
+void Quiz::SetId(unsigned int id)
+{
+    this->id = id;
+}
+
 unsigned int Quiz::GetLikes() const
 {
     return this->numberOfLikes;

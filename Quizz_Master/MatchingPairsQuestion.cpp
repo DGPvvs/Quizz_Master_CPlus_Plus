@@ -40,3 +40,22 @@ String MatchingPairsQuestion::BuildQuestionData()
     //брой малки отговори
     //... изброяване на възможните малки отговори
 }
+
+String MatchingPairsQuestion::ToStringFile()
+{
+    String result = this->GetDescription() + NEW_LINE;
+
+    for (size_t i = 0; i < this->GetQuestions().getSize(); i++)
+    {
+        result += this->GetQuestions()[i] + NEW_LINE;
+    }
+
+    for (size_t i = 0; i < this->GetAnswersVec().getSize(); i++)
+    {
+        result += this->GetAnswersVec()[i] + NEW_LINE;
+    }
+
+    result += this->GetCorrectAnswer() + NEW_LINE;
+
+    return result;
+}

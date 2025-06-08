@@ -99,3 +99,17 @@ bool SingleChoiceQuestion::AnswerAQuestion()
 
     return result;
 }
+
+String SingleChoiceQuestion::ToStringFile()
+{
+    String result = this->GetDescription() + NEW_LINE;
+
+    for (size_t i = 0; i < this->GetQuestions().getSize(); i++)
+    {
+        result += this->GetQuestions()[i] + NEW_LINE;
+    }
+
+    result += this->GetCorrectAnswer() + NEW_LINE;
+
+    return result;
+}

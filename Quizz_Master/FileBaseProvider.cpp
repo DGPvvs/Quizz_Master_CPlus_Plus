@@ -87,7 +87,7 @@ void FileBaseProvider::Action(String& str, ProviderOptions options)
         delete[] arr;
         arr = nullptr;
     }
-    else if ((options == ProviderOptions::UserLoad) || (options == ProviderOptions::QuizzeFind) || (options == ProviderOptions::MessagesLoad))
+    else if ((options == ProviderOptions::UserLoad) || (options == ProviderOptions::QuizzeFind) || (options == ProviderOptions::MessagesLoad) || (options == ProviderOptions::QuizzeLoad))
     {
         String s = str;
         str = FileLoad(s);

@@ -30,6 +30,7 @@ public:
     String GetUserFullName() const;
     unsigned int GetNumberOfQuestions() const;
     unsigned int GetId() const;
+    void SetId(unsigned int);
     unsigned int GetLikes() const;
     void IncrementLikes(int);
     Vector<IQuestion*>& GetQuestions();

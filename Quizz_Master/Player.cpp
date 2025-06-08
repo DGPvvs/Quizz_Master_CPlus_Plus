@@ -113,6 +113,253 @@ void Player::Action(CommandStruct& cmdStr)
     {
         this->PrintChalleenges();
     }
+    else if (cmdStr.command == EDIT_QUIZ && cmdStr.paramRange == 2)
+    {
+        this->EditQuiz(cmdStr.Param1);
+    }
+    else if (cmdStr.command == START_QUIZ && cmdStr.paramRange >= 2)
+    {
+        this->StartQuiz(cmdStr.Param1, cmdStr.Param2, cmdStr.Param3);
+    }
+    else if (cmdStr.command == SAVE_QUIZ && cmdStr.paramRange == 3)
+    {
+        this->SaveQuiz(cmdStr.Param1, cmdStr.Param2);
+    }
+}
+
+void Player::SaveQuiz(String& quizId, String& fileName)
+{
+    Quiz* quiz = LoadQuiz(quizId, false);
+
+    String fileData = fileName + FILENAME_SEPARATOR + quiz->GetQuizName() + " - " + String::UIntToString(quiz->GetNumberOfQuestions()) + " Questions" + NEW_LINE;
+
+    fileData += "By: " + this->getName() + " " + this->getUserName() + NEW_LINE;
+
+    for (size_t i = 0; i < quiz->GetQuestions().getSize(); i++)
+    {
+        fileData += String::UIntToString(i + 1) + ") " + quiz->GetQuestions()[i]->ToStringFile();
+        if ((i + 1) < quiz->GetQuestions().getSize())
+        {
+            fileData += NEW_LINE;
+        }
+    }
+
+    this->Provider().Action(fileData, ProviderOptions::QuizzeSave);
+    //TODO Save quiz in text file
+}
+
+void Player::StartQuiz(String& quizId, String& mode, String& shuffle)
+{
+    bool isTest = (mode == TEST)
+        ? TEST_MODE
+        : NORMAL_MODE;
+
+    Quiz* quiz = LoadQuiz(quizId, isTest);
+    //TODO
+}
+
+Quiz* Player::LoadQuizHeader(Vector<String>& v)
+{    
+    unsigned int numberOfQuestions = v[1].StringToInt();
+    String quizName = v[0];
+    String userName = v[2];
+
+    Quiz* quiz = new Quiz(&this->Writer(), &this->Reader(), &this->Provider(), quizName, userName, 0, numberOfQuestions, 0);
+
+    return quiz;
+}
+
+IQuestion* Player::LoadTF(Vector<String>& quizVec, unsigned int& indexRow, bool isTest)
+{
+    String description = quizVec[indexRow];
+    indexRow++;
+
+    String answer = quizVec[indexRow];
+    indexRow++;
+
+    unsigned int points = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    TrueOrFalseQuestion* question = new TrueOrFalseQuestion(&this->Writer(), &this->Reader(), description, answer, points, isTest);
+
+    return question;
+}
+
+IQuestion* Player::LoadSC(Vector<String>& quizVec, unsigned int& indexRow, bool isTest)
+{
+    String description = quizVec[indexRow];
+    indexRow++;
+
+    String answer = quizVec[indexRow];
+    indexRow++;
+
+    unsigned int points = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    unsigned char numOfAnswers = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    SingleChoiceQuestion* question = new SingleChoiceQuestion(&this->Writer(), &this->Reader(), description, answer, points, isTest);
+
+        for (size_t i = 0; i < numOfAnswers; i++)
+        {
+            question->GetQuestions().push_back(quizVec[indexRow]);
+            indexRow++;
+        }
+
+    return question;
+}
+
+IQuestion* Player::LoadMC(Vector<String>& quizVec, unsigned int& indexRow, bool isTest)
+{
+    String description = quizVec[indexRow];
+    indexRow++;
+
+    String answer = quizVec[indexRow];
+    indexRow++;
+
+    unsigned int points = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    unsigned char numOfAnswers = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    MultipleChoiceQuestion* question = new MultipleChoiceQuestion(&this->Writer(), &this->Reader(), description, answer, points, isTest, numOfAnswers);
+
+    for (size_t i = 0; i < numOfAnswers; i++)
+    {
+        question->GetQuestions().push_back(quizVec[indexRow]);
+        indexRow++;
+    }
+
+    return question;
+}
+
+IQuestion* Player::LoadShA(Vector<String>& quizVec, unsigned int& indexRow, bool isTest)
+{
+    String description = quizVec[indexRow];
+    indexRow++;
+
+    String answer = quizVec[indexRow];
+    indexRow++;
+
+    unsigned int points = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    ShortAnswerQuestion* question = new ShortAnswerQuestion(&this->Writer(), &this->Reader(), description, answer, points, isTest);
+
+    return question;
+}
+
+IQuestion* Player::LoadMP(Vector<String>& quizVec, unsigned int& indexRow, bool isTest)
+{
+    String description = quizVec[indexRow];
+    indexRow++;
+
+    String answer = quizVec[indexRow];
+    indexRow++;
+
+    unsigned int points = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    unsigned char numOfAnswers = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    MatchingPairsQuestion* question = new MatchingPairsQuestion(&this->Writer(), &this->Reader(), description, answer, points, isTest, numOfAnswers);
+
+    for (size_t i = 0; i < numOfAnswers; i++)
+    {
+        question->GetQuestions().push_back(quizVec[indexRow]);
+        indexRow++;
+    }
+
+    unsigned char numOfAnswers1 = quizVec[indexRow].StringToInt();
+    indexRow++;
+
+    for (size_t j = 0; j < numOfAnswers1; j++)
+    {
+        question->GetAnswersVec().push_back(quizVec[indexRow]);
+        indexRow++;
+    }
+
+    return question;
+}
+
+Quiz* Player::LoadQuiz(String& idString, bool isTest)
+{
+    unsigned int id = idString.StringToInt();
+    String quizString = ERROR;
+    Quiz* quiz = nullptr;
+
+    String allQuizzes = this->GetQuiz().FindAllQuizzes();
+
+    Vector<String> quizzesVec;
+
+    String::Split(ROW_DATA_SEPARATOR, quizzesVec, allQuizzes);
+
+    for (size_t i = 0; i < quizzesVec.getSize(); i++)
+    {
+        QuizIndexDTO qiDTO;
+        String quizElement = quizzesVec[i];
+        qiDTO.SetElement(quizElement);
+
+        if (id == qiDTO.id && qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
+        {
+            quizString = qiDTO.quizFileName;
+            this->Provider().Action(quizString, ProviderOptions::QuizzeLoad);
+        }
+    }
+
+    if (quizString != ERROR)
+    {
+        Vector<String> quizVec;
+        String::Split(ROW_DATA_SEPARATOR, quizVec, quizString);
+
+        quiz = this->LoadQuizHeader(quizVec);
+        quiz->SetId(id);
+        unsigned int indexRow = 3;
+
+        for (size_t i = 0; i < quiz->GetNumberOfQuestions(); i++)
+        {
+            IQuestion* question = nullptr;            
+
+            unsigned int questionType = quizVec[indexRow].StringToInt();
+            indexRow++;
+
+            if (questionType == QuestionType::TF)
+            {
+                question = this->LoadTF(quizVec, indexRow, isTest);
+            }
+            else if (questionType == QuestionType::ShA)
+            {
+                question = this->LoadShA(quizVec, indexRow, isTest);
+            }
+            else if (questionType == QuestionType::SC)
+            {
+                question = this->LoadSC(quizVec, indexRow, isTest);
+            }
+            else if (questionType == QuestionType::MP)
+            {
+                question = this->LoadMP(quizVec, indexRow, isTest);
+            }
+            else if (questionType == QuestionType::MC)
+            {
+                question = this->LoadMC(quizVec, indexRow, isTest);
+            }
+
+            quiz->GetQuestions().push_back(question);
+        }
+    }
+
+    return quiz;
+}
+
+void Player::EditQuiz(String& idString)
+{
+    Quiz* quiz = LoadQuiz(idString, false);
+
+    delete quiz;
+    quiz = nullptr;
 }
 
 void Player::PrintChalleenges()

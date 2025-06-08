@@ -29,6 +29,14 @@ void TrueOrFalseQuestion::SetUpData(String& dataString)
     //TODO
 }
 
+String TrueOrFalseQuestion::ToStringFile()
+{
+    String result = this->GetDescription() + NEW_LINE;
+    result += this->GetCorrectAnswer() + NEW_LINE;
+
+    return result;
+}
+
 String TrueOrFalseQuestion::BuildQuestionData()
 {
     char* arr = new char[2] {'\0'};
