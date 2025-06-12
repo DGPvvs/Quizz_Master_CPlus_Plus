@@ -127,5 +127,6 @@ const String START_QUIZ = "start-quiz";
 const String SAVE_QUIZ = "save-quiz";
 const String TEST = "test";
 const String NORMAL = "normal";
+const String SHUFFLE = "shuffle";
 
 #endif

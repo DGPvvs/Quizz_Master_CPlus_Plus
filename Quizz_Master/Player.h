@@ -64,6 +64,7 @@ private:
     IQuestion* LoadSC(Vector<String>&, unsigned int&, bool);
     void StartQuiz(String&, String&, String&);
     void SaveQuiz(String&, String&);
+    unsigned int* GetOrder(bool, unsigned int);
 
     TrueOrFalseQuestion* CreateTF(String*);
     SingleChoiceQuestion* CreateSC(String*);

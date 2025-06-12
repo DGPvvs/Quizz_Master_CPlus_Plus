@@ -74,3 +74,22 @@ String MatchingPairsQuestion::ToStringFile()
 
     return result;
 }
+
+void MatchingPairsQuestion::PrintQuestion()
+{
+    this->Writer()->WriteLine(this->GetDescription() + "\t(" + String::UIntToString(this->GetPoints()) + " points)");
+
+    for (int i = 0; i < this->GetQuestions().getSize(); ++i)
+    {
+        this->Writer()->WriteLine(this->GetQuestions()[i]);
+    }
+
+    this->Writer()->WriteLine(EMPTY_STRING);
+
+    for (int i = 0; i < this->GetAnswersVec().getSize(); ++i)
+    {
+        this->Writer()->WriteLine(this->GetAnswersVec()[i]);
+    }
+
+    Question::PrintQuestion();
+}

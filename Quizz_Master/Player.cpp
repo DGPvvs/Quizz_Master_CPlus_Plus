@@ -131,7 +131,7 @@ void Player::SaveQuiz(String& quizId, String& fileName)
 {
     Quiz* quiz = LoadQuiz(quizId, false);
 
-    if (quiz != nullptr)
+    if (quiz != nullptr && quiz->GetUserName() == this->getUserName())
     {
         String fileData = fileName + FILENAME_SEPARATOR + quiz->GetQuizName() + " - " + String::UIntToString(quiz->GetNumberOfQuestions()) + " Questions" + NEW_LINE;
 
@@ -154,13 +154,82 @@ void Player::SaveQuiz(String& quizId, String& fileName)
     }    
 }
 
+unsigned int* Player::GetOrder(bool isShuffle, unsigned int numberOfQuestions)
+{
+    unsigned int* arr = new unsigned int[numberOfQuestions];
+    for (size_t i = 0; i < numberOfQuestions; i++)
+    {
+        arr[i] = i;
+    }
+
+    if (!isShuffle)
+    {
+        return arr;
+    }
+
+    srand(time(0));
+    unsigned int questionSize = numberOfQuestions;
+
+    unsigned int* arr1 = new unsigned int[numberOfQuestions];
+
+    for (int i = 0; i < numberOfQuestions; i++)
+    {
+        int randomIndex = rand() % questionSize;
+
+        arr1[i] = arr[randomIndex];
+        arr[randomIndex] = arr[--questionSize];
+    }
+
+    delete[] arr;
+    arr = nullptr;
+
+    return arr1;
+}
+
 void Player::StartQuiz(String& quizId, String& mode, String& shuffle)
 {
     bool isTest = (mode == TEST)
         ? TEST_MODE
         : NORMAL_MODE;
 
+    bool isShuffle = (shuffle == SHUFFLE)
+        ? true
+        : false;
+
     Quiz* quiz = LoadQuiz(quizId, isTest);
+
+    if (quiz != nullptr)
+    {
+        unsigned int* order = this->GetOrder(isShuffle, quiz->GetNumberOfQuestions());
+
+        for (size_t i = 0; i < quiz->GetNumberOfQuestions(); ++i)
+        {
+            unsigned int idx = order[i];
+            this->AddPoints(quiz->GetQuestions()[idx]->Action());
+        }
+
+        if (isTest)
+        {
+            numberSolvedTestQuizzes++;
+        }
+        else
+        {
+            numberSolvedNormalQuizzes++;
+        }
+
+        this->AddQuizChallenge(ChallengerOptions::TestQuizChallenger);
+        this->AddQuizChallenge(ChallengerOptions::NormalQuizChallenger);
+
+        delete[] order;
+        order = nullptr;
+
+        delete[] quiz;
+        quiz = nullptr;
+    }
+    else
+    {
+        this->Writer().WriteLine("Quiz not found");
+    }    
 }
 
 Quiz* Player::LoadQuizHeader(Vector<String>& v)
@@ -308,7 +377,7 @@ Quiz* Player::LoadQuiz(String& idString, bool isTest)
         String quizElement = quizzesVec[i];
         qiDTO.SetElement(quizElement);
 
-        if (id == qiDTO.id && qiDTO.quizStatus == QuizStatus::ApprovedQuiz && qiDTO.userName == this->getUserName())
+        if (id == qiDTO.id && qiDTO.quizStatus == QuizStatus::ApprovedQuiz)
         {
             quizString = qiDTO.quizFileName;
             this->Provider().Action(quizString, ProviderOptions::QuizzeLoad);

@@ -11,14 +11,16 @@ MultipleChoiceQuestion::MultipleChoiceQuestion(IWriter* writer, IReader* reader,
 
 void MultipleChoiceQuestion::SeparateAnswers(Vector<String>& v, String s)
 {
-    String::Split(ELEMENT_DATA_SEPARATOR, v, s);
+    Vector<String> tmp1;
+    String::Split(ELEMENT_DATA_SEPARATOR, tmp1, s);
+    v.clear();
 
     Vector<String> tmp;
 
-    for (size_t i = 0; i < v.getSize(); i++)
+    for (size_t i = 0; i < tmp1.getSize(); i++)
     {
         tmp.clear();
-        String::Split(COMMA_DATA_SEPARATOR, tmp, v[i]);
+        String::Split(COMMA_DATA_SEPARATOR, tmp, tmp1[i]);
 
         for (size_t j = 0; j < tmp.getSize(); j++)
         {

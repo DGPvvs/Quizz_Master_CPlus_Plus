@@ -16,6 +16,7 @@ public:
 
 	virtual void SetUpData(String&) override;
 	virtual String BuildQuestionData() override;
+	virtual void PrintQuestion() override;
 	virtual String ToStringFile() override;
 
 	virtual ~MatchingPairsQuestion() {};

@@ -77,7 +77,7 @@ void SingleChoiceQuestion::PrintQuestion()
 
     for (int i = 0; i < this->questions.getSize(); ++i)
     {
-        this->Writer()->WriteLine("this.questions[i]");
+        this->Writer()->WriteLine(this->questions[i]);
     }
 
     Question::PrintQuestion();
