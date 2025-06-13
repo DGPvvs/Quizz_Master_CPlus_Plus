@@ -210,26 +210,25 @@ void Player::StartQuiz(String& quizId, String& mode, String& shuffle)
 
         if (isTest)
         {
-            numberSolvedTestQuizzes++;
+            this->numberSolvedTestQuizzes++;
+            this->AddQuizChallenge(ChallengerOptions::TestQuizChallenger);
         }
         else
         {
-            numberSolvedNormalQuizzes++;
+            this->numberSolvedNormalQuizzes++;
+            this->AddQuizChallenge(ChallengerOptions::NormalQuizChallenger);
         }
-
-        this->AddQuizChallenge(ChallengerOptions::TestQuizChallenger);
-        this->AddQuizChallenge(ChallengerOptions::NormalQuizChallenger);
 
         delete[] order;
         order = nullptr;
 
-        delete[] quiz;
+        delete quiz;
         quiz = nullptr;
     }
     else
     {
         this->Writer().WriteLine("Quiz not found");
-    }    
+    }
 }
 
 Quiz* Player::LoadQuizHeader(Vector<String>& v)
@@ -381,6 +380,7 @@ Quiz* Player::LoadQuiz(String& idString, bool isTest)
         {
             quizString = qiDTO.quizFileName;
             this->Provider().Action(quizString, ProviderOptions::QuizzeLoad);
+            break;
         }
     }
 
@@ -1329,11 +1329,48 @@ void Player::AddQuizChallenge(ChallengerOptions co)
     }
     else if (co == ChallengerOptions::NormalQuizChallenger)
     {
-        //TODO: if has challenges to this->numberSolvedNormalQuizzes++;
+        int normalQuizCount = this->numberSolvedNormalQuizzes;
+
+        bool isChalleeng = (normalQuizCount < 101) && (normalQuizCount % 10 == 0);
+
+        if (isChalleeng)
+        {
+            point = normalQuizCount * 10 / 3;
+
+            String message = String::UIntToString(this->getId()) + MESSAGE_ELEMENT_SEPARATOR;
+            message += "New challenge complited! You solved " + String::UIntToString(normalQuizCount) + " quizzes in normal mode! ";
+            message += String::UIntToString(point) + " points added.";
+
+            this->GetMessage().SendMessage(message);
+
+            String finishedChaleng = DateTime::DateNow() + MESSAGE_ELEMENT_SEPARATOR + "Commplete " + String::UIntToString(normalQuizCount);
+            finishedChaleng += " quizzes in normal mode";
+
+            this->listFinishedChallenges.push_back(finishedChaleng);
+            this->numberFinishedChallenges = this->listFinishedChallenges.getSize();
+        }
     }
     else if (co == ChallengerOptions::TestQuizChallenger)
     {
-        //TODO: if has challenges to this->numberSolvedTestQuizzes++;
+        int testQuizCount = this->numberSolvedTestQuizzes;
+
+        bool isChalleeng = (testQuizCount < 101) && (testQuizCount % 10 == 0);
+
+        if (isChalleeng)
+        {
+            point = testQuizCount * 10 / 3;
+
+            String message = String::UIntToString(this->getId()) + MESSAGE_ELEMENT_SEPARATOR;
+            message += "New challenge complited! You solved " + String::UIntToString(testQuizCount) + " quizzes in test mode! ";
+            message += String::UIntToString(point) + " points added.";
+
+            this->GetMessage().SendMessage(message);
+
+            String finishedChaleng = DateTime::DateNow() + MESSAGE_ELEMENT_SEPARATOR + "Commplete " + String::UIntToString(testQuizCount);
+            finishedChaleng += " quizzes in test mode";
+
+            this->listFinishedChallenges.push_back(finishedChaleng);
+        }
     }
 
     this->AddPoints(point);
