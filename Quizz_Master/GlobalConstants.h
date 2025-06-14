@@ -9,6 +9,7 @@ enum ProviderOptions
 	UserSave,
 	UserFind,
 	NewUserSave,
+	EditUser,
 	QuizzeLoad,
 	QuizzeSave,
 	QuizzeFind,
@@ -125,6 +126,7 @@ const String VIEW_CHALLEENGES = "view-challeenges";
 const String EDIT_QUIZ = "edit-quiz";
 const String START_QUIZ = "start-quiz";
 const String SAVE_QUIZ = "save-quiz";
+const String EDIT_PROFILE = "edit-profile";
 const String TEST = "test";
 const String NORMAL = "normal";
 const String SHUFFLE = "shuffle";

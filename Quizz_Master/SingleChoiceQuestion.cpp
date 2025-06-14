@@ -75,10 +75,17 @@ void SingleChoiceQuestion::PrintQuestion()
 {
     this->Writer()->WriteLine(this->GetDescription() + "\t(" + String::UIntToString(this->GetPoints()) + " points)");
 
+    char* arr = new char[2] {'\0'};
+
     for (int i = 0; i < this->questions.getSize(); ++i)
-    {
-        this->Writer()->WriteLine(this->questions[i]);
+    {        
+        arr[0] = 'A' + i;
+        
+        this->Writer()->WriteLine(String(arr) + ") " + this->questions[i]);
     }
+
+    delete[] arr;
+    arr = nullptr;
 
     Question::PrintQuestion();
 }

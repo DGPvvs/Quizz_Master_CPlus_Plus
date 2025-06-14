@@ -125,6 +125,93 @@ void Player::Action(CommandStruct& cmdStr)
     {
         this->SaveQuiz(cmdStr.Param1, cmdStr.Param2);
     }
+    else if (cmdStr.command == EDIT_PROFILE && cmdStr.paramRange == 1)
+    {
+        this->EditProfile();
+    }
+}
+
+void Player::EditProfile()
+{
+    this->Writer().Write("Enter password: ");
+    String* password = this->Reader().ReadLine();
+
+    if (this->Hash(*password) != this->GetPassword())
+    {
+        this->Writer().WriteLine("Wrong password");
+        delete password;
+        password = nullptr;
+        return;
+    }
+
+    delete password;
+    password = nullptr;
+
+    this->Writer().Write("Enter new password: ");
+    String* newPassword = this->Reader().ReadLine();
+
+    this->Writer().Write("Reenter new password: ");
+    String* repeatNewPassword = this->Reader().ReadLine();
+
+    if (*newPassword != *repeatNewPassword)
+    {
+        this->Writer().WriteLine("Passwords do not match");
+
+        delete newPassword;
+        newPassword = nullptr;
+
+        delete repeatNewPassword;
+        repeatNewPassword = nullptr;
+
+        return;
+    }    
+
+    delete repeatNewPassword;
+    repeatNewPassword = nullptr;
+
+    UserStruct* us = new UserStruct();
+
+    us->firstName = EMPTY_STRING;
+    us->lastName = EMPTY_STRING;
+    us->userName = this->getUserName();
+    us->password = EMPTY_STRING;
+
+    Vector<String> usersVec, v;
+    String users;
+    this->AllUsers(users);
+    String::Split(ROW_DATA_SEPARATOR, usersVec, users);
+
+    int userIndex = this->FindUserIndex(*us, usersVec);
+
+    if (userIndex < 0)
+    {
+        this->Writer().WriteLine("No user with that name found!");
+
+        delete us;
+        us = nullptr;
+
+        return;
+    }
+
+    String::Split(ELEMENT_DATA_SEPARATOR, v, usersVec[userIndex]);
+
+    v[1] = String::UIntToString(this->Hash(*newPassword));
+    this->SetPassword(this->Hash(*newPassword));
+
+    String s, s1;
+
+    String::Join(ELEMENT_DATA_SEPARATOR, v, s);
+
+    usersVec[userIndex] = s;
+    String::Join(ROW_DATA_SEPARATOR, usersVec, s1);
+
+    this->Provider().Action(s1, ProviderOptions::EditUser);
+
+    delete newPassword;
+    newPassword = nullptr;
+
+    delete us;
+    us = nullptr;
 }
 
 void Player::SaveQuiz(String& quizId, String& fileName)

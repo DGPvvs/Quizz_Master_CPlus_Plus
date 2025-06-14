@@ -95,6 +95,7 @@ public:
     void PrintFinishedChalleenges();
     void PrintChalleenges();
     void EditQuiz(String&);
+    void EditProfile();
     virtual ~Player() {};
 };
 

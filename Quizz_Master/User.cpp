@@ -250,7 +250,7 @@ int User::FindUserData(UserStruct& us, bool exsist)
         us.fileName = v[2];
         us.id = v[3].StringToInt();
         us.firstName = v[0];
-        us.lastName = v[1];
+        us.password = v[1];
 
         return (UserOptions::Empty | UserOptions::OK | UserOptions::AlreadyExisist);
     }
@@ -315,4 +315,5 @@ void User::SetUpUserData(UserStruct& us, Vector<String>& v, UserOptions uo)
     this->fileName = us.fileName;
     this->id = us.id;
     this->userName = us.userName;
+    this->password = us.password.StringToInt();
 }

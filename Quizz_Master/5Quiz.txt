@@ -5,13 +5,14 @@ UserPrime
 Description
 A,a B,b C,h
 25
+6
 A
 B
 C
 D
 E
 F
-<PairsSeparator>
+8
 a
 b
 c

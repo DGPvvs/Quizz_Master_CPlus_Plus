@@ -78,18 +78,24 @@ String MatchingPairsQuestion::ToStringFile()
 void MatchingPairsQuestion::PrintQuestion()
 {
     this->Writer()->WriteLine(this->GetDescription() + "\t(" + String::UIntToString(this->GetPoints()) + " points)");
+    char* arr = new char[2] {'\0'};
 
     for (int i = 0; i < this->GetQuestions().getSize(); ++i)
     {
-        this->Writer()->WriteLine(this->GetQuestions()[i]);
+        arr[0] = 'A' + i;
+        this->Writer()->WriteLine(String(arr) + ") " + this->GetQuestions()[i]);
     }
 
     this->Writer()->WriteLine(EMPTY_STRING);
 
     for (int i = 0; i < this->GetAnswersVec().getSize(); ++i)
     {
-        this->Writer()->WriteLine(this->GetAnswersVec()[i]);
+        arr[0] = 'a' + i;
+        this->Writer()->WriteLine(String(arr) + ") " + this->GetAnswersVec()[i]);
     }
+
+    delete[] arr;
+    arr = nullptr;
 
     Question::PrintQuestion();
 }
