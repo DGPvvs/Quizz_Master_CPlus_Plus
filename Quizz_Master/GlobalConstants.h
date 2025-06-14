@@ -3,6 +3,10 @@
 
 #include "String.h"
 
+/// <summary>
+/// Енумератор определящ състоянието на файловия провайдър
+/// </summary>
+
 enum ProviderOptions
 {
 	UserLoad,
@@ -20,6 +24,10 @@ enum ProviderOptions
 	MessagesSave,
 };
 
+/// <summary>
+/// Енумератор от флагове определящ състоянието на потребителя
+/// </summary>
+
 enum UserOptions
 {
 	Empty			= 0b00000000,
@@ -31,6 +39,10 @@ enum UserOptions
 	NewUserCreated	= 0b00100000,
 };
 
+/// <summary>
+/// Енумератор са състоянието на куиз
+/// </summary>
+
 enum QuizStatus
 {
 	NewQuiz = 0,
@@ -41,6 +53,10 @@ enum QuizStatus
 	LikeQuiz,
 	UnlikeQuiz,
 };
+
+/// <summary>
+/// Енумератор на типовете въпроси
+/// </summary>
 
 enum QuestionType
 {

@@ -4,6 +4,10 @@
 #include "IBaseProvider.h"
 #include "String.h"
 
+/// <summary>
+/// Клас репрезентиращ работата с текстовата база данни
+/// </summary>
+
 class FileBaseProvider : public IBaseProvider
 {
 private:

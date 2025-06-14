@@ -3,6 +3,10 @@
 
 #include "IWriter.h"
 
+/// <summary>
+/// Клас репрезентиращ извеждане на конзолата
+/// </summary>
+
 class ConsoleWriter : public IWriter
 {
 public:

@@ -7,6 +7,10 @@
 #include "IBaseProvider.h"
 #include "UserStruct.h"
 
+/// <summary>
+/// Клас репрезентиращ методите осъществяващи играта
+/// </summary>
+
 class Game : public IGame
 {
 private:
@@ -28,9 +32,9 @@ public:
     Game(IWriter*, IReader*, IBaseProvider*);
     ~Game();
 
-    void Init();
-    void Run();
-    void Exit();
+    virtual void Init() override;
+    virtual void Run() override;
+    virtual void Exit() override;
 
     void LoginUser();
     void LogoutUser();

@@ -2,7 +2,9 @@
 #define CommandStruct_H
 
 #include "String.h"
-
+/// <summary>
+/// Структура в която се разлагат елементите на въведената команда
+/// </summary>
 struct CommandStruct
 {
 public:

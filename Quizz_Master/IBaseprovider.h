@@ -3,6 +3,10 @@
 
 #include "GlobalConstants.h"
 
+/// <summary>
+/// Интерфейс определящ поведението на базата данни
+/// </summary>
+
 class IBaseProvider
 {
 public:
