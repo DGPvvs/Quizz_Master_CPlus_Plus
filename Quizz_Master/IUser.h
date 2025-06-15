@@ -8,6 +8,10 @@
 #include "UserStruct.h"
 #include "GlobalConstants.h"
 
+/// <summary>
+/// Интерфейс определящ общото поведение на потребителите
+/// </summary>
+
 class IUser
 {
 public:

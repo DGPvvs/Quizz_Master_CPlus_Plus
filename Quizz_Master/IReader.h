@@ -3,6 +3,10 @@
 
 #include "String.h"
 
+/// <summary>
+/// Интерфейс определящ поведението на потребителският вход
+/// </summary>
+
 class IReader
 {
 public:

@@ -3,6 +3,10 @@
 
 #include "String.h"
 
+/// <summary>
+/// Интерфейс определящ поведението на потребителският изход
+/// </summary>
+
 class IWriter
 {
 public:

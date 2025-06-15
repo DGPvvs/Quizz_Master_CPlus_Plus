@@ -3,6 +3,10 @@
 
 #include "String.h"
 
+/// <summary>
+/// Интерфейс определящ поведението на въпросите
+/// </summary>
+
 class IQuestion
 {
 public:

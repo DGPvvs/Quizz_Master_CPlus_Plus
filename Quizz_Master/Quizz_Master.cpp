@@ -17,7 +17,7 @@ int main()
     ConsoleReader* reader = new ConsoleReader();
     FileBaseProvider* provider = new FileBaseProvider();
 
-    Game* game = new Game(writer, reader, provider);
+    IGame* game = new Game(writer, reader, provider);
     try
     {
         
